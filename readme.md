@@ -16,3 +16,7 @@
     - Realtime collaborative map editing experience.
     - Platform, tooling, and workflow for rapid web game development.
     - **We're currently in the process moving Nanoshooter framework code into Susa.**
+
+--------
+
+  [❤ Akkadian Games](https://github.com/AkkadianGames)
