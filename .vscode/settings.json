@@ -1,0 +1,13 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.wrappingColumn": 0,
+  "editor.renderWhitespace": true,
+  "editor.wrappingIndent": "indent",
+  "files.exclude": {},
+  "search.exclude": {
+    "node_modules": true,
+    "build": true,
+    "typings": true
+  }
+}

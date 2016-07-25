@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0",
+  "command": "npm",
+  "args": ["run", "--silent"],
+  "isShellCommand": true,
+  "tasks": [
+    {
+      "taskName": "build",
+      "problemMatcher": ["$tsc"],
+      "isBuildCommand": true
+    },
+    {
+      "taskName": "watch",
+      "problemMatcher": "$tsc-watch",
+      "isWatching": true
+    }
+  ]
+}
