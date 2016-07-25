@@ -1,0 +1,19 @@
+{
+  "name": "susa",
+  "version": "0.0.0",
+  "description": "Free open source 3D online multiplayer web game framework featuring collaborative map editing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkkadianGames/Susa.git"
+  },
+  "author": "Chase Moskal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AkkadianGames/Susa/issues"
+  },
+  "homepage": "https://github.com/AkkadianGames/Susa#readme"
+}
