@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "description": "Networked web game framework.",
   "scripts": {
-    "initialize": "typings install",
+    "initialize": "echo Initializing Susa. && typings install",
     "clean": "rimraf build",
-    "build": "npm run clean --silent && tsc && echo Susa build complete.",
+    "build": "echo Building Susa. && npm run clean --silent && tsc && tslint src/**/*.ts",
     "watch": "tsc -w",
     "test": "echo No tests yet, lol && exit 0"
   },
