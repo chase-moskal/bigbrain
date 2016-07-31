@@ -5,7 +5,7 @@
   "scripts": {
     "initialize": "typings install",
     "clean": "rimraf build",
-    "build": "npm run clean --silent && tsc && tslint src/**/*.ts -e **/*.d.ts && echo Susa build complete.",
+    "build": "npm run clean --silent && tsc && echo Susa build complete.",
     "watch": "tsc -w",
     "test": "echo No tests yet, lol && exit 0"
   },
