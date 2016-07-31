@@ -2,5 +2,8 @@
 language: node_js
 node_js:
   - "5"
-install: npm install --silent
-script: npm run build --silent
+install:
+  - npm install --silent
+  - npm run initialize --silent
+script:
+  - npm run build --silent
