@@ -1,5 +1,5 @@
 
-# Susa
+# Susa — [![Build Status](https://travis-ci.org/AkkadianGames/Susa.svg?branch=master)](https://travis-ci.org/AkkadianGames/Susa)
 ## Networked web game framework
 
   - [**Roadmap**](https://trello.com/b/MGlfhN1a/susa-roadmap) — glean into Susa's future.
