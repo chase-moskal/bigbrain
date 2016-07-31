@@ -2,18 +2,21 @@
 # Susa
 ## Networked web game framework
 
-Susa is a high level framework for online multiplayer action web games. It's currently in early development.
+  - [**Roadmap**](https://trello.com/b/MGlfhN1a/susa-roadmap) — glean into Susa's future.
+
+Susa is:
+
+  - Currently in early development.
+  - A high level framework for online multiplayer action web games.
+  - A platform and workflow for rapid web game development.
 
 Overarching goals:
 
   - Online multiplayer action via WebRTC (RTCDataChannel).
   - Realtime collaborative map editing experience.
-  - Complete platform, tooling, and workflow for rapid web game development.
   - Built on [BabylonJS](http://www.babylonjs.com/) — 3D web game engine.
 
-Susa's development is intertwined with its sister project, [Nanoshooter](https://github.com/AkkadianGames/Nanoshooter#readme), and is typically developed on as a submodule within the Nanoshooter project.
-
-We're keeping Susa and Nanoshooter's development workflow tightly integrated during these early stages, though are maintaining separated repositories, roadmaps, issue tracking, and versioning.
+Susa's development is intertwined with its sister project, [Nanoshooter](https://github.com/AkkadianGames/Nanoshooter#readme), and is typically developed on as a submodule within the Nanoshooter project. We're keeping Susa and Nanoshooter's development workflow tightly integrated during these early stages, though are maintaining separated repositories, roadmaps, issue tracking, and versioning.
 
 --------
 
