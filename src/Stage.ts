@@ -72,6 +72,14 @@ export default class Stage {
   }
 
   /**
+   * Render a frame.
+   */
+  private render({since}: RenderInfo) {
+    this.scene.render()
+    this.stats.totalFrames++
+  }
+
+  /**
    * Start the rendering loop.
    */
   start() {
@@ -96,14 +104,6 @@ export default class Stage {
     // Remove all listeners.
     for (const eventName of Object.keys(this.listeners))
       document.removeEventListener(eventName, this.listeners[eventName])
-  }
-
-  /**
-   * Render a frame.
-   */
-  private render({since}: RenderInfo) {
-    this.scene.render()
-    this.stats.totalFrames++
   }
 }
 
