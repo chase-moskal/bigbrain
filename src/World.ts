@@ -1,5 +1,6 @@
 
-import Game, {GameState, Logger} from './Game'
+import Game, {Logger} from './Game'
+import GameState from './GameState'
 import Stage from './Stage'
 import State from './State'
 import Loader from './Loader'
