@@ -59,7 +59,8 @@ export default class Game {
     // Create game logic ticker, and define the game logic routine.
     this.logicTicker = new Ticker({
       tick: tickReport => {
-        this.world.logic({tickReport, gameState: this.state})
+        this.world.synchronize(this.state)
+        this.world.logic(this.state, tickReport)
       }
     })
 

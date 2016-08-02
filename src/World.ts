@@ -28,19 +28,19 @@ export interface WorldOptions {
 export default class World {
 
   /** Parent game instance. */
-  protected game: Game
+  private game: Game
 
   /** Babylon stage. */
-  protected stage: Stage
+  private stage: Stage
 
   /** Loads object files and images. */
-  protected loader: Loader
+  private loader: Loader
 
   /** Logger for world events. */
-  protected log: Logger
+  private log: Logger
 
   /** Collection of entity instances. */
-  protected entities: { [id: string]: Entity } = {}
+  private entities: { [id: string]: Entity } = {}
 
   /** Getter which provides an array version of entities. */
   get entityArray(): Entity[] { return Object.keys(this.entities).map(id => this.entities[id]) }
@@ -56,82 +56,7 @@ export default class World {
   }
 
   /**
-   * Query for entities by searching through their tags.
-   *  - Search through tags with a string (looking for exact match), or use a regular expression.
-   */
-  query(terms: (string | RegExp)[] = []): Entity[] {
-
-    return this.entityArray.filter(entity => {
-      const matchingTerms = terms.filter(term =>
-        entity.tags.filter(tag =>
-          typeof term === 'string' ? tag === term : term.test(tag)
-        ).length > 0
-      )
-
-      // Entity matches when all terms match.
-      return matchingTerms.length === terms.length
-    })
-  }
-
-  /**
-   * Loop over each entity.
-   */
-  loopOverEntities(looper: (entity: Entity) => void): void {
-
-    // Take the array of object keys, which are entity IDs.
-    Object.keys(this.entities)
-
-      // Map the IDs to the entity instances themselves.
-      .map(id => this.entities[id])
-
-      // Filter out null entities (which indicates that they are still loading).
-      .filter(entity => !!entity)
-
-      // Run each entity through the looper.
-      .forEach(looper)
-  }
-
-  /**
-   * Run all game logic routines.
-   *  - Add new entities to the world (load them dynamically).
-   *  - Remove extraneous entities from the world.
-   *  - Run all entity logic.
-   *  - Return a final logic report, which includes all added or removed entities.
-   */
-  logic({gameState, tickReport}: WorldLogicInput): Promise<WorldLogicOutput> {
-    const added: Promise<Entity>[] = []
-    const removed: Promise<string>[] = []
-
-    // Add entities that are present in the game state, but are missing from this world.
-    gameState.loopOverEntities((entityState, id) => {
-      if (!this.entities.hasOwnProperty(id))
-        added.push(this.summonEntity(id, entityState).then(() => undefined))
-    })
-
-    // Remove entities that are missing from the game state, but are present in this game world.
-    gameState.loopOverEntities((entityState, id) => {
-      if (!gameState.getEntityState(id))
-        removed.push(this.removeEntity(id).then(() => id))
-    })
-
-    // Run all entity logic.
-    this.loopOverEntities(entity => {
-      entity.logic({
-        entityState: gameState.getEntityState(entity.id),
-        tickReport
-      })
-    })
-
-    // Return a report of all added or removed entities.
-    return Promise.all([Promise.all(added), Promise.all(removed)])
-      .then((results: any) => ({
-        added: results[0],
-        removed: results[1]
-      }))
-  }
-
-  /**
-   * Dynamically load up and instantiate an entity provided entity state.
+   * Dynamically load up and instantiate an entity provided some entity state.
    */
   private summonEntity(id: string, entityState: EntityState): Promise<Entity> {
     return new Promise<Entity>((resolve, reject) => {
@@ -184,15 +109,89 @@ export default class World {
   }
 
   /**
+   * Query for entities by searching through their tags.
+   */
+  query(terms: (string | RegExp)[] = []): Entity[] {
+
+    return this.entityArray.filter(entity => {
+      const matchingTerms = terms.filter(term =>
+        entity.tags.filter(tag =>
+          typeof term === 'string' ? tag === term : term.test(tag)
+        ).length > 0
+      )
+
+      // Entity matches when all terms match.
+      return matchingTerms.length === terms.length
+    })
+  }
+
+  /**
+   * Loop over each entity.
+   */
+  loopOverEntities(looper: (entity: Entity) => void): void {
+
+    // Take the array of object keys, which are entity IDs.
+    Object.keys(this.entities)
+
+      // Map the IDs to the entity instances themselves.
+      .map(id => this.entities[id])
+
+      // Filter out null entities (which indicates that they are still loading).
+      .filter(entity => !!entity)
+
+      // Run each entity through the looper.
+      .forEach(looper)
+  }
+
+  /**
+   * Compare the world to the game state, add new entities, remove missing ones.
+   *  - Add new entities to the world, load them dynamically.
+   *  - Remove extraneous entities from the world which aren't in the game state.
+   *  - Return a report about added/removed entities.
+   */
+  synchronize(gameState: GameState): Promise<WorldLogicOutput> {
+    const added: Promise<Entity>[] = []
+    const removed: Promise<string>[] = []
+
+    // Add entities that are present in the game state, but are missing from this world.
+    gameState.loopOverEntities((entityState, id) => {
+      if (!this.entities.hasOwnProperty(id))
+        added.push(this.summonEntity(id, entityState).then(() => undefined))
+    })
+
+    // Remove entities that are missing from the game state, but are present in this game world.
+    gameState.loopOverEntities((entityState, id) => {
+      if (!gameState.getEntityState(id))
+        removed.push(this.removeEntity(id).then(() => id))
+    })
+
+    // Return a report of all added or removed entities.
+    return Promise.all([Promise.all(added), Promise.all(removed)])
+      .then((results: any) => ({
+        added: results[0],
+        removed: results[1]
+      }))
+  }
+
+  /**
+   * Run game logic across all entities.
+   */
+  logic(gameState: GameState, tickReport: TickReport): void {
+
+    // Run all entity logic.
+    this.loopOverEntities(entity => {
+      entity.logic({
+        state: gameState.getEntityState(entity.id),
+        tickReport
+      })
+    })
+  }
+
+  /**
    * Destruct all entities and shut down.
    * This allows all event bindings and such to be cleaned up.
    */
   destructor() {}
-}
-
-export interface WorldLogicInput {
-  gameState: GameState
-  tickReport: TickReport
 }
 
 export interface WorldLogicOutput {
