@@ -59,12 +59,13 @@ export default class Stage {
     this.canvas = document.createElement('canvas')
     this.hostElement.appendChild(this.canvas)
     this.engine = new BABYLON.Engine(this.canvas, true)
+
     this.scene = new BABYLON.Scene(this.engine)
-    this.scene.workerCollisions = true
+    // this.scene.collisionsEnabled = true
+    // this.scene.workerCollisions = true
 
     this.canvas.onclick = () => this.canvas.requestPointerLock()
     this.engine.isPointerLock = true
-
 
     // Apparently this makes BabylonJS care about UV mapping ¯\_(ツ)_/¯
     ; (<any>BABYLON).OBJFileLoader.OPTIMIZE_WITH_UV = true
