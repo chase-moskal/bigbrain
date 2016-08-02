@@ -67,7 +67,6 @@ export default class Stage {
     this.canvas.onclick = () => this.canvas.requestPointerLock()
     this.engine.isPointerLock = true
 
-
     // Apparently this makes BabylonJS care about UV mapping ¯\_(ツ)_/¯
     ; (<any>BABYLON).OBJFileLoader.OPTIMIZE_WITH_UV = true
   }
