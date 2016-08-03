@@ -87,7 +87,7 @@ export default class Entity {
 }
 
 export interface EntityLogicInput {
-  entityState: EntityState
+  state: EntityState
   tickReport: TickReport
 }
 

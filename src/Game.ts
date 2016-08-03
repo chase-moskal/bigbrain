@@ -1,7 +1,7 @@
 
 import Stage from './Stage'
+import GameState from './GameState'
 import World from './World'
-import State from './State'
 import Loader from './Loader'
 import Ticker, {TickReport} from './Ticker'
 import Entity, {EntityState} from './Entity'
@@ -59,7 +59,8 @@ export default class Game {
     // Create game logic ticker, and define the game logic routine.
     this.logicTicker = new Ticker({
       tick: tickReport => {
-        this.world.logic({tickReport, gameState: this.state})
+        this.world.synchronize(this.state)
+        this.world.logic(this.state, tickReport)
       }
     })
 
@@ -116,47 +117,5 @@ export default class Game {
    */
   getFramerate(): number {
     return this.stage.engine.getFps()
-  }
-}
-
-/**
- * Serializable source-of-truth which describes everything (all entities) of the game at the current moment.
- */
-export class GameState extends State {
-
-  /** Collection of entity state. */
-  private entities: { [id: string]: EntityState } = {}
-
-  /** Entity id pulling station. */
-  private pullId = () => (++this.nextId).toString()
-  private nextId = 0
-
-  /**
-   * Loop over each entity state.
-   */
-  loopOverEntities(looper: (entityState: EntityState, id: string) => void): void {
-    for (const id of Object.keys(this.entities))
-      looper(this.entities[id], id)
-  }
-
-  /**
-   * Obtain a particular entity state.
-   */
-  getEntityState(id: string) {
-    return this.entities[id]
-  }
-
-  /**
-   * Add entity state.
-   */
-  addEntity<T extends EntityState>(entityState: T) {
-    this.entities[this.pullId()] = entityState
-  }
-
-  /**
-   * Remove entity state.
-   */
-  removeEntity(id: string) {
-    delete this.entities[id]
   }
 }
