@@ -1,4 +1,6 @@
 
+--------
+
 # Susa — [![Build Status](https://travis-ci.org/AkkadianGames/Susa.svg?branch=master)](https://travis-ci.org/AkkadianGames/Susa) [![Join the chat at https://gitter.im/AkkadianGames/AkkadianLounge](https://badges.gitter.im/AkkadianGames/AkkadianLounge.svg)](https://gitter.im/AkkadianGames/AkkadianLounge?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Networked web game framework
