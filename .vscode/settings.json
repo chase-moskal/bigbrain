@@ -4,10 +4,10 @@
   "editor.wrappingColumn": 0,
   "editor.renderWhitespace": true,
   "editor.wrappingIndent": "indent",
-  "files.exclude": {},
-  "search.exclude": {
+  "files.exclude": {
     "node_modules": true,
     "build": true,
     "typings": true
-  }
+  },
+  "search.exclude": {}
 }
