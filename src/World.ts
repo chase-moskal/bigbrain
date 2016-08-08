@@ -166,7 +166,7 @@ export default class World {
     })
 
     // Return a report of all added or removed entities.
-    return Promise.all([Promise.all(added), Promise.all(removed)])
+    return Promise.all<any>([Promise.all(added), Promise.all(removed)])
       .then((results: any) => ({
         added: results[0],
         removed: results[1]

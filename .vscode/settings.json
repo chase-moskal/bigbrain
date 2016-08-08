@@ -9,5 +9,5 @@
     "build": true,
     "typings": true
   },
-  "search.exclude": {}
+  "typescript.tsdk": "node_modules/typescript/lib/"
 }
