@@ -1,6 +1,6 @@
 
-import State from './State'
-import {EntityState} from './Entity'
+import State from 'Susa/State'
+import {EntityState} from 'Susa/Entity'
 
 /**
  * Serializable source-of-truth which describes everything (all entities) of the game at the current moment.
@@ -8,7 +8,7 @@ import {EntityState} from './Entity'
 export default class GameState extends State {
 
   /** Collection of entity state. */
-  private entities: { [id: string]: EntityState } = {}
+  private readonly entities: { [id: string]: EntityState } = {}
 
   /** Entity id pulling station. */
   private pullId = () => (++this.nextId).toString()

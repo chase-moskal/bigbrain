@@ -1,11 +1,11 @@
 
-import Game, {Logger} from './Game'
-import GameState from './GameState'
-import Stage from './Stage'
-import State from './State'
-import Loader from './Loader'
-import Entity, {EntityState} from './Entity'
-import {TickReport} from './Ticker'
+import Game, {Logger} from 'Susa/Game'
+import GameState from 'Susa/GameState'
+import Stage from 'Susa/Stage'
+import State from 'Susa/State'
+import Loader from 'Susa/Loader'
+import Entity, {EntityState} from 'Susa/Entity'
+import {TickReport} from 'Susa/Ticker'
 declare const require: (moduleIds: string[], callback?: (...modules: any[]) => void, errback?: (error: Error) => void) => void
 
 /**

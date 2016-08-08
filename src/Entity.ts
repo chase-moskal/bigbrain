@@ -1,10 +1,10 @@
 
-import Game from './Game'
-import World from './World'
-import Stage from './Stage'
-import Loader from './Loader'
-import State from './State'
-import {TickReport} from './Ticker'
+import Game from 'Susa/Game'
+import World from 'Susa/World'
+import Stage from 'Susa/Stage'
+import Loader from 'Susa/Loader'
+import State from 'Susa/State'
+import {TickReport} from 'Susa/Ticker'
 export {TickReport}
 
 /**

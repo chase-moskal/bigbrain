@@ -6,6 +6,10 @@
     "moduleResolution": "node",
     "rootDir": "src",
     "outDir": "build",
+    "baseUrl": ".",
+    "paths": {
+      "Susa/*": ["src/*"]
+    },
     "sourceMap": true,
     "declaration": true
   },

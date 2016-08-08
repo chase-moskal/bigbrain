@@ -1,10 +1,10 @@
 
-import Stage from './Stage'
-import GameState from './GameState'
-import World from './World'
-import Loader from './Loader'
-import Ticker, {TickReport} from './Ticker'
-import Entity, {EntityState} from './Entity'
+import Stage from 'Susa/Stage'
+import GameState from 'Susa/GameState'
+import World from 'Susa/World'
+import Loader from 'Susa/Loader'
+import Ticker, {TickReport} from 'Susa/Ticker'
+import Entity, {EntityState} from 'Susa/Entity'
 
 /**
  * Options for creating a Game.
