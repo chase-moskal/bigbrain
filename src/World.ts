@@ -1,111 +1,72 @@
 
-import Game, {Logger} from 'Susa/Game'
-import GameState from 'Susa/GameState'
-import Stage from 'Susa/Stage'
+import Logger from 'Susa/Toolbox/Logger'
 import State from 'Susa/State'
-import Loader from 'Susa/Loader'
-import Entity, {EntityState} from 'Susa/Entity'
-import {TickReport} from 'Susa/Ticker'
+import Stage from 'Susa/Stage'
+import Entity, {EntityState, EntityOptions} from 'Susa/Entity'
+import Ticker, {TickReport} from 'Susa/Toolbox/Ticker'
 declare const require: (moduleIds: string[], callback?: (...modules: any[]) => void, errback?: (error: Error) => void) => void
 
 /**
- * Inputs for a new world instance.
- */
-export interface WorldOptions {
-  game: Game
-  stage: Stage
-  loader: Loader
-  log?: Logger
-}
-
-/**
- * Game world, which contains entity instances which imitate the game state.
- * Contain the entity instances of the game world.
- * Synchronizes with provided game state by adding or removing entities.
- * Responsible for dynamically loading and instancing entities.
- * Requires a stage reference, so it can be passed to each instanced entity.
+ * World is an entity management system.
+ *  - Contain collection of entity instances.
+ *  - Logic routine where entities imitate the state.
+ *  - Responsible for dynamically loading and instancing entities.
  */
 export default class World {
 
-  /** Parent game instance. */
-  private game: Game
-
-  /** Babylon stage. */
-  private stage: Stage
-
-  /** Loads object files and images. */
-  private loader: Loader
-
   /** Logger for world events. */
-  private log: Logger
+  private readonly logger: Logger
+
+  /** Source of truth serializable state. */
+  private readonly state: State
+
+  /** Stage for rendering the scene. */
+  private readonly stage: Stage
+
+  /** Game logic loop utility. */
+  private readonly ticker: Ticker
 
   /** Collection of entity instances. */
-  private entities: { [id: string]: Entity } = {}
+  private readonly entities: { [id: string]: Entity } = {}
 
   /** Getter which provides an array version of entities. */
-  get entityArray(): Entity[] { return Object.keys(this.entities).map(id => this.entities[id]) }
-
-  /**
-   * Create a world instance with some world options.
-   */
-  constructor(options: WorldOptions) {
-    this.game = options.game
-    this.stage = options.stage
-    this.loader = options.loader
-    this.log = options.log || this.game.log
+  private get entityArray(): Entity[] {
+    return Object.keys(this.entities).map(id => this.entities[id])
   }
 
   /**
-   * Dynamically load up and instantiate an entity provided some entity state.
+   * Construct a world instance.
    */
-  private summonEntity(id: string, entityState: EntityState): Promise<Entity> {
-    return new Promise<Entity>((resolve, reject) => {
+  constructor(options: WorldOptions) {
+    this.logger = options.logger
+    this.stage = options.stage
 
-      // Entity is set to null in the collection while the entity is loading.
-      // If we didn't do this, the world might perform another sync during
-      this.entities[id] = null
-
-      // Load the entity.
-      require(
-        [entityState.type],
-        entityModule => {
-
-          // Instantiate the entity.
-          const entity = new (<typeof Entity>entityModule.default)({
-            id,
-            entityState,
-            tags: entityState.tags,
-            world: this,
-            game: this.game,
-            stage: this.stage,
-            loader: this.loader
-          })
-
-          // Add the entity to the entities collection.
-          this.entities[id] = entity
-
-          // Log about it.
-          this.log(`(+) Added entity ${entity}`)
-
-          // Resolve the promise with the added entity.
-          resolve(entity)
-        },
-
-        // Handle loading error by rejecting the promise.
-        error => { reject(error) }
-      )
+    // Create logic ticker which runs the logic routine.
+    this.ticker = new Ticker({
+      tickAction: tickReport => this.logic(this.state, tickReport)
     })
   }
 
   /**
-   * Remove an entity from the game world.
+   * Destruct all entities and shut down.
+   * This allows all event bindings and such to be cleaned up.
    */
-  private removeEntity(id: string): Promise<void> {
-    const entity = this.entities[id]
-    entity.destructor()
-    delete this.entities[id]
-    this.log(`(-) Removed entity ${entity}`)
-    return Promise.resolve()
+  destructor() {}
+
+  /**
+   * Run the game rendering and logic.
+   */
+  start() {
+    this.stage.start()
+    this.ticker.start()
+  }
+
+  /**
+   * Halt the game rendering and logic.
+   */
+  stop(): Promise<void> {
+    this.stage.stop()
+    return this.ticker.stop()
   }
 
   /**
@@ -144,39 +105,12 @@ export default class World {
   }
 
   /**
-   * Compare the world to the game state, add new entities, remove missing ones.
-   *  - Add new entities to the world, load them dynamically.
-   *  - Remove extraneous entities from the world which aren't in the game state.
-   *  - Return a report about added/removed entities.
-   */
-  synchronize(gameState: GameState): Promise<WorldLogicOutput> {
-    const added: Promise<Entity>[] = []
-    const removed: Promise<string>[] = []
-
-    // Add entities that are present in the game state, but are missing from this world.
-    gameState.loopOverEntities((entityState, id) => {
-      if (!this.entities.hasOwnProperty(id))
-        added.push(this.summonEntity(id, entityState).then(() => undefined))
-    })
-
-    // Remove entities that are missing from the game state, but are present in this game world.
-    gameState.loopOverEntities((entityState, id) => {
-      if (!gameState.getEntityState(id))
-        removed.push(this.removeEntity(id).then(() => id))
-    })
-
-    // Return a report of all added or removed entities.
-    return Promise.all<any>([Promise.all(added), Promise.all(removed)])
-      .then((results: any) => ({
-        added: results[0],
-        removed: results[1]
-      }))
-  }
-
-  /**
    * Run game logic across all entities.
    */
-  logic(gameState: GameState, tickReport: TickReport): void {
+  private logic(gameState: State, tickReport: TickReport): void {
+
+    // Imitate the game state.
+    this.synchronize(gameState)
 
     // Run all entity logic.
     this.loopOverEntities(entity => {
@@ -188,12 +122,100 @@ export default class World {
   }
 
   /**
-   * Destruct all entities and shut down.
-   * This allows all event bindings and such to be cleaned up.
+   * Compare the world to the game state, add new entities, remove missing ones.
+   *  - Add new entities to the world, load them dynamically.
+   *  - Remove extraneous entities from the world which aren't in the game state.
+   *  - Return a report about added/removed entities.
    */
-  destructor() {}
+  private synchronize(state: State): Promise<WorldLogicOutput> {
+    const added: Promise<Entity>[] = []
+    const removed: Promise<string>[] = []
+
+    // Add entities that are present in the game state, but are missing from this world.
+    state.loopOverEntityStates((entityState, id) => {
+      if (!this.entities.hasOwnProperty(id))
+        added.push(this.summonEntity(id, entityState).then(() => undefined))
+    })
+
+    // Remove entities that are missing from the game state, but are present in this game world.
+    state.loopOverEntityStates((entityState, id) => {
+      if (!state.getEntityState(id))
+        removed.push(this.banishEntity(id).then(() => id))
+    })
+
+    // Return a report of all added or removed entities.
+    return Promise.all<any>([Promise.all(added), Promise.all(removed)])
+      .then((results: any) => ({
+        added: results[0],
+        removed: results[1]
+      }))
+  }
+
+  /**
+   * Dynamically load up and instantiate an entity, based on a given id and entity state object.
+   */
+  private summonEntity(id: string, entityState: EntityState): Promise<Entity> {
+    return new Promise<Entity>((resolve, reject) => {
+
+      // Entity is set to null in the collection while the entity is loading.
+      // If we didn't do this, the world might try to add the same entity again.
+      this.entities[id] = null
+
+      // Gather input to instance the entity.
+      const entityInput = <EntityOptions>{
+        id,
+        entityState,
+        tags: entityState.tags,
+        logger: this.logger,
+        stage: this.stage,
+        world: this
+      }
+
+      // Handle completed loading for the entity's javascript module.
+      const onEntityLoad = entityModule => {
+
+        // Instantiate the entity.
+        const entity = new entityModule.default(entityInput)
+
+        // Add it to the collection.
+        this.entities[id] = entity
+
+        // Log about it
+        this.logger.log(`(+) Added entity ${entity}`)
+
+        // Resolve the promise with the added entity.
+        resolve(entity)
+      }
+
+      // Load the entity.
+      require([entityState.type], onEntityLoad, error => reject)
+    })
+  }
+
+  /**
+   * Destruct and remove an entity instance from the game world.
+   */
+  private banishEntity(id: string): Promise<void> {
+    const entity = this.entities[id]
+    entity.destructor()
+    delete this.entities[id]
+    this.logger.log(`(-) Removed entity ${entity}`)
+    return Promise.resolve()
+  }
 }
 
+/**
+ * Options to create a world.
+ */
+export interface WorldOptions {
+  logger: Logger
+  state: State
+  stage: Stage
+}
+
+/**
+ * Output from world logic.
+ */
 export interface WorldLogicOutput {
 
   /** Entity instances which were added. */

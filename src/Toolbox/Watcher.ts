@@ -1,49 +1,39 @@
 
-//
-// Watcher class — monitors user input (keyboard/mouse).
-//
-//   - Declare bindings of your own aliases to inputs. Example:
-//          const watcher = new Watcher({
-//            bindings: {
-//              'jump': Input.Space,
-//              'crouch': Input.Ctrl
-//            }
-//          })
-//
-//   - Conveniently check on the status of your aliased inputs:
-//          watcher.status['jump'] // true || false
-//
-//   - Attach a listener which is called whenever the status changes:
-//          watcher.on('jump', report => {
-//            if (report.status) startChargingJump()
-//            else releaseChargedJump()
-//          })
-//
-// Terminology and concepts.
-//
-//   - Bindings — relationships between aliases and inputs.
-//   - Input — enum value of inputs that the watcher supports (which can be aliased via bindings).
-//   - Status — an aliased input has a status boolean, true when the input is activated, false when the input is deactivated.
-//   - Listener — listener functions associated with aliases, which are attached via on/off methods. Called whenever a status changes.
-//
-// Todo and status:
-//
-//   - The watcher and associated concepts still feel a little too complicated, inconsistent, rough around the edges.
-//   - We really want to simplify this thing as much as we can — this is a good candidate for casual refactoring.
-//   - This current implementation is on the fence about whether it's better to stick with string aliases/inputs, or to use enums across the board.
-//
+/*
 
-/**
- * Options for creating a new Watcher instance.
- */
-export interface WatcherOptions {
+Watcher class — monitors user input (keyboard/mouse).
 
-  /**
-   * Aliases for the inputs you'd like to watch.
-   * Example, bindings: {'jump': Input.Space, 'crouch': Input.Ctrl}
-   */
-  bindings: Bindings
-}
+  - Declare bindings of your own aliases to inputs. Example:
+         const watcher = new Watcher({
+           bindings: {
+             'jump': Input.Space,
+             'crouch': Input.Ctrl
+           }
+         })
+
+  - Conveniently check on the status of your aliased inputs:
+         watcher.status['jump'] // true || false
+
+  - Attach a listener which is called whenever the status changes:
+         watcher.on('jump', report => {
+           if (report.status) startChargingJump()
+           else releaseChargedJump()
+         })
+
+Terminology and concepts.
+
+  - Bindings — relationships between aliases and inputs.
+  - Input — enum value of inputs that the watcher supports (which can be aliased via bindings).
+  - Status — an aliased input has a status boolean, true when the input is activated, false when the input is deactivated.
+  - Listener — listener functions associated with aliases, which are attached via on/off methods. Called whenever a status changes.
+
+Todo and status:
+
+  - The watcher and associated concepts still feel a little too complicated, inconsistent, rough around the edges.
+  - We really want to simplify this thing as much as we can — this is a good candidate for casual refactoring.
+  - This current implementation is on the fence about whether it's better to stick with string aliases/inputs, or to use enums across the board.
+
+*/
 
 /**
  * Watch for user input, like on the keyboard, or with the mouse.
@@ -188,6 +178,18 @@ export default class Watcher {
   destructor() {
     this.stop()
   }
+}
+
+/**
+ * Options for creating a new Watcher instance.
+ */
+export interface WatcherOptions {
+
+  /**
+   * Aliases for the inputs you'd like to watch.
+   * Example, bindings: {'jump': Input.Space, 'crouch': Input.Ctrl}
+   */
+  bindings: Bindings
 }
 
 /**

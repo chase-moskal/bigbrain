@@ -5,15 +5,7 @@
  */
 export default class Ticker {
 
-  /**
-   * Instantiate a ticker with an action function which will be called repeatedly.
-   */
-  constructor({tick, relax = 10}: TickerOptions) {
-    this.tick = tick
-    this.relax = relax
-  }
-
-  /** Total ticker time, which actually pauses when the ticker is paused. */
+  /** Total ticker time. Does not increment when ticker is stopped. */
   private timeline: number = 0
 
   /** Action to be called for every tick while the ticker is running. */
@@ -27,9 +19,19 @@ export default class Ticker {
     totalTicks: 0
   }
 
-  // For starting and stopping.
+  /** The presence of this callback function is the indicator to stop ticking. It is called. */
   private stopTickingCallback: () => void
+
+  /** Timestamp of the previous tick. */
   private lastTickTime = performance.now()
+
+  /**
+   * Instantiate a ticker with an action function which will be called repeatedly.
+   */
+  constructor({tickAction, relax = 10}: TickerOptions) {
+    this.tick = tickAction
+    this.relax = relax
+  }
 
   /**
    * Start the recursive ticking loop.
@@ -72,6 +74,7 @@ export default class Ticker {
 
   /**
    * Halt the ticker.
+   * Set the stop ticking callback, and use it to resolve the returned promise.
    */
   stop(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
@@ -84,7 +87,7 @@ export default class Ticker {
  * Options for instantiating a new ticker.
  */
 export interface TickerOptions {
-  tick: TickAction
+  tickAction: TickAction
   relax?: number
 }
 

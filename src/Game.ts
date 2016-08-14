@@ -1,91 +1,58 @@
 
+import Logger from 'Susa/Toolbox/Logger'
 import Stage from 'Susa/Stage'
-import GameState from 'Susa/GameState'
 import World from 'Susa/World'
-import Loader from 'Susa/Loader'
-import Ticker, {TickReport} from 'Susa/Ticker'
+import State from 'Susa/State'
+import Loader from 'Susa/Toolbox/BabylonLoader'
 import Entity, {EntityState} from 'Susa/Entity'
 
-/**
- * Options for creating a Game.
- */
-export interface GameOptions {
-  hostElement: HTMLElement
-  log: Logger
-}
-
-/** Logging function to be used freely by entities and the like. */
-export type Logger = (...messages: any[]) => void
+/** Export abstract class as default. */
+export default Game
 
 /**
- * 3D web game.
+ * Generic game class. Binds the pieces together.
  */
-export default class Game {
+abstract class Game {
 
   /** Logging utility function. */
-  log: Logger
+  protected readonly logger: Logger
 
-  /** Stage which manages the Babylon scene. */
-  protected stage: Stage
+  /** Serializable source-of-truth. */
+  protected readonly state: State
 
-  /** Game state, source of truth that the world is based on. */
-  protected state: GameState
+  /** Stage which manages the scene rendering. */
+  protected readonly stage: Stage
 
-  /** Maintains entity instances, synchronizes with game state. */
-  protected world: World
-
-  /** Game logic loop utility. */
-  protected logicTicker: Ticker
+  /** World which manages entities. */
+  protected readonly world: World
 
   /**
    * Create and wire up the engine components that the game is comprised of.
    */
-  constructor({hostElement, log}: GameOptions) {
-    this.log = log
+  constructor(options: GameOptions) {
+    this.logger = options.logger
+    this.state = options.state
+    this.stage = options.stage
 
-    // Create the Babylon stage.
-    this.stage = new Stage({hostElement})
-
-    // Create the source-of-truth game state.
-    this.state = new GameState()
-
-    // Create the game world, which contains entity instances and conforms to the game state.
     this.world = new World({
-      game: this,
-      stage: this.stage,
-      loader: new Loader({scene: this.stage.scene})
+      logger: this.logger,
+      state: this.state,
+      stage: this.stage
     })
-
-    // Create game logic ticker, and define the game logic routine.
-    this.logicTicker = new Ticker({
-      tick: tickReport => {
-        this.world.synchronize(this.state)
-        this.world.logic(this.state, tickReport)
-      }
-    })
-
-    // Initialize this game.
-    this.initialize()
   }
 
   /**
-   * Tear down and de-initialize all of the game's components.
+   * Shut down.
    * This allows all entities to destruct, thus removing their event bindings which might otherwise cause errors if not removed.
    */
   destructor() {}
-
-  /**
-   * Overridable game initialization step.
-   * Initialize methods are handy, because you don't have to worry about all options that the constructor must accept.
-   */
-  protected initialize() {}
 
   /**
    * Add an entity to the game based on the provided entity state.
    * TODO: Make this return a promise of the true Entity instance within the World.
    */
   addEntity<T extends EntityState>(entityState: T) {
-    this.state.addEntity<T>(entityState)
+    this.state.addEntityState<T>(entityState)
   }
 
   /**
@@ -93,29 +60,25 @@ export default class Game {
    * TODO: Make this return a promise that is resolved when the entity instance is actually removed from the world.
    */
   removeEntity(id: string) {
-    this.state.removeEntity(id)
+    this.state.removeEntityState(id)
   }
 
   /**
-   * Run the whole game engine.
+   * Return the current rendering framerate (frames per second).
    */
-  start() {
-    this.stage.start()
-    this.logicTicker.start()
-  }
+  abstract getFrameRate(): number
 
   /**
-   * Halt the whole game engine.
+   * Return the current logic tick rate (ticks per second).
    */
-  stop(): Promise<void> {
-    this.stage.stop()
-    return this.logicTicker.stop()
-  }
+  abstract getTickRate(): number
+}
 
-  /**
-   * Return the current number of frames being rendered per second.
-   */
-  getFramerate(): number {
-    return this.stage.engine.getFps()
-  }
+/**
+ * Options for creating a Game.
+ */
+export interface GameOptions {
+  logger: Logger
+  state: State
+  stage: Stage
 }
