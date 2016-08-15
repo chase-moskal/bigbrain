@@ -1,5 +1,5 @@
 
-import Stage, { StageOptions, RenderInfo } from 'Susa/Stage'
+import Stage, {RenderInfo} from 'Susa/Stage'
 import BabylonLoader from 'Susa/Toolbox/BabylonLoader'
 
 /**
@@ -7,6 +7,9 @@ import BabylonLoader from 'Susa/Toolbox/BabylonLoader'
  * An access point to key Babylon API components for controlling the 3D scene.
  */
 export default class BabylonStage extends Stage {
+
+  /** HTML element which contains the game's rendering canvas. */
+  readonly hostElement: HTMLElement
 
   /** Canvas HTML element which the game renders to. */
   readonly canvas: HTMLCanvasElement
@@ -52,14 +55,16 @@ export default class BabylonStage extends Stage {
   /**
    * Accept stage options and initialize the stage's babylon components.
    */
-  constructor(options: StageOptions) {
-    super(options)
+  constructor(options: BabylonStageOptions) {
+    super()
 
+    this.hostElement = options.hostElement
     this.canvas = document.createElement('canvas')
-    this.hostElement.appendChild(this.canvas)
     this.engine = new BABYLON.Engine(this.canvas, true)
-
     this.scene = new BABYLON.Scene(this.engine)
+
+    this.hostElement.appendChild(this.canvas)
+
     // this.scene.collisionsEnabled = true
     // this.scene.workerCollisions = true
 
@@ -68,14 +73,6 @@ export default class BabylonStage extends Stage {
 
     // Apparently this makes Babylon care about UV mapping ¯\_(ツ)_/¯
     ; (<any>BABYLON).OBJFileLoader.OPTIMIZE_WITH_UV = true
-  }
-
-  /**
-   * Render a frame.
-   */
-  protected render(info: RenderInfo) {
-    this.scene.render()
-    super.render(info)
   }
 
   /**
@@ -110,4 +107,21 @@ export default class BabylonStage extends Stage {
     for (const eventName of Object.keys(this.listeners))
       document.removeEventListener(eventName, this.listeners[eventName])
   }
+
+  /**
+   * Render a frame.
+   */
+  protected render(info: RenderInfo) {
+    this.scene.render()
+    super.render(info)
+  }
+}
+
+/**
+ * Options for creating a new stage.
+ */
+export interface BabylonStageOptions {
+
+  /** HTML element to inject the canvas within. */
+  hostElement: HTMLElement
 }

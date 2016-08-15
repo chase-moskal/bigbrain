@@ -1,5 +1,6 @@
 
-import Entity from 'Susa/Entity'
+import Entity, {EntityLogicInput, EntityLogicOutput} from 'Susa/Entity'
+import BabylonGame from 'Susa/BabylonGame'
 import BabylonStage from 'Susa/BabylonStage'
 
 /** Export default abstract class. */
@@ -10,6 +11,16 @@ export default BabylonEntity
  */
 abstract class BabylonEntity extends Entity {
 
-  /** Stage instance through which the entity accesses Babylon components (engine, scene, etc). */
+  /** Game instance. Entities can start/stop the game, add/remove entities, etc. */
+  protected game: BabylonGame
+
+  /** Stage instance. Entities can use it for rendering and access to Babylon components. */
   protected stage: BabylonStage
+
+  /**
+   * Empty logic routine is provided to cover the abstract one.
+   */
+  logic(input: EntityLogicInput): EntityLogicOutput {
+    return {}
+  }
 }

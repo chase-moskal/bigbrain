@@ -6,9 +6,6 @@ import State from 'Susa/State'
 import Loader from 'Susa/Toolbox/BabylonLoader'
 import Entity, {EntityState} from 'Susa/Entity'
 
-/** Export abstract class as default. */
-export default Game
-
 /**
  * Generic game class. Binds the pieces together.
  */
@@ -48,8 +45,18 @@ abstract class Game {
   destructor() {}
 
   /**
+   * Start the game world.
+   */
+  start() { return this.world.start() }
+
+  /**
+   * Stop the game world.
+   */
+  stop() { return this.world.stop() }
+
+  /**
    * Add an entity to the game based on the provided entity state.
-   * TODO: Make this return a promise of the true Entity instance within the World.
+   * TODO: Make this resolve a promise of the true Entity instance within the World.
    */
   addEntity<T extends EntityState>(entityState: T) {
     this.state.addEntityState<T>(entityState)
@@ -57,7 +64,7 @@ abstract class Game {
 
   /**
    * Remove an entity from the state based on the provided entity id.
-   * TODO: Make this return a promise that is resolved when the entity instance is actually removed from the world.
+   * TODO: Make this resolve a promise that is resolved when the entity instance is actually removed from the world.
    */
   removeEntity(id: string) {
     this.state.removeEntityState(id)
@@ -74,8 +81,11 @@ abstract class Game {
   abstract getTickRate(): number
 }
 
+/** Export abstract class as default. */
+export default Game
+
 /**
- * Options for creating a Game.
+ * Options for creating a Game instance.
  */
 export interface GameOptions {
   logger: Logger

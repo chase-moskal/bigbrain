@@ -1,7 +1,8 @@
 
 import Logger from 'Susa/Toolbox/Logger'
+import Game from 'Susa/Game'
 import State from 'Susa/State'
-import Stage from 'Susa/Stage'
+import BabylonStage from 'Susa/Stage'
 import Entity, {EntityState, EntityOptions} from 'Susa/Entity'
 import Ticker, {TickReport} from 'Susa/Toolbox/Ticker'
 declare const require: (moduleIds: string[], callback?: (...modules: any[]) => void, errback?: (error: Error) => void) => void
@@ -17,11 +18,14 @@ export default class World {
   /** Logger for world events. */
   private readonly logger: Logger
 
+  /** Parent game instance, passed to summoned entities. */
+  private readonly game: Game
+
   /** Source of truth serializable state. */
   private readonly state: State
 
   /** Stage for rendering the scene. */
-  private readonly stage: Stage
+  private readonly stage: BabylonStage
 
   /** Game logic loop utility. */
   private readonly ticker: Ticker
@@ -39,11 +43,12 @@ export default class World {
    */
   constructor(options: WorldOptions) {
     this.logger = options.logger
+    this.state = options.state
     this.stage = options.stage
 
     // Create logic ticker which runs the logic routine.
     this.ticker = new Ticker({
-      tickAction: tickReport => this.logic(this.state, tickReport)
+      tickAction: tickReport => this.logic(tickReport)
     })
   }
 
@@ -107,15 +112,15 @@ export default class World {
   /**
    * Run game logic across all entities.
    */
-  private logic(gameState: State, tickReport: TickReport): void {
+  private logic(tickReport: TickReport): void {
 
     // Imitate the game state.
-    this.synchronize(gameState)
+    this.synchronize()
 
     // Run all entity logic.
     this.loopOverEntities(entity => {
       entity.logic({
-        state: gameState.getEntityState(entity.id),
+        state: this.state.getEntityState(entity.id),
         tickReport
       })
     })
@@ -127,19 +132,19 @@ export default class World {
    *  - Remove extraneous entities from the world which aren't in the game state.
    *  - Return a report about added/removed entities.
    */
-  private synchronize(state: State): Promise<WorldLogicOutput> {
+  private synchronize(): Promise<WorldLogicOutput> {
     const added: Promise<Entity>[] = []
     const removed: Promise<string>[] = []
 
     // Add entities that are present in the game state, but are missing from this world.
-    state.loopOverEntityStates((entityState, id) => {
+    this.state.loopOverEntityStates((entityState, id) => {
       if (!this.entities.hasOwnProperty(id))
         added.push(this.summonEntity(id, entityState).then(() => undefined))
     })
 
     // Remove entities that are missing from the game state, but are present in this game world.
-    state.loopOverEntityStates((entityState, id) => {
-      if (!state.getEntityState(id))
+    this.state.loopOverEntityStates((entityState, id) => {
+      if (!this.state.getEntityState(id))
         removed.push(this.banishEntity(id).then(() => id))
     })
 
@@ -167,8 +172,9 @@ export default class World {
         entityState,
         tags: entityState.tags,
         logger: this.logger,
-        stage: this.stage,
-        world: this
+        game: this.game,
+        world: this,
+        stage: this.stage
       }
 
       // Handle completed loading for the entity's javascript module.
@@ -188,7 +194,11 @@ export default class World {
       }
 
       // Load the entity.
-      require([entityState.type], onEntityLoad, error => reject)
+      require([entityState.type], onEntityLoad, reject)
+    })
+    .catch(error => {
+      console.error(`Failed to load entity (${entityState.type})`)
+      console.error(error)
     })
   }
 
@@ -210,7 +220,7 @@ export default class World {
 export interface WorldOptions {
   logger: Logger
   state: State
-  stage: Stage
+  stage: BabylonStage
 }
 
 /**

@@ -30,10 +30,13 @@ abstract class Entity {
   /** Simple logging utility. */
   protected readonly logger: Logger
 
+  /** Game instance. Entities can start/stop the game, add/remove entities, etc. */
+  protected readonly game: Game
+
   /** World instance. Entities can query for and access other entity instances. */
   protected readonly world: World
 
-  /** Stage instance. Entities have full access to the Babylon API that the stage exposes. */
+  /** Stage instance. Entities can use the stage for rendering and to access Babylon components. */
   protected readonly stage: Stage
 
   /**
@@ -44,6 +47,7 @@ abstract class Entity {
     this.id = options.id
     this.tags = options.tags || []
     this.logger = options.logger
+    this.game = options.game
     this.world = options.world
     this.stage = options.stage
   }
@@ -74,6 +78,7 @@ export interface EntityOptions {
   entityState: EntityState
   tags?: string[]
   logger: Logger
+  game: Game
   world: World
   stage: Stage
 }
@@ -90,7 +95,7 @@ export interface EntityLogicInput {
  * Output from entity logic.
  */
 export interface EntityLogicOutput {
-  entityStateDelta: any
+  entityStateDelta?: any
 }
 
 /**

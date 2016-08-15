@@ -1,5 +1,5 @@
 
-import Game from 'Susa/Game'
+import Game, {GameOptions} from 'Susa/Game'
 import World from 'Susa/World'
 import BabylonStage from 'Susa/BabylonStage'
 
@@ -25,6 +25,13 @@ export default class BabylonGame extends Game {
    * Return the current logic tick rate (ticks per second).
    */
   getTickRate(): number {
-    throw 'TODO'
+    return 0
   }
+}
+
+/**
+ * Options for creating a BabylonGame instance.
+ */
+export interface BabylonGameOptions extends GameOptions {
+  stage: BabylonStage
 }

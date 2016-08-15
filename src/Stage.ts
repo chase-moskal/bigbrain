@@ -1,25 +1,12 @@
 
-/** Export abstract class as default. */
-export default Stage
-
 /**
  * Rendering stage.
  */
-abstract class Stage {
-
-  /** HTML element which contains the game's rendering canvas. */
-  readonly hostElement: HTMLElement
+abstract class BabylonStage {
 
   /** Nifty diagnostics. */
   readonly stats = {
     totalFrames: 0
-  }
-
-  /**
-   * Construct a stage with options.
-   */
-  constructor(options: StageOptions) {
-    this.hostElement = options.hostElement
   }
 
   /**
@@ -36,14 +23,8 @@ abstract class Stage {
   abstract stop()
 }
 
-/**
- * Options for creating a new stage.
- */
-export interface StageOptions {
-
-  /** HTML element to inject the canvas within. */
-  hostElement: HTMLElement
-}
+/** Export abstract class as default. */
+export default BabylonStage
 
 /**
  * Information passed for each rendered frame.
