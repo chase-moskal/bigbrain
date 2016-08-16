@@ -3,9 +3,6 @@ import Entity, {EntityLogicInput, EntityLogicOutput} from 'Susa/Entity'
 import BabylonGame from 'Susa/BabylonGame'
 import BabylonStage from 'Susa/BabylonStage'
 
-/** Export default abstract class. */
-export default BabylonEntity
-
 /**
  * Entity with access to Babylon components, via the Babylon stage.
  */
@@ -24,3 +21,6 @@ abstract class BabylonEntity extends Entity {
     return {}
   }
 }
+
+/** Export default abstract class. */
+export default BabylonEntity
