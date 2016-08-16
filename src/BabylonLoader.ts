@@ -1,5 +1,5 @@
 
-import Loader, {LoaderOptions, AssetReport} from 'Susa/Toolbox/Loader'
+import Loader, {LoaderOptions, AssetReport} from 'Susa/Loader'
 
 /**
  * Load objects directly into a Babylon scene.

@@ -1,10 +1,10 @@
 
-import Logger from 'Susa/Toolbox/Logger'
+import Logger from 'Susa/Logger'
 import Game from 'Susa/Game'
 import World from 'Susa/World'
 import State from 'Susa/State'
 import Stage from 'Susa/Stage'
-import {TickReport} from 'Susa/Toolbox/Ticker'
+import {TickReport} from 'Susa/Ticker'
 
 /** Export abstract class as default. */
 export default Entity

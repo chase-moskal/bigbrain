@@ -1,10 +1,10 @@
 
-import Logger from 'Susa/Toolbox/Logger'
+import Logger from 'Susa/Logger'
 import Game from 'Susa/Game'
 import State from 'Susa/State'
 import BabylonStage from 'Susa/Stage'
 import Entity, {EntityState, EntityOptions} from 'Susa/Entity'
-import Ticker, {TickReport} from 'Susa/Toolbox/Ticker'
+import Ticker, {TickReport} from 'Susa/Ticker'
 declare const require: (moduleIds: string[], callback?: (...modules: any[]) => void, errback?: (error: Error) => void) => void
 
 /**

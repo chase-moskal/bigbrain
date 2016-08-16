@@ -1,8 +1,5 @@
 
-import Logger from 'Susa/Toolbox/Logger'
-
-/** Export abstract class as default. */
-export default Loader
+import Logger from 'Susa/Logger'
 
 /**
  * Base class.
@@ -23,6 +20,9 @@ abstract class Loader {
    */
   abstract loadAsset(input: AssetRequest)
 }
+
+/** Export abstract class as default. */
+export default Loader
 
 /**
  * Input for creating a loader.

@@ -1,9 +1,9 @@
 
-import Logger from 'Susa/Toolbox/Logger'
+import Logger from 'Susa/Logger'
 import Stage from 'Susa/Stage'
 import World from 'Susa/World'
 import State from 'Susa/State'
-import Loader from 'Susa/Toolbox/BabylonLoader'
+import Loader from 'Susa/BabylonLoader'
 import Entity, {EntityState} from 'Susa/Entity'
 
 /**
