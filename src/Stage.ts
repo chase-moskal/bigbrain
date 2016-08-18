@@ -2,7 +2,7 @@
 /**
  * Rendering stage.
  */
-abstract class BabylonStage {
+abstract class Stage {
 
   /** Nifty diagnostics. */
   readonly stats = {
@@ -24,7 +24,7 @@ abstract class BabylonStage {
 }
 
 /** Export abstract class as default. */
-export default BabylonStage
+export default Stage
 
 /**
  * Information passed for each rendered frame.

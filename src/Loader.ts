@@ -13,12 +13,12 @@ abstract class Loader {
   /**
    * Construct a new loader with options.
    */
-  constructor(input: LoaderOptions) {}
+  constructor(options: LoaderOptions) {}
 
   /**
    * Load an individual asset.
    */
-  abstract loadAsset(input: AssetRequest)
+  abstract loadAsset(request: AssetRequest)
 }
 
 /** Export abstract class as default. */

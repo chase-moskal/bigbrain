@@ -3,7 +3,7 @@ import Logger from 'Susa/Logger'
 import Stage from 'Susa/Stage'
 import World from 'Susa/World'
 import State from 'Susa/State'
-import Loader from 'Susa/BabylonLoader'
+import Loader from 'Susa/Loader'
 import Entity, {EntityState} from 'Susa/Entity'
 
 /**
@@ -11,38 +11,23 @@ import Entity, {EntityState} from 'Susa/Entity'
  */
 abstract class Game {
 
-  /** Logging utility function. */
-  protected readonly logger: Logger
+  /** Logging warnings and diagnostics to the console. */
+  protected abstract readonly logger: Logger
 
-  /** Serializable source-of-truth. */
-  protected readonly state: State
+  /** Stage manages scene rendering. */
+  protected abstract readonly stage: Stage
 
-  /** Stage which manages the scene rendering. */
-  protected readonly stage: Stage
+  /** State describes the entire game world, and is the serializable source-of-truth. */
+  protected abstract readonly state: State
 
-  /** World which manages entities. */
-  protected readonly world: World
-
-  /**
-   * Create and wire up the engine components that the game is comprised of.
-   */
-  constructor(options: GameOptions) {
-    this.logger = options.logger
-    this.state = options.state
-    this.stage = options.stage
-
-    this.world = new World({
-      logger: this.logger,
-      state: this.state,
-      stage: this.stage
-    })
-  }
+  /** World manages entities. */
+  protected abstract readonly world: World
 
   /**
    * Shut down.
-   * This allows all entities to destruct, thus removing their event bindings which might otherwise cause errors if not removed.
+   * Destruct all entities, cleanup event handlers, etc.
    */
-  destructor() {}
+  abstract destructor()
 
   /**
    * Start the game world.
@@ -83,12 +68,3 @@ abstract class Game {
 
 /** Export abstract class as default. */
 export default Game
-
-/**
- * Options for creating a Game instance.
- */
-export interface GameOptions {
-  logger: Logger
-  state: State
-  stage: Stage
-}

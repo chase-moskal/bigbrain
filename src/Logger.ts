@@ -6,10 +6,17 @@
 export default class Logger {
 
   /**
-   * Log messages to the console.
+   * Log a message to the console.
    */
   log(...messages: any[]): void {
     console.log.apply(console, messages)
+  }
+
+  /**
+   * Write a warning to the console.
+   */
+  warn(...messages: any[]): void {
+    console.warn.apply(console, messages)
   }
 }
 
@@ -22,4 +29,9 @@ export class DisabledLogger extends Logger {
    * Disabled log function that does nothing.
    */
   log(...messages: any[]): void {}
+
+  /**
+   * Disabled log function that does nothing.
+   */
+  warn(...messages: any[]): void {}
 }
