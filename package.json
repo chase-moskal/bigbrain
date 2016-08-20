@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Networked web game framework.",
   "scripts": {
-    "initialize": "echo Initializing Susa. && typings install",
+    "ready": "npm install && typings install",
     "clean": "rimraf build",
     "build": "echo Building Susa. && npm run clean --silent && tsc && tslint src/**/*.ts",
     "watch": "tsc -w",
