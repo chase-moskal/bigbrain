@@ -1,7 +1,8 @@
 
-import Entity, {EntityLogicInput, EntityLogicOutput} from 'Susa/Entity'
+import {Tick} from 'Susa/Ticker'
 import BabylonGame from 'Susa/BabylonGame'
 import BabylonStage from 'Susa/BabylonStage'
+import Entity, {EntityLogicInput} from 'Susa/Entity'
 
 /**
  * Entity with access to Babylon components, via the Babylon stage.
@@ -15,11 +16,9 @@ abstract class BabylonEntity extends Entity {
   protected stage: BabylonStage
 
   /**
-   * Empty logic routine is provided to cover the abstract one.
+   * Entity logic routine.
    */
-  logic(input: EntityLogicInput): EntityLogicOutput {
-    return {}
-  }
+  logic(tick: Tick): void {}
 }
 
 /** Export default abstract class. */

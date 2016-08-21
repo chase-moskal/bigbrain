@@ -1,59 +1,63 @@
 
-import Logger from 'Susa/Logger'
 import Stage from 'Susa/Stage'
 import World from 'Susa/World'
-import State from 'Susa/State'
+import Logger from 'Susa/Logger'
 import Loader from 'Susa/Loader'
-import Entity, {EntityState} from 'Susa/Entity'
+import Network, {GameUpdate} from 'Susa/Network'
+import {StatePatch} from 'Susa/State'
+import WorldState from 'Susa/WorldState'
+import Ticker, {Tick} from 'Susa/Ticker'
+import Entity, {EntityData, EntityMessage} from 'Susa/Entity'
 
 /**
- * Generic game class. Binds the pieces together.
+ * Generic game class.
  */
 abstract class Game {
 
-  /** Logging warnings and diagnostics to the console. */
-  protected abstract readonly logger: Logger
+  /** Network streams patches and messages, and handles connections. */
+  protected abstract readonly network: Network
 
-  /** Stage manages scene rendering. */
-  protected abstract readonly stage: Stage
+  /** Ticker is the heartbeat of the game, which actuates the mainloop. */
+  protected readonly ticker: Ticker
 
-  /** State describes the entire game world, and is the serializable source-of-truth. */
-  protected abstract readonly state: State
+  /** State stores and manages game data. */
+  protected abstract readonly state: WorldState
 
   /** World manages entities. */
   protected abstract readonly world: World
+
+  /** Stage for scene rendering. */
+  protected abstract readonly stage: Stage
+
+  /** Logger writes to the console. */
+  protected abstract readonly logger: Logger
+
+  /**
+   * Construct a new game.
+   */
+  constructor(options: GameOptions) {
+    this.stage = options.stage
+
+    this.logger = options.logger || new Logger()
+    this.state = options.state || new WorldState()
+    this.network = options.network || new Network()
+
+    this.ticker = options.ticker || new Ticker({
+      action: tick => this.mainloop(tick)
+    })
+
+    this.world = options.world || new World({
+      game: this,
+      stage: this.stage,
+      logger: this.logger
+    })
+  }
 
   /**
    * Shut down.
    * Destruct all entities, cleanup event handlers, etc.
    */
-  abstract destructor()
-
-  /**
-   * Start the game world.
-   */
-  start() { return this.world.start() }
-
-  /**
-   * Stop the game world.
-   */
-  stop() { return this.world.stop() }
-
-  /**
-   * Add an entity to the game based on the provided entity state.
-   * TODO: Make this resolve a promise of the true Entity instance within the World.
-   */
-  addEntity<T extends EntityState>(entityState: T) {
-    this.state.addEntityState<T>(entityState)
-  }
-
-  /**
-   * Remove an entity from the state based on the provided entity id.
-   * TODO: Make this resolve a promise that is resolved when the entity instance is actually removed from the world.
-   */
-  removeEntity(id: string) {
-    this.state.removeEntityState(id)
-  }
+  abstract destructor(): Promise<void>
 
   /**
    * Return the current rendering framerate (frames per second).
@@ -64,7 +68,153 @@ abstract class Game {
    * Return the current logic tick rate (ticks per second).
    */
   abstract getTickRate(): number
+
+  /**
+   * Start the game world.
+   */
+  start(): void {
+    this.stage.start()
+    return this.ticker.start()
+  }
+
+  /**
+   * Stop the game world.
+   */
+  stop(): Promise<void> {
+    this.stage.stop()
+    return this.ticker.stop()
+  }
+
+  /**
+   * Add an entity to the game based on the provided entity state.
+   * TODO: Make this resolve a promise of the true Entity instance within the World.
+   */
+  addEntity<T extends EntityData>(entityData: T) {
+    this.state.addEntity<T>(entityData)
+  }
+
+  /**
+   * Remove an entity from the state based on the provided entity id.
+   * TODO: Make this resolve a promise that is resolved when the entity instance is actually removed from the world.
+   */
+  removeEntity(id: string) {
+    this.state.deleteEntity(id)
+  }
+
+  /**
+   * Main game routine.
+   */
+  protected mainloop(tick: Tick) {
+    const {state, world, network} = this
+
+    // [1] RECEIVE
+    // Receive the official game update from the network.
+    const {patches, messages} = network.receive()
+
+    // [2] APPLY
+    // Apply patches to our world state.
+    for (const patch of patches) state.apply(patch)
+
+    // [3] SYNC
+    // Sync the world entities to match state, deliver message to entity inboxes.
+    this.sync(messages)
+
+    // [4] LOGIC
+    // Run entity logic routines.
+    const outgoingUpdate = this.logic(tick)
+
+    // [5] SEND
+    // Send locally generated patches and messages to the host.
+    network.send(outgoingUpdate)
+  }
+
+  /**
+   * Synchronize the world to match the state.
+   *  - Add/remove world entities to reflect state.
+   *  - Update entity data and deliver messages to inboxes.
+   *  - Return a promised report.
+   */
+  private sync(messages: EntityMessage[]): Promise<{
+
+    /** Entity instances which were added. */
+    added: Entity[]
+
+    /** The IDs of entity instances which were removed. */
+    removed: string[]
+  }> {
+    const {state, world} = this
+
+    const added: Promise<Entity>[] = []
+    const removed: Promise<string>[] = []
+
+    const stateEntityIds = state.getEntityIds()
+    const entities = world.getEntities()
+
+    // Add new entities to the world, load them dynamically.
+    for (const id of stateEntityIds) {
+      if (!world.entities.hasOwnProperty(id)) {
+        const entityPromise = world.summonEntity(id, state.getEntityData(id))
+        added.push(entityPromise)
+      }
+    }
+
+    // Remove extraneous entities from the world (when they aren't in state).
+    for (const entity of entities) {
+      if (!state.getEntityData(entity.id)) {
+        const removalPromise = world.banishEntity(entity.id).then(() => entity.id)
+        removed.push(removalPromise)
+      }
+    }
+
+    // Update entity data and inboxes.
+    for (const entity of entities) {
+      entity.data = state.getEntityData(entity.id)
+      entity.inbox = messages.filter(message => message.entityId === entity.id)
+    }
+
+    // Return a report of all added or removed entities.
+    return Promise.all<any>([Promise.all(added), Promise.all(removed)])
+      .then(([added, removed]) => ({added, removed}))
+  }
+
+  /**
+   * Entity logic routine.
+   */
+  private logic(tick: Tick): GameUpdate {
+    const {state, world} = this
+    const entities = world.getEntities()
+
+    // Run entity logic.
+    for (const entity of entities) entity.logic(tick)
+
+    // Aggregate a single outgoing patch.
+    const patch = {}
+
+    // Aggregate messages.
+    const messages: EntityMessage[] = entities
+
+      // Array of outboxes.
+      .map(entity => entity.outbox)
+
+      // Flatten to an array of messages.
+      .reduce((a, b) => a.concat(b), [])
+
+    // Return an outgoing game update.
+    return {patches: [patch], messages}
+  }
 }
 
 /** Export abstract class as default. */
 export default Game
+
+/**
+ * Options for constructing a game.
+ */
+export interface GameOptions {
+  stage?: Stage
+  world?: World
+  logger?: Logger
+  ticker?: Ticker
+  network?: Network
+  state?: WorldState
+}

@@ -44,11 +44,13 @@ export default class BabylonStage extends Stage {
 
     // Start and stop pointer lock input.
     pointerlockchange: () => {
-      const locked = (document.pointerLockElement === this.canvas)
-      if (locked)
-        this.scene.activeCamera.attachControl(this.canvas)
-      else
-        this.scene.activeCamera.detachControl(this.canvas)
+      if (this.scene.activeCamera) {
+        const locked = (document.pointerLockElement === this.canvas)
+        if (locked)
+          this.scene.activeCamera.attachControl(this.canvas)
+        else
+          this.scene.activeCamera.detachControl(this.canvas)
+      }
     }
   }
 
