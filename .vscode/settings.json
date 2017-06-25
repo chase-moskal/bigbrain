@@ -1,13 +1,12 @@
 {
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
-  "editor.wrappingColumn": 0,
-  "editor.renderWhitespace": true,
-  "editor.wrappingIndent": "indent",
+  "editor.renderWhitespace": "boundary",
+
   "files.exclude": {
     "node_modules": true,
-    "build": true,
-    "typings": true
+    "build": true
   },
+
   "typescript.tsdk": "node_modules/typescript/lib/"
 }
