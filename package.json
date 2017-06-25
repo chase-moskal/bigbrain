@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/AkkadianGames/Susa#readme",
   "devDependencies": {
+    "babylonjs": "3.0.4-beta",
+    "browserify": "14.4.0",
     "rimraf": "2.6.1",
     "tslint": "5.4.3",
     "typescript": "2.3.4"

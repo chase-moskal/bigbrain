@@ -1,19 +1,16 @@
 {
-  "compileOnSave": true,
   "compilerOptions": {
-    "module": "amd",
-    "target": "es6",
-    "moduleResolution": "node",
-    "rootDir": "src",
-    "outDir": "build",
     "baseUrl": ".",
-    "paths": {
-      "Susa/*": ["src/*"]
-    },
+    "rootDir": "s",
+    "outDir": "o",
+    "module": "umd",
+    "target": "es2016",
+    "moduleResolution": "node",
     "sourceMap": true,
     "declaration": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "s/_archive"
   ]
 }
