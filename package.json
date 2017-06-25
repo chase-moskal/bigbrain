@@ -1,7 +1,7 @@
 {
-  "name": "susa",
-  "version": "0.0.0",
-  "description": "Networked web game framework.",
+  "name": "monarch",
+  "version": "0.1.0-dev",
+  "description": "concept game engine",
   "scripts": {
     "ready": "npm install",
     "clean": "rimraf build",
