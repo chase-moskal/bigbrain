@@ -20,8 +20,6 @@
   "devDependencies": {
     "@types/chai": "4.0.1",
     "@types/mocha": "2.2.41",
-    "babylonjs": "3.0.4-beta",
-    "browserify": "14.4.0",
     "chai": "4.0.2",
     "mocha": "3.4.2",
     "npm-run-all": "4.0.2",
@@ -29,5 +27,7 @@
     "tslint": "5.4.3",
     "typescript": "2.3.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "babylonjs": "3.0.4-beta"
+  }
 }
