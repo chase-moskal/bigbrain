@@ -3,9 +3,7 @@
   "version": "0.1.0-dev",
   "description": "concept game engine",
   "scripts": {
-    "ready": "npm install",
-    "clean": "rimraf build",
-    "build": "echo Building Susa. && npm run clean --silent && tsc && tslint src/**/*.ts",
+    "build": "rimraf build && tsc && tslint src/**/*.ts && echo Done build.",
     "watch": "tsc -w",
     "test": "echo No tests yet, lol && exit 0"
   },
