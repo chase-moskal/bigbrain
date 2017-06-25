@@ -3,9 +3,9 @@
   "version": "0.1.0-dev",
   "description": "concept game engine",
   "scripts": {
-    "build": "rimraf build && tsc && tslint src/**/*.ts && echo Done build.",
-    "watch": "tsc -w",
-    "test": "echo No tests yet, lol && exit 0"
+    "build": "rimraf o && tsc && run-p lint test && echo Done build.",
+    "lint": "tslint src/**/*.ts",
+    "test": "mocha o/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -18,8 +18,13 @@
   },
   "homepage": "https://github.com/AkkadianGames/Susa#readme",
   "devDependencies": {
+    "@types/chai": "4.0.1",
+    "@types/mocha": "2.2.41",
     "babylonjs": "3.0.4-beta",
     "browserify": "14.4.0",
+    "chai": "4.0.2",
+    "mocha": "3.4.2",
+    "npm-run-all": "4.0.2",
     "rimraf": "2.6.1",
     "tslint": "5.4.3",
     "typescript": "2.3.4"

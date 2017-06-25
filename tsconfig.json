@@ -3,6 +3,7 @@
     "baseUrl": ".",
     "rootDir": "s",
     "outDir": "o",
+    "lib": ["es2016", "dom"],
     "module": "umd",
     "target": "es2016",
     "moduleResolution": "node",
@@ -10,6 +11,7 @@
     "declaration": true
   },
   "exclude": [
+    "o",
     "node_modules",
     "s/_archive"
   ]
