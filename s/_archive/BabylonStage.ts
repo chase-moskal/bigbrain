@@ -1,6 +1,6 @@
 
-import Stage, {RenderInfo} from 'Susa/Stage'
-import BabylonLoader from 'Susa/BabylonLoader'
+import Stage, {RenderInfo} from './Stage'
+import BabylonLoader from './BabylonLoader'
 
 /**
  * Govern a 3D Babylon scene from a high level.

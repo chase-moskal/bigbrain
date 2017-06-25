@@ -1,11 +1,11 @@
 
-import Game from 'Susa/Game'
-import World from 'Susa/World'
-import State from 'Susa/State'
-import Stage from 'Susa/Stage'
-import Logger from 'Susa/Logger'
-import {Tick} from 'Susa/Ticker'
-import WorldState from 'Susa/WorldState'
+import Game from './Game'
+import World from './World'
+import State from './State'
+import Stage from './Stage'
+import Logger from './Logger'
+import {Tick} from './Ticker'
+import WorldState from './WorldState'
 
 /**
  * Entity in the game world which responds to fresh entity state on logic ticks.

@@ -1,8 +1,8 @@
 
-import {Tick} from 'Susa/Ticker'
-import BabylonGame from 'Susa/BabylonGame'
-import BabylonStage from 'Susa/BabylonStage'
-import Entity, {EntityLogicInput} from 'Susa/Entity'
+import {Tick} from './Ticker'
+import BabylonGame from './BabylonGame'
+import BabylonStage from './BabylonStage'
+import Entity, {EntityLogicInput} from './Entity'
 
 /**
  * Entity with access to Babylon components, via the Babylon stage.

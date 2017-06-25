@@ -1,5 +1,5 @@
 
-import Logger from 'Susa/Logger'
+import Logger from './Logger'
 
 /**
  * Base class.

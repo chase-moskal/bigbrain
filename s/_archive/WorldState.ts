@@ -1,6 +1,6 @@
 
-import State from 'Susa/State'
-import {EntityData} from 'Susa/Entity'
+import State from './State'
+import {EntityData} from './Entity'
 
 /**
  * World state is specialized for tracking entities.

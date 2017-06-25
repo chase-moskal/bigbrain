@@ -1,6 +1,6 @@
 
-import {StatePatch} from 'Susa/State'
-import {EntityMessage} from 'Susa/Entity'
+import {StatePatch} from './State'
+import {EntityMessage} from './Entity'
 
 /**
  * Network component.

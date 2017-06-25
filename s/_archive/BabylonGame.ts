@@ -1,12 +1,12 @@
 
-import Stage from 'Susa/Stage'
-import State from 'Susa/State'
-import World from 'Susa/World'
-import Logger from 'Susa/Logger'
-import Network from 'Susa/Network'
-import WorldState from 'Susa/WorldState'
-import Game, {GameOptions} from 'Susa/Game'
-import BabylonStage from 'Susa/BabylonStage'
+import Stage from './Stage'
+import State from './State'
+import World from './World'
+import Logger from './Logger'
+import Network from './Network'
+import WorldState from './WorldState'
+import Game, {GameOptions} from './Game'
+import BabylonStage from './BabylonStage'
 
 /**
  * Game that is wired up for the babylon engine.

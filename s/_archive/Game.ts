@@ -1,13 +1,13 @@
 
-import Stage from 'Susa/Stage'
-import World from 'Susa/World'
-import Logger from 'Susa/Logger'
-import Loader from 'Susa/Loader'
-import Network, {GameUpdate} from 'Susa/Network'
-import {StatePatch} from 'Susa/State'
-import WorldState from 'Susa/WorldState'
-import Ticker, {Tick} from 'Susa/Ticker'
-import Entity, {EntityData, EntityMessage} from 'Susa/Entity'
+import Stage from './Stage'
+import World from './World'
+import Logger from './Logger'
+import Loader from './Loader'
+import Network, {GameUpdate} from './Network'
+import {StatePatch} from './State'
+import WorldState from './WorldState'
+import Ticker, {Tick} from './Ticker'
+import Entity, {EntityData, EntityMessage} from './Entity'
 
 /**
  * Generic game class.

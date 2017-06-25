@@ -1,11 +1,11 @@
 
-import Game from 'Susa/Game'
-import Logger from 'Susa/Logger'
-import BabylonStage from 'Susa/Stage'
-import {GameUpdate} from 'Susa/Network'
-import WorldState from 'Susa/WorldState'
-import Ticker, {Tick} from 'Susa/Ticker'
-import Entity, {EntityOptions, EntityMessage, EntityData} from 'Susa/Entity'
+import Game from './Game'
+import Logger from './Logger'
+import BabylonStage from './Stage'
+import {GameUpdate} from './Network'
+import WorldState from './WorldState'
+import Ticker, {Tick} from './Ticker'
+import Entity, {EntityOptions, EntityMessage, EntityData} from './Entity'
 
 declare const require: (moduleIds: string[], callback?: (...modules: any[]) => void, errback?: (error: Error) => void) => void
 
