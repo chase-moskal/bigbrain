@@ -20,6 +20,14 @@ export interface Context {
   readonly host: boolean
 }
 
+export interface StateEntry {
+  type: string
+}
+
+export interface State {
+  [id: string]: StateEntry
+}
+
 export interface MonarchOptions {
   state: State
   context: Context
@@ -55,16 +63,4 @@ export default class Monarch {
     const output = this.simulator.simulate({tick, ...input})
     this.network.send(output)
   }
-}
-
-////
-//// STATE AND ENTRIES
-////
-
-export interface StateEntry {
-  type: string
-}
-
-export interface State {
-  [id: string]: StateEntry
 }

@@ -1,5 +1,6 @@
 
 import {Message} from "./Network"
+import clone from "./Toolbox/clone"
 import Ticker, {Tick} from "./Ticker"
 import {Entity, GenericEntity} from "./Entity"
 import {Context, State, StateEntry} from "./Monarch"
@@ -18,10 +19,6 @@ export interface SimulationOutput {
 export interface SimulatorOptions {
   context: Context
   entityClasses: {[name: string]: typeof Entity}
-}
-
-export function copy(anything: any) {
-  return JSON.parse(JSON.stringify(anything))
 }
 
 export default class Simulator {
@@ -62,7 +59,7 @@ export default class Simulator {
     }
 
     // begin aggregating state and messages for output
-    const outputState: State = copy(state)
+    const outputState: State = clone(state)
     let outputMessages: Message[] = []
 
     // loop over entity instances
