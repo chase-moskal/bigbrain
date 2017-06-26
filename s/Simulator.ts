@@ -1,9 +1,8 @@
 
-import {Message} from "./Network"
 import clone from "./Toolbox/clone"
 import Ticker, {Tick} from "./Ticker"
 import {Entity, GenericEntity} from "./Entity"
-import {Context, State, StateEntry} from "./Monarch"
+import {Context, State, StateEntry, Message} from "./Monarch"
 
 export interface SimulationInput {
   tick: Tick

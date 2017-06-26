@@ -1,7 +1,7 @@
 
 import {expect} from "chai"
 
-import {Message} from "./Network"
+import {Message} from "./Monarch"
 import Simulator from "./Simulator"
 import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
 

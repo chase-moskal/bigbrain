@@ -1,10 +1,6 @@
 
-import {Context, State} from "./Monarch"
 import {SimulationOutput} from "./Simulator"
-
-export interface Message {
-  recipient: string
-}
+import {Context, State, Message} from "./Monarch"
 
 export interface NetworkOptions {
   context: Context

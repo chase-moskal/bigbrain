@@ -28,6 +28,18 @@ export interface State {
   [id: string]: StateEntry
 }
 
+export interface Message {
+  recipient: string
+}
+
+export interface Update {
+  messages: Message[]
+}
+
+export interface Mandate extends Update {
+  state: State
+}
+
 export interface MonarchOptions {
   state: State
   context: Context
