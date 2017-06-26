@@ -1,14 +1,9 @@
 
 import {SimulationOutput} from "./Simulator"
-import {Context, State, Message} from "./Monarch"
+import {Context, State, Message, Update} from "./Monarch"
 
 export interface NetworkOptions {
   context: Context
-}
-
-export interface NetworkUpdate {
-  state: State
-  messages: Message[]
 }
 
 export default class Network {
@@ -18,9 +13,9 @@ export default class Network {
     this.context = options.context
   }
 
-  recv(state: State): NetworkUpdate {
+  recv(state: State): Update {
     return {state, messages: []}
   }
 
-  send(update: NetworkUpdate) {}
+  send(update: Update) {}
 }

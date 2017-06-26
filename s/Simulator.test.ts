@@ -9,7 +9,7 @@ interface DogMessage extends Message {
   payload: string
 }
 
-const createDogSpyReport = () => {
+const createSpyEntity = () => {
   const report = {
     constructed: 0,
     run: 0,
@@ -42,7 +42,7 @@ describe("Simulator", () => {
     const messages = []
 
     it("constructs new entities", () => {
-      const {DogEntity, report} = createDogSpyReport()
+      const {DogEntity, report} = createSpyEntity()
       const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
       expect(report.constructed).to.equal(0)
       const output = simulator.simulate({tick, state, messages})
@@ -51,14 +51,14 @@ describe("Simulator", () => {
     })
 
     it("runs entities", () => {
-      const {DogEntity, report} = createDogSpyReport()
+      const {DogEntity, report} = createSpyEntity()
       const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
       const output = simulator.simulate({tick, state, messages})
       expect(report.run).to.equal(1)
     })
 
     it("forwards messages to entities", () => {
-      const {DogEntity, report} = createDogSpyReport()
+      const {DogEntity, report} = createSpyEntity()
       const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
       const output = simulator.simulate({
         tick,
@@ -72,7 +72,7 @@ describe("Simulator", () => {
     })
 
     it("destructs old entities", () => {
-      const {DogEntity, report} = createDogSpyReport()
+      const {DogEntity, report} = createSpyEntity()
       const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
       const output = simulator.simulate({tick, state, messages})
       expect(report.constructed).to.equal(1)

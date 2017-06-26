@@ -2,18 +2,13 @@
 import clone from "./Toolbox/clone"
 import Ticker, {Tick} from "./Ticker"
 import {Entity, GenericEntity} from "./Entity"
-import {Context, State, StateEntry, Message} from "./Monarch"
+import {Context, State, Message, Update} from "./Monarch"
 
-export interface SimulationInput {
+export interface SimulationInput extends Update {
   tick: Tick
-  state: State
-  messages: Message[]
 }
 
-export interface SimulationOutput {
-  state: State
-  messages: Message[]
-}
+export interface SimulationOutput extends Update {}
 
 export interface SimulatorOptions {
   context: Context

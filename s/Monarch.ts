@@ -34,9 +34,6 @@ export interface Message {
 
 export interface Update {
   messages: Message[]
-}
-
-export interface Mandate extends Update {
   state: State
 }
 
