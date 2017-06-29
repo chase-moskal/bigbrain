@@ -45,7 +45,7 @@ export interface MonarchOptions {
 }
 
 export default class Monarch {
-  private readonly state: State
+  private state: State
   private readonly context: Context
   private readonly network: Network
   private readonly simulator: Simulator
@@ -68,8 +68,17 @@ export default class Monarch {
   }
 
   private mainloop(tick: Tick) {
-    const input = this.network.recv(this.state)
-    const output = this.simulator.simulate({tick, ...input})
+
+    // receive updates from the network
+    const {state, messages} = this.network.recv(this.state)
+
+    // update our copy of the state
+    this.state = state
+
+    // run the simulation given the update, to produce an outgoing update
+    const output = this.simulator.simulate({tick, state, messages})
+
+    // send the outgoing update over the network
     this.network.send(output)
   }
 }
