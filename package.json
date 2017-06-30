@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rimraf o && tsc && run-p lint test && echo Done build.",
     "lint": "tslint src/**/*.ts",
-    "test": "mocha o/**/*.test.js"
+    "test": "nyc --reporter=text mocha -- o/**/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "chai": "4.0.2",
     "mocha": "3.4.2",
     "npm-run-all": "4.0.2",
+    "nyc": "11.0.3",
     "rimraf": "2.6.1",
     "tslint": "5.4.3",
     "typescript": "2.3.4"
