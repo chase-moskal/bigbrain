@@ -1,17 +1,4 @@
 
-/*
-
-Experimental concept grounds for game engine ideas
-
-  const state = {}
-  const context = {host: true}
-  const network = new Network({context})
-  const simulator = new Simulator({context, entityClasses: {Cube, Horse, Landscape, Spectator}})
-
-  const monarch = new Monarch({state, context, network, simulator})
-
-*/
-
 import Network from "./Network"
 import Ticker, {Tick} from "./Ticker"
 import Simulator, {SimulationOutput} from "./Simulator"
@@ -42,6 +29,7 @@ export interface MonarchOptions {
   context: Context
   network: Network
   simulator: Simulator
+  Ticker?: typeof Ticker
 }
 
 export default class Monarch {
@@ -56,7 +44,7 @@ export default class Monarch {
     this.context = options.context
     this.network = options.network
     this.simulator = options.simulator
-    this.ticker = new Ticker({action: tick => this.mainloop(tick)})
+    this.ticker = new (options.Ticker || Ticker)({action: tick => this.mainloop(tick)})
   }
 
   destructor() {

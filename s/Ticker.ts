@@ -1,4 +1,6 @@
 
+import {time, environment} from "./toolbox"
+
 /**
  * Generic ticking loop, with start/stop controls.
  * Keeps a consistent timeline.
@@ -18,7 +20,7 @@ export default class Ticker {
   private stopTickingCallback: () => void
 
   /** Timestamp of the previous tick. */
-  private lastTickTime = performance.now()
+  private lastTickTime = time()
 
   /** Nifty statistics. */
   private stats = {
@@ -46,10 +48,9 @@ export default class Ticker {
     }
 
     // Gather 'start' timings.
-    let now = performance.now()
-    const timeSinceLastTick = now - this.lastTickTime
+    const tickStartTime = time()
+    const timeSinceLastTick = tickStartTime - this.lastTickTime
     this.timeline += timeSinceLastTick
-    const tickStartTime = now
 
     // Call the tick action.
     this.action({
@@ -58,17 +59,20 @@ export default class Ticker {
     })
 
     // Gather 'after' timings.
-    now = performance.now()
-    this.lastTickTime = now
-    const tickTime = now - tickStartTime
+    this.lastTickTime = time()
+    const tickTime = this.lastTickTime - tickStartTime
 
     ++this.stats.totalTicks
 
     // Recurse, but give the browser some time to relax.
     setTimeout(() => {
-      window.requestAnimationFrame(() => {
+      if (environment === "browser") 
+        window.requestAnimationFrame(() => {
+          this.start()
+        })
+      else {
         this.start()
-      })
+      }
     }, this.relax)
   }
 

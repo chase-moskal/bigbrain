@@ -1,5 +1,5 @@
 
-import clone from "./Toolbox/clone"
+import {clone} from "./toolbox"
 import Ticker, {Tick} from "./Ticker"
 import {Context, State, Message, Update} from "./Monarch"
 import {Entity, GenericEntity, EntityClasses} from "./Entity"
