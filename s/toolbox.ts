@@ -15,3 +15,5 @@ export function now() {
     return Math.round((t[0] * 1000) + (t[1] / 1000000))
   }
 }
+
+export const jsonIdentical = (a, b) => JSON.stringify(a) === JSON.stringify(b)

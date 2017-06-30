@@ -1,9 +1,9 @@
 
 import {expect} from "chai"
 
-import Network from "./Network"
-import {sleep, clone} from "./toolbox"
 import Simulator from "./Simulator"
+import {sleep, clone} from "./toolbox"
+import {Network, LocalNetwork} from "./Network"
 import Monarch, {MonarchOptions} from "./Monarch"
 import {createSpyDogClass} from "./Entity.test-tools"
 import {createSpyTickerClass} from "./Ticker.test-tools"
@@ -16,12 +16,9 @@ describe("Monarch", function() {
     const {Dog, report: dogReport} = createSpyDogClass()
     const {Ticker, report: tickerReport} = createSpyTickerClass()
     const context = {host: true}
-    const network = new Network({context})
+    const network = new LocalNetwork({context, state: {}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({
-      context, network, simulator, Ticker,
-      state: {}
-    })
+    const monarch = new Monarch({context, network, simulator, Ticker})
 
     expect(tickerReport.ticks).to.equal(0)
     monarch.start()
@@ -40,12 +37,9 @@ describe("Monarch", function() {
     const {Ticker, report: tickerReport} = createSpyTickerClass()
     const {Dog, report: dogReport} = createSpyDogClass()
     const context = {host: true}
-    const network = new Network({context})
+    const network = new LocalNetwork({context, state: {A123: {type: "Dog"}}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({
-      context, network, simulator, Ticker,
-      state: {A123: {type: "Dog"}}
-    })
+    const monarch = new Monarch({context, network, simulator, Ticker})
 
     monarch.start()
 
@@ -61,12 +55,9 @@ describe("Monarch", function() {
     const {Ticker, report: tickerReport} = createSpyTickerClass()
     const {Dog, report: dogReport} = createSpyDogClass()
     const context = {host: true}
-    const network = new Network({context})
+    const network = new LocalNetwork({context, state: {A123: {type: "Dog"}}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({
-      context, network, simulator, Ticker,
-      state: {A123: {type: "Dog"}}
-    })
+    const monarch = new Monarch({context, network, simulator, Ticker})
 
     monarch.start()
 

@@ -1,7 +1,7 @@
 
 import {expect} from "chai"
 
-import {Message} from "./Monarch"
+import {Message} from "./Network"
 import Simulator from "./Simulator"
 import {createSpyDogClass, DogMessage} from "./Entity.test-tools"
 import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"

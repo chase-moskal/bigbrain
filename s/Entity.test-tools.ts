@@ -1,5 +1,5 @@
 
-import {Message} from "./Monarch"
+import {Message} from "./Network"
 import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
 
 export interface DogMessage extends Message {

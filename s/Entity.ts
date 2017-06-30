@@ -1,6 +1,7 @@
 
 import {Tick} from "./Ticker"
-import {Context, StateEntry, Message} from "./Monarch"
+import {Context} from "./Monarch"
+import {StateEntry, Message} from "./Network"
 
 export interface EntityOptions {
   id: string
