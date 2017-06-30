@@ -1,8 +1,8 @@
 
 import clone from "./Toolbox/clone"
 import Ticker, {Tick} from "./Ticker"
-import {Entity, GenericEntity} from "./Entity"
 import {Context, State, Message, Update} from "./Monarch"
+import {Entity, GenericEntity, EntityClasses} from "./Entity"
 
 export interface SimulationInput extends Update {
   tick: Tick
@@ -12,7 +12,7 @@ export interface SimulationOutput extends Update {}
 
 export interface SimulatorOptions {
   context: Context
-  entityClasses: {[name: string]: typeof Entity}
+  entityClasses: EntityClasses
 }
 
 export default class Simulator {
@@ -23,6 +23,10 @@ export default class Simulator {
   constructor(options: SimulatorOptions) {
     this.context = options.context
     this.entityClasses = options.entityClasses
+  }
+
+  destructor() {
+    for (const id of Object.keys(this.entities)) this.entities[id].destructor()
   }
 
   private nextId = 0
@@ -38,10 +42,10 @@ export default class Simulator {
 
   simulate({tick, state, messages}: SimulationInput): SimulationOutput {
 
-    // loop over state entities
+    // loop over state entries
     for (const id of Object.keys(state)) {
 
-      // add new entities that have appeared in the state
+      // add entities for new entries
       if (!(id in this.entities)) {
         const entry = state[id]
         const Entity = this.getEntityClass(entry.type)
@@ -52,7 +56,7 @@ export default class Simulator {
       }
     }
 
-    // begin aggregating state and messages for output
+    // begin aggregating output state and messages
     const outputState: State = clone(state)
     let outputMessages: Message[] = []
 

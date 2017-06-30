@@ -17,7 +17,7 @@ const createSpyEntity = () => {
     woofs: 0
   }
 
-  class DogEntity extends Entity {
+  class Dog extends Entity {
     constructor(o) {
       report.constructed += 1
       super(o)
@@ -30,20 +30,20 @@ const createSpyEntity = () => {
     destructor() { report.destructed++ }
   }
 
-  return {DogEntity, report}
+  return {Dog, report}
 }
 
 describe("Simulator", () => {
 
-  describe("simulate", () => {
+  describe("simulate method", () => {
     const tick = {timeline: 0, timeSinceLastTick: 0}
     const context = {host: true}
     const state = {A123: {type: "Dog"}}
     const messages = []
 
     it("constructs new entities", () => {
-      const {DogEntity, report} = createSpyEntity()
-      const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
+      const {Dog, report} = createSpyEntity()
+      const simulator = new Simulator({context, entityClasses: {Dog}})
       expect(report.constructed).to.equal(0)
       const output = simulator.simulate({tick, state, messages})
       expect(report.constructed).to.equal(1)
@@ -51,15 +51,15 @@ describe("Simulator", () => {
     })
 
     it("runs entities", () => {
-      const {DogEntity, report} = createSpyEntity()
-      const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
+      const {Dog, report} = createSpyEntity()
+      const simulator = new Simulator({context, entityClasses: {Dog}})
       const output = simulator.simulate({tick, state, messages})
       expect(report.run).to.equal(1)
     })
 
     it("forwards messages to entities", () => {
-      const {DogEntity, report} = createSpyEntity()
-      const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
+      const {Dog, report} = createSpyEntity()
+      const simulator = new Simulator({context, entityClasses: {Dog}})
       const output = simulator.simulate({
         tick,
         state,
@@ -72,8 +72,8 @@ describe("Simulator", () => {
     })
 
     it("destructs old entities", () => {
-      const {DogEntity, report} = createSpyEntity()
-      const simulator = new Simulator({context, entityClasses: {Dog: DogEntity}})
+      const {Dog, report} = createSpyEntity()
+      const simulator = new Simulator({context, entityClasses: {Dog}})
       const output = simulator.simulate({tick, state, messages})
       expect(report.constructed).to.equal(1)
       const output2 = simulator.simulate({tick, state: {}, messages})

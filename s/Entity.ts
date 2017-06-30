@@ -35,3 +35,5 @@ export class GenericEntity extends Entity {
   run(input: EntityRunInput): EntityRunOutput { throw new Error(`generic implementation not for actual use`) }
   destructor() { throw new Error(`generic implementation not for actual use`) }
 }
+
+export type EntityClasses = {[name: string]: typeof Entity}
