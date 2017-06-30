@@ -20,7 +20,7 @@
             "check-whitespace"
         ],
         "quotemark": [
-            false,
+            true,
             "double"
         ],
         "semicolon": [
