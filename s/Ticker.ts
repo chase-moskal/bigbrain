@@ -1,5 +1,5 @@
 
-import {time, environment} from "./toolbox"
+import {now, environment} from "./toolbox"
 
 /**
  * Generic ticking loop, with start/stop controls.
@@ -20,12 +20,7 @@ export default class Ticker {
   private stopTickingCallback: () => void
 
   /** Timestamp of the previous tick. */
-  private lastTickTime = time()
-
-  /** Nifty statistics. */
-  private stats = {
-    totalTicks: 0
-  }
+  private lastTickTime = now()
 
   /**
    * Instantiate a ticker with an action function which will be called repeatedly.
@@ -48,7 +43,7 @@ export default class Ticker {
     }
 
     // Gather 'start' timings.
-    const tickStartTime = time()
+    const tickStartTime = now()
     const timeSinceLastTick = tickStartTime - this.lastTickTime
     this.timeline += timeSinceLastTick
 
@@ -59,10 +54,8 @@ export default class Ticker {
     })
 
     // Gather 'after' timings.
-    this.lastTickTime = time()
+    this.lastTickTime = now()
     const tickTime = this.lastTickTime - tickStartTime
-
-    ++this.stats.totalTicks
 
     // Recurse, but give the browser some time to relax.
     setTimeout(() => {

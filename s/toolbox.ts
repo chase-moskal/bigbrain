@@ -4,11 +4,11 @@ export const clone = value => JSON.parse(JSON.stringify(value))
 export const sleep = (milliseconds: number) =>
   new Promise((resolve, reject) => setTimeout(resolve, milliseconds))
 
-export const environment = new Function("try{return this===window}catch(e){return false}")()
+export const environment: "browser" | "node" = new Function("try{return this===window}catch(e){return false}")()
   ? "browser"
   : "node"
 
-export const time = () => {
+export function now() {
   if (environment === "browser") return performance.now()
   else {
     const t = process.hrtime()
