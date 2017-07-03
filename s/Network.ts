@@ -15,7 +15,7 @@ export interface Message {
 }
 
 export interface Update {
-  state: State
+  state?: State
   messages: Message[]
 }
 
