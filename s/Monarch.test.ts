@@ -3,10 +3,10 @@ import {expect} from "chai"
 
 import Simulator from "./Simulator"
 import {sleep, clone} from "./toolbox"
-import {Network, LoopbackNetwork} from "./Network"
 import Monarch, {MonarchOptions} from "./Monarch"
-import {createSpyDogClass} from "./Entity.test-tools"
+import {Network, LoopbackNetwork} from "./Network"
 import {createSpyTicker} from "./Ticker.test-tools"
+import {createSpyDogClass} from "./Entity.test-tools"
 import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
 
 describe("Monarch", function() {
