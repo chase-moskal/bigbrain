@@ -1,7 +1,7 @@
 
-import {clone} from "./toolbox"
 import {Context} from "./Monarch"
 import Ticker, {Tick} from "./Ticker"
+import {Service, clone} from "./toolbox"
 import {State, Message, Update} from "./Network"
 import {Entity, GenericEntity, EntityClasses} from "./Entity"
 
@@ -16,7 +16,7 @@ export interface SimulatorOptions {
   entityClasses: EntityClasses
 }
 
-export default class Simulator {
+export default class Simulator implements Service {
   private readonly context: Context
   private readonly entityClasses: {[name: string]: typeof Entity}
   private entities: {[id: string]: Entity} = {}
@@ -29,6 +29,8 @@ export default class Simulator {
   destructor() {
     for (const id of Object.keys(this.entities)) this.entities[id].destructor()
   }
+  start() {}
+  stop() {}
 
   private nextId = 0
   private generateId(): string {

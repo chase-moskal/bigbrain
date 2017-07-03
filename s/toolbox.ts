@@ -1,4 +1,34 @@
 
+// mixin decorator
+export const mixin = (...sources: Function[]) => (target: Function) => {
+  for (const source of sources) {
+    for (const name of Object.getOwnPropertyNames(source.prototype))
+      target.prototype[name] = source.prototype[name]
+  }
+}
+
+export interface Service {
+  destructor(): void
+  start(): void
+  stop(): void
+}
+
+export class ServiceMaster {
+  private services: Service[]
+  constructor(services: Service[]) {
+    this.services = services
+  }
+  destructor() {
+    for (const service of this.services) service.destructor()
+  }
+  start() {
+    for (const service of this.services) service.start()
+  }
+  stop() {
+    for (const service of this.services) service.stop()
+  }
+}
+
 export const clone = value => JSON.parse(JSON.stringify(value))
 
 export const sleep = (milliseconds: number) =>

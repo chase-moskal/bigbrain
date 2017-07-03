@@ -1,43 +1,44 @@
 
 /*
 
-const ticker = new Ticker()
-const context = {host: true}
-const entityClasses = {Dog, Cat, Human}
-const network = new LoopbackNetwork({context})
-const simulator = new Simulator({context, entityClasses})
-const monarch = new Monarch({ticker, context, network, simulator})
-
 const canvas = document.createElement("canvas")
 const engine = new Engine(canvas, true)
 const scene = new Scene(engine)
 const susa = new Susa({monarch, canvas, engine, scene})
+
+const context = {scene, host: true}
+
+const ticker = new Ticker()
+const entityClasses = {Dog, Cat, Human}
+const network = new LoopbackNetwork({context})
+const simulator = new Simulator({context, entityClasses})
+const monarch = new Monarch({ticker, context, network, simulator})
 
 */
 
 import * as BABYLON from "babylonjs"
 import {Scene, Engine, PickingInfo} from "babylonjs"
 
-import {now} from "../toolbox"
-import Monarch from "../Monarch"
+import {now, Service} from "../toolbox"
 
 export interface RenderInfo {
   since: number
 }
 
 export interface SusaOptions {
-  scene: Scene
-  engine: Engine
-  monarch: Monarch
   canvas: HTMLCanvasElement
+  engine: Engine
+  scene: Scene
 }
 
-export default class Susa {
-  readonly canvas: HTMLCanvasElement
-  readonly engine: Engine
-  readonly scene: Scene
-  pick: PickingInfo = new PickingInfo()
+export default class Susa implements Service {
+  private readonly canvas: HTMLCanvasElement
+  private readonly engine: Engine
+  private readonly scene: Scene
+
+  private pick: PickingInfo = new PickingInfo()
   private lastRenderTime = now()
+
   private listeners: { [event: string]: () => void } = {
     resize: () => this.engine.resize(),
     mousemove: () => {
@@ -65,6 +66,8 @@ export default class Susa {
     // this.scene.collisionsEnabled = true
     // this.scene.workerCollisions = true
   }
+
+  destructor() {}
 
   /**
    * Add all stage listeners to the document
