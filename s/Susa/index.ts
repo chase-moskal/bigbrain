@@ -4,7 +4,7 @@
 const canvas = document.createElement("canvas")
 const engine = new Engine(canvas, true)
 const scene = new Scene(engine)
-const susa = new Susa({monarch, canvas, engine, scene})
+const susa = new Susa({canvas, engine, scene})
 
 const context = {scene, host: true}
 
@@ -12,7 +12,7 @@ const ticker = new Ticker()
 const entityClasses = {Dog, Cat, Human}
 const network = new LoopbackNetwork({context})
 const simulator = new Simulator({context, entityClasses})
-const monarch = new Monarch({ticker, context, network, simulator})
+const monarch = new Monarch({ticker, network, simulator})
 
 */
 
