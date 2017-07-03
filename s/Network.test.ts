@@ -1,7 +1,7 @@
 
 import {expect} from "chai"
 
-import {jsonIdentical} from "./toolbox"
+import {identical} from "./toolbox"
 import {Network, LocalNetwork} from "./Network"
 
 describe("LocalNetwork", () => {
@@ -23,6 +23,5 @@ describe("LocalNetwork", () => {
     const third = network.recv()
     expect(third.state).to.deep.equal(newState)
     expect(third.messages).to.deep.equal(newMessages)
-
   })
 })

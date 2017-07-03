@@ -16,4 +16,4 @@ export function now() {
   }
 }
 
-export const jsonIdentical = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+export const identical = (a, b) => JSON.stringify(a) === JSON.stringify(b)
