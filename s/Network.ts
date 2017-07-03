@@ -1,4 +1,5 @@
 
+import {Service} from "./toolbox"
 import {Context} from "./Monarch"
 import {SimulationOutput} from "./Simulator"
 
@@ -24,7 +25,7 @@ export interface NetworkOptions {
   state: State
 }
 
-export abstract class Network {
+export abstract class Network implements Service {
   protected state: State
   protected readonly context: Context
 
@@ -33,8 +34,11 @@ export abstract class Network {
     this.context = options.context
   }
 
-  abstract recv(): Update
+  destructor() {}
+  start() {}
+  stop() {}
 
+  abstract recv(): Update
   abstract send(update: Update): void
 }
 

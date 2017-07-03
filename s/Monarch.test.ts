@@ -7,7 +7,7 @@ import Monarch, {MonarchOptions} from "./Monarch"
 import {Network, LoopbackNetwork} from "./Network"
 import {createSpyTicker} from "./Ticker.test-tools"
 import {createSpyDogClass} from "./Entity.test-tools"
-import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
+import {Entity, LogicInput, LogicOutput} from "./Entity"
 
 describe("Monarch", function() {
   this.slow(200)
@@ -33,7 +33,7 @@ describe("Monarch", function() {
     monarch.destructor()
   })
 
-  it("runs initial entities every tick", async () => {
+  it("run initial entity logic every tick", async () => {
     const {ticker, report: tickerReport} = createSpyTicker()
     const {Dog, report: dogReport} = createSpyDogClass()
     const context = {host: true}
@@ -48,10 +48,10 @@ describe("Monarch", function() {
     monarch.destructor()
 
     expect(tickerReport.ticks).to.be.greaterThan(1)
-    expect(tickerReport.ticks).to.equal(dogReport.run)
+    expect(tickerReport.ticks).to.equal(dogReport.logic)
   })
 
-  it("constructs, runs, and destructs dog entity", async () => {
+  it("orchestrates entity lifecycle (construct, logic, destruct)", async () => {
     const {ticker, report: tickerReport} = createSpyTicker()
     const {Dog, report: dogReport} = createSpyDogClass()
     const context = {host: true}
@@ -66,7 +66,7 @@ describe("Monarch", function() {
     monarch.destructor()
 
     expect(dogReport.constructed).to.be.equal(1)
-    expect(dogReport.run).to.be.greaterThan(1)
+    expect(dogReport.logic).to.be.greaterThan(1)
     expect(dogReport.destructed).to.be.equal(1)
     expect(dogReport.woofs).to.equal(0)
   })

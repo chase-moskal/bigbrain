@@ -3,7 +3,7 @@ import {expect} from "chai"
 
 import {Message} from "./Network"
 import Simulator from "./Simulator"
-import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
+import {Entity, LogicInput, LogicOutput} from "./Entity"
 import {createSpyDogClass, DogMessage} from "./Entity.test-tools"
 
 describe("Simulator", () => {
@@ -21,11 +21,11 @@ describe("Simulator", () => {
     expect(output.state.A123.type).to.equal("Dog")
   })
 
-  it("runs entities", () => {
+  it("runs entity logic", () => {
     const {Dog, report} = createSpyDogClass()
     const simulator = new Simulator({context, entityClasses: {Dog}})
     const output = simulator.simulate({tick, state, messages})
-    expect(report.run).to.equal(1)
+    expect(report.logic).to.equal(1)
   })
 
   it("forwards messages to entities", () => {

@@ -21,7 +21,7 @@ export default class Monarch extends ServiceMaster {
   private readonly simulator: Simulator
 
   constructor({ticker, network, simulator, services = []}: MonarchOptions) {
-    super([...services, ticker, simulator])
+    super([...services, ticker, network, simulator])
     this.network = network
     this.simulator = simulator
     ticker.subscribe(tick => this.mainloop(tick))

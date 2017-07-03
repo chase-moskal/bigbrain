@@ -8,6 +8,17 @@ export interface EntityOptions {
   context: Context
 }
 
+export interface LogicInput {
+  tick: Tick
+  entry: StateEntry
+  messages: Message[]
+}
+
+export interface LogicOutput {
+  entry: StateEntry
+  messages: Message[]
+}
+
 export abstract class Entity {
   readonly id: string
   protected readonly context: Context
@@ -17,24 +28,12 @@ export abstract class Entity {
     this.context = options.context
   }
 
-  abstract run(input: EntityRunInput): EntityRunOutput
-  abstract destructor()
-}
-
-export interface EntityRunInput {
-  tick: Tick
-  entry: StateEntry
-  messages: Message[]
-}
-
-export interface EntityRunOutput {
-  entry: StateEntry
-  messages: Message[]
+  abstract logic(input: LogicInput): LogicOutput
+  destructor() {}
 }
 
 export class GenericEntity extends Entity {
-  run(input: EntityRunInput): EntityRunOutput { throw new Error(`generic implementation not for actual use`) }
-  destructor() { throw new Error(`generic implementation not for actual use`) }
+  logic(input: LogicInput): LogicOutput { throw new Error(`generic implementation not for actual use`) }
 }
 
-export type EntityClasses = {[name: string]: typeof Entity}
+export type EntityClasses = {[name: string]: typeof GenericEntity}

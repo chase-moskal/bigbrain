@@ -67,10 +67,10 @@ export default class Simulator implements Service {
     for (const id of Object.keys(this.entities)) {
       const entity = this.entities[id]
 
-      // run entities who have state entries
+      // run logic for entities who have state entries
       if (id in state) {
         const entry = state[id]
-        const result = entity.run({
+        const result = entity.logic({
           tick,
           entry,
           messages: messages.filter(message => message.recipient === entity.id)

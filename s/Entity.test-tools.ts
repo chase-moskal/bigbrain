@@ -1,6 +1,6 @@
 
 import {Message} from "./Network"
-import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
+import {Entity, LogicInput, LogicOutput, GenericEntity} from "./Entity"
 
 export interface DogMessage extends Message {
   payload: string
@@ -9,7 +9,7 @@ export interface DogMessage extends Message {
 export const createSpyDogClass = () => {
   const report = {
     constructed: 0,
-    run: 0,
+    logic: 0,
     destructed: 0,
     woofs: 0
   }
@@ -21,8 +21,8 @@ export const createSpyDogClass = () => {
       report.constructed += 1
     }
 
-    run({tick, entry, messages}: EntityRunInput): EntityRunOutput {
-      report.run += 1
+    logic({tick, entry, messages}: LogicInput): LogicOutput {
+      report.logic += 1
       report.woofs += (<DogMessage[]>messages).filter(message => message.payload === "woof").length
       return {entry, messages: []}
     }
@@ -30,5 +30,5 @@ export const createSpyDogClass = () => {
     destructor() { report.destructed++ }
   }
 
-  return {Dog: (<typeof Entity>Dog), report}
+  return {Dog: <typeof GenericEntity>Dog, report}
 }
