@@ -2,13 +2,13 @@
 import {expect} from "chai"
 
 import {identical} from "./toolbox"
-import {Network, LocalNetwork} from "./Network"
+import {Network, LoopbackNetwork} from "./Network"
 
-describe("LocalNetwork", () => {
+describe("LoopbackNetwork", () => {
 
   it("feedback loop is active", () => {
     const state = {A123: {type: "Dog"}}
-    const network = new LocalNetwork({context: {host: true}, state})
+    const network = new LoopbackNetwork({context: {host: true}, state})
 
     const first = network.recv()
     expect(first.state).to.deep.equal(state)

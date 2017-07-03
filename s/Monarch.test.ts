@@ -3,10 +3,10 @@ import {expect} from "chai"
 
 import Simulator from "./Simulator"
 import {sleep, clone} from "./toolbox"
-import {Network, LocalNetwork} from "./Network"
+import {Network, LoopbackNetwork} from "./Network"
 import Monarch, {MonarchOptions} from "./Monarch"
 import {createSpyDogClass} from "./Entity.test-tools"
-import {createSpyTickerClass} from "./Ticker.test-tools"
+import {createSpyTicker} from "./Ticker.test-tools"
 import {Entity, EntityRunInput, EntityRunOutput} from "./Entity"
 
 describe("Monarch", function() {
@@ -14,11 +14,11 @@ describe("Monarch", function() {
 
   it("ticks between start and stop", async () => {
     const {Dog, report: dogReport} = createSpyDogClass()
-    const {Ticker, report: tickerReport} = createSpyTickerClass()
+    const {ticker, report: tickerReport} = createSpyTicker()
     const context = {host: true}
-    const network = new LocalNetwork({context, state: {}})
+    const network = new LoopbackNetwork({context, state: {}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({context, network, simulator, Ticker})
+    const monarch = new Monarch({ticker, context, network, simulator})
 
     expect(tickerReport.ticks).to.equal(0)
     monarch.start()
@@ -34,12 +34,12 @@ describe("Monarch", function() {
   })
 
   it("runs initial entities every tick", async () => {
-    const {Ticker, report: tickerReport} = createSpyTickerClass()
+    const {ticker, report: tickerReport} = createSpyTicker()
     const {Dog, report: dogReport} = createSpyDogClass()
     const context = {host: true}
-    const network = new LocalNetwork({context, state: {A123: {type: "Dog"}}})
+    const network = new LoopbackNetwork({context, state: {A123: {type: "Dog"}}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({context, network, simulator, Ticker})
+    const monarch = new Monarch({ticker, context, network, simulator})
 
     monarch.start()
 
@@ -52,12 +52,12 @@ describe("Monarch", function() {
   })
 
   it("constructs, runs, and destructs dog entity", async () => {
-    const {Ticker, report: tickerReport} = createSpyTickerClass()
+    const {ticker, report: tickerReport} = createSpyTicker()
     const {Dog, report: dogReport} = createSpyDogClass()
     const context = {host: true}
-    const network = new LocalNetwork({context, state: {A123: {type: "Dog"}}})
+    const network = new LoopbackNetwork({context, state: {A123: {type: "Dog"}}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({context, network, simulator, Ticker})
+    const monarch = new Monarch({ticker, context, network, simulator})
 
     monarch.start()
 

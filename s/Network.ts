@@ -38,7 +38,7 @@ export abstract class Network {
   abstract send(update: Update): void
 }
 
-export class LocalNetwork extends Network {
+export class LoopbackNetwork extends Network {
   protected state: State
   private inbox: Message[] = []
 

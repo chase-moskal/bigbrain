@@ -1,26 +1,20 @@
 
 import Ticker, {TickAction, TickerOptions} from "./Ticker"
 
-export const createSpyTickerClass = () => {
-
+export const createSpyTicker = (options: TickerOptions = {}) => {
   const report = {
     ticks: 0
   }
 
   class SpyTicker extends Ticker {
-    constructor(options: TickerOptions) {
-      super({
-        ...options,
-        action: tick => {
-          report.ticks++
-          options.action(tick)
-        }
-      })
+    constructor(o) {
+      super(o)
+      this.subscribe(tick => report.ticks++)
     }
   }
 
   return {
-    Ticker: <typeof Ticker> SpyTicker,
-    report
+    report,
+    ticker: <Ticker> new SpyTicker(options)
   }
 }

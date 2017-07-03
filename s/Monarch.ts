@@ -8,10 +8,10 @@ export interface Context {
 }
 
 export interface MonarchOptions {
+  ticker: Ticker
   context: Context
   network: Network
   simulator: Simulator
-  Ticker?: typeof Ticker
 }
 
 export default class Monarch {
@@ -21,10 +21,11 @@ export default class Monarch {
   private readonly simulator: Simulator
 
   constructor(options: MonarchOptions) {
+    this.ticker = options.ticker
     this.context = options.context
     this.network = options.network
     this.simulator = options.simulator
-    this.ticker = new (options.Ticker || Ticker)({action: tick => this.mainloop(tick)})
+    this.ticker.subscribe(tick => this.mainloop(tick))
   }
 
   destructor() {
