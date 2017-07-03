@@ -18,7 +18,7 @@ export interface SimulatorOptions {
 
 export default class Simulator implements Service {
   private readonly context: Context
-  private readonly entityClasses: {[name: string]: typeof Entity}
+  private readonly entityClasses: EntityClasses
   private entities: {[id: string]: Entity} = {}
 
   constructor(options: SimulatorOptions) {

@@ -13,7 +13,7 @@ export interface Service {
   stop(): void
 }
 
-export class ServiceMaster {
+export class ServiceMaster implements Service {
   private services: Service[]
   constructor(services: Service[]) {
     this.services = services

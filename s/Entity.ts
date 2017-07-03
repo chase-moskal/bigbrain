@@ -3,11 +3,6 @@ import {Tick} from "./Ticker"
 import {Context} from "./Monarch"
 import {StateEntry, Message} from "./Network"
 
-export interface EntityOptions {
-  id: string
-  context: Context
-}
-
 export interface LogicInput {
   tick: Tick
   entry: StateEntry
@@ -19,17 +14,20 @@ export interface LogicOutput {
   messages: Message[]
 }
 
-export abstract class Entity {
+export abstract class Entity<gContext extends Context = Context> {
   readonly id: string
-  protected readonly context: Context
+  protected readonly context: gContext
 
-  constructor(options: EntityOptions) {
+  constructor(options: {
+    id: string
+    context: gContext
+  }) {
     this.id = options.id
     this.context = options.context
   }
 
-  abstract logic(input: LogicInput): LogicOutput
   destructor() {}
+  abstract logic(input: LogicInput): LogicOutput
 }
 
 export class GenericEntity extends Entity {
