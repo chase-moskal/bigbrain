@@ -1,7 +1,7 @@
 
 import {Engine, Scene} from "babylonjs"
 
-import Dog from "./Dog"
+import Cube from "./Cube"
 import Susa from "../Susa"
 import Ticker from "../Ticker"
 import Simulator from "../Simulator"
@@ -26,7 +26,7 @@ export default class PlaygroundGame extends ServiceMaster {
     const context: PlaygroundContext = {host: true, scene}
     const ticker = new Ticker()
     const network = new LoopbackNetwork({context: <PlaygroundContext>{host: true, scene}, state: {}})
-    const simulator = new Simulator({context, entityClasses: {Dog}})
+    const simulator = new Simulator({context, entityClasses: {Cube}})
     const monarch = new Monarch({ticker, network, simulator, services: [susa]})
 
     // monarch is a service of this game

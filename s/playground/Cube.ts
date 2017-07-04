@@ -9,21 +9,24 @@ import {PlaygroundContext} from "./PlaygroundGame"
 import {LoopbackNetwork, StateEntry} from "../Network"
 import {Entity, GenericEntity, EntityClasses, LogicInput, LogicOutput} from "../Entity"
 
-export interface DogEntry extends StateEntry {
-  woofs: number
-}
-export interface DogLogicInput extends LogicInput {
-  entry: DogEntry
-}
-export interface DogLogicOutput extends LogicOutput {
-  entry: DogEntry
+export interface CubeEntry extends StateEntry {
+  lifespan: number
 }
 
-export default class Dog extends Entity<PlaygroundContext> {
-  logic({tick, entry, messages}: DogLogicInput): DogLogicOutput {
+export interface CubeLogicInput extends LogicInput {
+  entry: CubeEntry
+}
+
+export interface CubeLogicOutput extends LogicOutput {
+  entry: CubeEntry
+}
+
+export default class Cube extends Entity<PlaygroundContext> {
+
+  logic({tick, entry, messages}: CubeLogicInput): CubeLogicOutput {
     if (this.context.host) {}
     return {
-      entry: {type: "Dog", woofs: 1},
+      entry: {type: "Cube", lifespan: 0},
       messages: [{recipient: ""}]
     }
   }
