@@ -3,15 +3,15 @@ import {Tick} from "./Ticker"
 import {Context} from "./Monarch"
 import {StateEntry, Message} from "./Network"
 
-export interface LogicInput {
+export interface LogicInput<gEntry extends StateEntry = StateEntry, gMessage extends Message = Message> {
   tick: Tick
-  entry: StateEntry
-  messages: Message[]
+  entry: gEntry
+  messages: gMessage[]
 }
 
-export interface LogicOutput {
-  entry: StateEntry
-  messages: Message[]
+export interface LogicOutput<gEntry extends StateEntry = StateEntry, gMessage extends Message = Message> {
+  entry: gEntry
+  messages: gMessage[]
 }
 
 export abstract class Entity<gContext extends Context = Context> {

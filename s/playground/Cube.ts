@@ -6,24 +6,18 @@ import Ticker from "../Ticker"
 import Simulator from "../Simulator"
 import Monarch, {Context} from "../Monarch"
 import {PlaygroundContext} from "./PlaygroundGame"
-import {LoopbackNetwork, StateEntry} from "../Network"
+import {LoopbackNetwork, StateEntry, Message} from "../Network"
 import {Entity, GenericEntity, EntityClasses, LogicInput, LogicOutput} from "../Entity"
 
 export interface CubeEntry extends StateEntry {
   lifespan: number
 }
 
-export interface CubeLogicInput extends LogicInput {
-  entry: CubeEntry
-}
-
-export interface CubeLogicOutput extends LogicOutput {
-  entry: CubeEntry
-}
+export interface CubeMessage extends Message {}
 
 export default class Cube extends Entity<PlaygroundContext> {
 
-  logic({tick, entry, messages}: CubeLogicInput): CubeLogicOutput {
+  logic({tick, entry, messages}: LogicInput<CubeEntry, CubeMessage>): LogicOutput<CubeEntry, CubeMessage> {
     if (this.context.host) {}
     return {
       entry: {type: "Cube", lifespan: 0},
