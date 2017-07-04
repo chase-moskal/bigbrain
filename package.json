@@ -3,8 +3,10 @@
   "version": "0.1.0-dev",
   "description": "concept game engine",
   "scripts": {
-    "build": "rimraf o && tsc && run-p lint test && echo Done build.",
+    "build": "rimraf o && tsc && run-p build-playground lint test && echo Done build",
+    "build-playground": "browserify o/playground/index.js > o/playground/index.bundle.js && echo Done playground build",
     "lint": "tslint src/**/*.ts",
+    "start": "http-server",
     "test": "nyc --reporter=text mocha -- o/**/*.test.js"
   },
   "repository": {
@@ -21,7 +23,9 @@
     "@types/chai": "4.0.1",
     "@types/mocha": "2.2.41",
     "@types/node": "8.0.6",
+    "browserify": "14.4.0",
     "chai": "4.0.2",
+    "http-server": "0.10.0",
     "mocha": "3.4.2",
     "npm-run-all": "4.0.2",
     "nyc": "11.0.3",
