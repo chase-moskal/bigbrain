@@ -1,52 +1,43 @@
 
-/*
+import {Scene, Engine, PickingInfo, Camera, Vector3} from "babylonjs"
 
-const canvas = document.createElement("canvas")
-const engine = new Engine(canvas, true)
-const scene = new Scene(engine)
-const susa = new Susa({canvas, engine, scene})
-
-const context = {scene, host: true}
-
-const ticker = new Ticker()
-const entityClasses = {Dog, Cat, Human}
-const network = new LoopbackNetwork({context})
-const simulator = new Simulator({context, entityClasses})
-const monarch = new Monarch({ticker, network, simulator})
-
-*/
-
-import * as BABYLON from "babylonjs"
-import {Scene, Engine, PickingInfo} from "babylonjs"
-
-import {now, Service} from "../toolbox"
+import {now, Service} from "./toolbox"
 
 export interface RenderInfo {
   since: number
 }
 
 export interface SusaOptions {
-  canvas: HTMLCanvasElement
-  engine: Engine
   scene: Scene
+  engine: Engine
+  window: Window
+  canvas: HTMLCanvasElement
 }
 
 export default class Susa implements Service {
-  private readonly canvas: HTMLCanvasElement
-  private readonly engine: Engine
   private readonly scene: Scene
+  private readonly engine: Engine
+  private readonly window: Window
+  private readonly document: Document
+  private readonly canvas: HTMLCanvasElement
 
+  private readonly fallbackCamera: Camera
   private pick: PickingInfo = new PickingInfo()
   private lastRenderTime = now()
 
-  private listeners: { [event: string]: () => void } = {
-    resize: () => this.engine.resize(),
+  private readonly listeners: { [eventName: string]: () => void } = {
+
+    resize: () => {
+      this.engine.resize()
+    },
+
     mousemove: () => {
       this.pick = this.scene.pick(this.scene.pointerX, this.scene.pointerY)
     },
+
     pointerlockchange: () => {
       if (this.scene.activeCamera) {
-        const locked = (document.pointerLockElement === this.canvas)
+        const locked = (this.document.pointerLockElement === this.canvas)
         if (locked) this.scene.activeCamera.attachControl(this.canvas)
         else this.scene.activeCamera.detachControl(this.canvas)
       }
@@ -54,6 +45,8 @@ export default class Susa implements Service {
   }
 
   constructor(options: SusaOptions) {
+    this.window = options.window
+    this.document = options.window.document
     this.canvas = options.canvas
     this.engine = options.engine
     this.scene = options.scene
@@ -61,10 +54,8 @@ export default class Susa implements Service {
     this.canvas.onclick = () => this.canvas.requestPointerLock()
     this.engine.isPointerLock = true
 
-    // Apparently this makes Babylon care about UV mapping ¯\_(ツ)_/¯
-    ;(<any> BABYLON).OBJFileLoader.OPTIMIZE_WITH_UV = true
-    // this.scene.collisionsEnabled = true
-    // this.scene.workerCollisions = true
+    this.fallbackCamera = new Camera("FallbackCamera", new Vector3(0, 1, -15), this.scene)
+    if (!this.scene.activeCamera) this.scene.activeCamera = this.fallbackCamera
   }
 
   destructor() {}
@@ -75,7 +66,7 @@ export default class Susa implements Service {
    */
   start() {
     for (const eventName of Object.keys(this.listeners))
-      document.addEventListener(eventName, this.listeners[eventName])
+      this.window.addEventListener(eventName, this.listeners[eventName])
 
     this.engine.runRenderLoop(() => {
       const since = now() - this.lastRenderTime
@@ -92,7 +83,7 @@ export default class Susa implements Service {
   stop() {
     this.engine.stopRenderLoop()
     for (const eventName of Object.keys(this.listeners))
-      document.removeEventListener(eventName, this.listeners[eventName])
+      this.window.removeEventListener(eventName, this.listeners[eventName])
   }
 
   /**

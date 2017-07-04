@@ -3,8 +3,9 @@
   "version": "0.1.0-dev",
   "description": "concept game engine",
   "scripts": {
-    "build": "rimraf o && tsc && run-p build-playground lint test && echo Done build",
-    "build-playground": "browserify o/playground/index.js > o/playground/index.bundle.js && echo Done playground build",
+    "build": "rimraf o && run-p build-library build-playground lint && echo Done build",
+    "build-library": "tsc && npm test -s",
+    "build-playground": "mkdirp o/playground/ && browserify s/playground/index.ts --debug -p [ tsify ] > o/playground/index.bundle.js",
     "lint": "tslint src/**/*.ts",
     "start": "http-server",
     "test": "nyc --reporter=text mocha -- o/**/*.test.js"
@@ -26,10 +27,12 @@
     "browserify": "14.4.0",
     "chai": "4.0.2",
     "http-server": "0.10.0",
+    "mkdirp": "0.5.1",
     "mocha": "3.4.2",
     "npm-run-all": "4.0.2",
     "nyc": "11.0.3",
     "rimraf": "2.6.1",
+    "tsify": "3.0.1",
     "tslint": "5.4.3",
     "typescript": "2.4.1"
   },
