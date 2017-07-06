@@ -1,6 +1,5 @@
 
 import Playground from "./Playground"
-import Cube, {CubeEntry} from "./Cube"
 import Environment, {EnvironmentEntry} from "./Environment"
 
 const game = new Playground({

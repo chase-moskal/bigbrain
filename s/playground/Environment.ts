@@ -47,6 +47,6 @@ export default class Environment extends PlaygroundEntity {
       scene.activeCamera = this.spectator
     }
 
-    return {entry, messages: []}
+    return null
   }
 }

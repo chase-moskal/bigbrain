@@ -1,7 +1,6 @@
 
 import {Engine, Scene} from "babylonjs"
 
-import Cube from "./Cube"
 import Susa from "../Susa"
 import Ticker from "../Ticker"
 import Simulator from "../Simulator"
