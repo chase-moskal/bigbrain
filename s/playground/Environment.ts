@@ -18,7 +18,7 @@ export default class Environment extends PlaygroundEntity {
     const {host, scene, canvas} = this.context
     const {spectator} = this
 
-    scene.clearColor = new Color4(0.5, 0.75, 1, 1)
+    scene.clearColor = new Color4(0.2, 0.2, 0.2, 1)
 
     spectator.setTarget(new Vector3(0, 0, 0))
     spectator.speed = 0.25
