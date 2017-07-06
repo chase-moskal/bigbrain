@@ -29,6 +29,6 @@ export default class Monarch extends ServiceMaster {
 
   private mainloop(tick: Tick) {
     const {network, simulator} = this
-    network.send(simulator.simulate({tick,...network.recv()}))
+    network.send(simulator.simulate({tick, ...network.recv()}))
   }
 }

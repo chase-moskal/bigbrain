@@ -27,6 +27,7 @@
     "browserify": "14.4.0",
     "chai": "4.0.2",
     "http-server": "0.10.0",
+    "is-utf8": "0.2.1",
     "mkdirp": "0.5.1",
     "mocha": "3.4.2",
     "npm-run-all": "4.0.2",
