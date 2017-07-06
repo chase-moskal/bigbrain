@@ -1,6 +1,7 @@
 
-import {HemisphericLight, FreeCamera, Mesh, Vector3, Color4} from "babylonjs"
+import {HemisphericLight, FreeCamera, Mesh, Vector3, Color4, ShadowGenerator, SpotLight} from "babylonjs"
 
+import {loadBabylonFile} from "../Susa"
 import {StateEntry, Message} from "../Network"
 import {Entity, LogicInput, LogicOutput} from "../Entity"
 
@@ -10,27 +11,40 @@ export interface EnvironmentEntry extends StateEntry {}
 export interface EnvironmentMessage extends Message {}
 
 export default class Environment extends PlaygroundEntity {
-  private readonly floor = Mesh.CreateGround("Floor", 10, 10, 2, this.context.scene)
-  private readonly light = new HemisphericLight("Light", new Vector3(1, 4, 2), this.context.scene)
-  private readonly spectator = new FreeCamera("Camera", new Vector3(0, 1, -15), this.context.scene)
+  private readonly spectator = new FreeCamera("Camera", new Vector3(0, 5, -15), this.context.scene)
 
   constructor(o) {
     super(o)
-    this.context.scene.clearColor = new Color4(0.5, 0.75, 1, 1)
+    const {host, scene, canvas} = this.context
+    const {spectator} = this
+
+    scene.clearColor = new Color4(0.5, 0.75, 1, 1)
+
+    spectator.setTarget(new Vector3(0, 0, 0))
+    spectator.speed = 0.25
+
+    loadBabylonFile(scene, "assets/playground-environment.babylon")
+      .then(() => {
+        const plane = <Mesh> scene.getMeshByName("Plane")
+        const torus = <Mesh> scene.getMeshByName("Torus")
+        const icosphere = <Mesh> scene.getMeshByName("Icosphere")
+        const light = <SpotLight> scene.getLightByName("Spot")
+
+        const shadowGenerator = new ShadowGenerator(1024, light)
+        const shadowCasters = [torus, icosphere]
+        const shadowReceivers = [plane, torus, icosphere]
+        shadowGenerator.getShadowMap().renderList.push(...shadowCasters)
+        plane.receiveShadows = true
+        shadowGenerator.usePoissonSampling = true
+      })
+      .catch(e => console.log(e))
   }
 
-  destructor() {
-    this.context.scene.removeMesh(this.floor)
-    this.context.scene.removeLight(this.light)
-    this.context.scene.removeCamera(this.spectator)
-  }
-
-  logic({tick, entry, messages}: LogicInput<EnvironmentEntry, EnvironmentMessage>): LogicOutput<EnvironmentEntry, EnvironmentMessage> {
-    const {scene, host} = this.context
+  logic({entry}: LogicInput<EnvironmentEntry>) {
+    const {host, scene, canvas} = this.context
 
     if (scene.activeCamera !== this.spectator) {
       scene.activeCamera = this.spectator
-      this.spectator.attachControl(this.context.canvas, false)
     }
 
     return {entry, messages: []}

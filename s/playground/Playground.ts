@@ -7,7 +7,7 @@ import Ticker from "../Ticker"
 import Simulator from "../Simulator"
 import Monarch, {Context} from "../Monarch"
 import {Service, ServiceMaster} from "../toolbox"
-import {LoopbackNetwork, StateEntry, State} from "../Network"
+import {LoopbackNetwork, StateEntry, State, Message} from "../Network"
 import {Entity, GenericEntity, EntityClasses, LogicInput, LogicOutput} from "../Entity"
 
 export interface PlaygroundContext extends Context {

@@ -1,5 +1,5 @@
 
-import {Scene, Engine, PickingInfo, Camera, Vector3} from "babylonjs"
+import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader} from "babylonjs"
 
 import {now, Service} from "./toolbox"
 
@@ -14,11 +14,38 @@ export interface SusaOptions {
   canvas: HTMLCanvasElement
 }
 
+export function pathBreakdown(path: string) {
+  let dirpath = ""
+  let filename = ""
+  if (path.includes("/")) {
+    const parts = path.split("/")
+    filename = parts.pop()
+    dirpath = parts.join("/") + "/"
+  } else {
+    filename = path
+  }
+  return {dirpath, filename}
+}
+
+export async function loadBabylonFile(scene, path: string, onProgress: Function = () => {}) {
+  SceneLoader.ShowLoadingScreen = false
+  const {dirpath, filename} = pathBreakdown(path)
+  return new Promise((resolve, reject) => {
+    SceneLoader.Append(
+      dirpath,
+      filename,
+      scene,
+      () => resolve(),
+      onProgress,
+      () => reject(new Error(`Error loading babylon file: "${path}"`))
+    )
+  })
+}
+
 export default class Susa implements Service {
   private readonly scene: Scene
   private readonly engine: Engine
   private readonly window: Window
-  private readonly document: Document
   private readonly canvas: HTMLCanvasElement
 
   private readonly fallbackCamera: Camera
@@ -37,7 +64,7 @@ export default class Susa implements Service {
 
     pointerlockchange: () => {
       if (this.scene.activeCamera) {
-        const locked = (this.document.pointerLockElement === this.canvas)
+        const locked = (this.window.document.pointerLockElement === this.canvas)
         if (locked) this.scene.activeCamera.attachControl(this.canvas)
         else this.scene.activeCamera.detachControl(this.canvas)
       }
@@ -46,7 +73,6 @@ export default class Susa implements Service {
 
   constructor(options: SusaOptions) {
     this.window = options.window
-    this.document = options.window.document
     this.canvas = options.canvas
     this.engine = options.engine
     this.scene = options.scene
@@ -65,8 +91,9 @@ export default class Susa implements Service {
    * Start the Babylon rendering loop
    */
   start() {
-    for (const eventName of Object.keys(this.listeners))
-      this.window.addEventListener(eventName, this.listeners[eventName])
+    this.window.addEventListener("resize", this.listeners.resize.bind(this))
+    this.window.addEventListener("mousemove", this.listeners.mousemove.bind(this))
+    this.window.document.addEventListener("pointerlockchange", this.listeners.pointerlockchange.bind(this))
 
     this.engine.runRenderLoop(() => {
       const since = now() - this.lastRenderTime

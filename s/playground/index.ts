@@ -7,12 +7,11 @@ const game = new Playground({
   window,
   canvas: document.querySelector("canvas"),
   state: {
-    A123: <EnvironmentEntry>{type: "Environment"},
-    C345: <CubeEntry>{type: "Cube"}
+    A123: <EnvironmentEntry>{type: "Environment"}
   },
-  entityClasses: {Cube, Environment}
+  entityClasses: {Environment}
 })
 
 game.start()
 
-;(<any>window).game = game
+; (<any>window).game = game

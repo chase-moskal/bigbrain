@@ -27,7 +27,9 @@ export abstract class Entity<gContext extends Context = Context> {
   }
 
   destructor() {}
-  abstract logic(input: LogicInput): LogicOutput
+  logic(input: LogicInput): LogicOutput {
+    return null
+  }
 }
 
 export class GenericEntity extends Entity {

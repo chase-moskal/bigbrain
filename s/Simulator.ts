@@ -75,8 +75,10 @@ export default class Simulator implements Service {
           entry,
           messages: messages.filter(message => message.recipient === entity.id)
         })
-        outputState[id] = result.entry
-        outputMessages = outputMessages.concat(result.messages)
+        if (result) {
+          outputState[id] = result.entry
+          outputMessages = outputMessages.concat(result.messages)
+        }
       }
 
       // remove old entities without state entries
