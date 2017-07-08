@@ -1,37 +1,37 @@
 
-# Monarch Game Engine — [![Build Status](https://travis-ci.org/AkkadianGames/Susa.svg?branch=master)](https://travis-ci.org/AkkadianGames/Susa)
+# Monarch Game Engine — [![Build Status](https://travis-ci.org/monarch-games/engine.svg?branch=master)](https://travis-ci.org/monarch-games/engine)
 
-## Concept engine of Chase Moskal's dreams
+## concept engine of chase moskal's dreams
 
- - Unstable hobby project
- - Built on top of the mighty [BabylonJS](http://www.babylonjs.com/) 3D web game engine
- - TypeScript
+ - unstable hobby project
+ - built on top of the mighty [babylonjs](http://www.babylonjs.com/) web game engine
+ - typescript
 
-## Networked multiplayer concept architecture
+## network architecture design
 
 ```
-╭╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╮
-╎          ~ HOST ~              ╎              ~ CLIENT ~        ╎
-╎          ========              ╎              ==========        ╎
-╎                                ╎                                ╎
-╎     (Update: Requests)         ╎     (Update: State + Mandates) ╎
-╎    ╭──────────────────╮        ╎        ╭──────────────────╮    ╎
-╎    │                  │        ╎        │                  │    ╎
-╎    │             ╔═════════╗   ╎   ╔═════════╗             │    ╎
-╎    │             ║ NETWORK ║   ╎   ║ NETWORK ║             │    ╎
-╎    │             ║    ▲    ║   ╎   ║    ▲    ║             │    ╎
-╎    ▼             ║    ╰─[recv] ╎ [recv]─╯    ║             ▼    ╎
-╎ ╔═══════════╗    ║       ▲ ║  ╲╎╱  ║         ║    ╔═══════════╗ ╎
-╎ ║ SIMULATOR ║    ║       │ ║   ╳   ║         ║    ║ SIMULATOR ║ ╎
-╎ ╚═══════════╝    ║       │ ║  ╱╎╲  ║         ║    ╚═══════════╝ ╎
-╎    │             ║    ╭►[send] ╎ [send]◄╮    ║             │    ╎
-╎    │             ║    │    ║   ╎   ║    │    ║             │    ╎
-╎    │             ╚═════════╝   ╎   ╚═════════╝             │    ╎
-╎    │                  ▲        ╎        ▲                  │    ╎
-╎    ╰──────────────────╯        ╎        ╰──────────────────╯    ╎
-╎  (Update: State + Mandates)    ╎         (Update: Requests)     ╎
-╎                                ╎                                ╎
-╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄╯
+┌─────────────────────────────────────────────────────────────────┐
+│          ~ HOST ~              │              ~ CLIENT ~        │
+│          ========              │              ==========        │
+│                                │                                │
+│     (Update: Messages)         │         (Update: Messages)     │
+│    ┌──────────────────┐        │        ┌──────────────────┐    │
+│    │                  │        │        ▼                  │    │
+│    │             ╔═════════╗   │   ╔═════════╗             │    │
+│    │             ║ NETWORK ║   │   ║ NETWORK ║             │    │
+│    │             ║    ▲    ║   │   ║    │    ║             │    │
+│    ▼             ║    └─[recv]◄┼─[send]─┘    ║             │    │
+│ ╔═══════════╗    ║       ▲ ║   │   ║         ║    ╔═══════════╗ │
+│ ║ SIMULATOR ║    ║       │ ║   │   ║         ║    ║ SIMULATOR ║ │
+│ ╚═══════════╝    ║       │ ║   │   ║         ║    ╚═══════════╝ │
+│    │             ║    ┌►[send]─┼►[recv]─┐    ║             ▲    │
+│    │             ║    │    ║   │   ║    ▼    ║             │    │
+│    │             ╚═════════╝   │   ╚═════════╝             │    │
+│    │                  ▲        │        │                  │    │
+│    └──────────────────┘        │        └──────────────────┘    │
+│  (Update: State + Messages)    │     (Update: State + Messages) │
+│                                │                                │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ### SIMULATOR

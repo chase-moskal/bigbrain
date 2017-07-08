@@ -1,5 +1,5 @@
 {
-  "name": "monarch",
+  "name": "@monarch/engine",
   "version": "0.1.0-dev",
   "description": "concept game engine",
   "scripts": {
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkkadianGames/Susa.git"
+    "url": "git+https://github.com/monarch-games/engine.git"
   },
   "author": "Chase Moskal",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AkkadianGames/Susa/issues"
+    "url": "https://github.com/monarch-games/engine/issues"
   },
-  "homepage": "https://github.com/AkkadianGames/Susa#readme",
+  "homepage": "https://github.com/monarch-games/engine#readme",
   "devDependencies": {
     "@types/chai": "4.0.1",
     "@types/mocha": "2.2.41",
