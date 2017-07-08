@@ -1,6 +1,6 @@
 {
   "name": "monarch-engine",
-  "version": "0.1.0-dev",
+  "version": "0.1.0",
   "description": "concept game engine",
   "scripts": {
     "build": "rimraf o && run-p build-library build-playground lint && echo Done build",
