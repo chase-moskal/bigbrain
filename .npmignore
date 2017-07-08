@@ -1,0 +1,9 @@
+
+o/**/*.test.js
+
+s
+.nyc*
+travis*
+tslint*
+tsconfig*
+coverage

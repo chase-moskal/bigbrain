@@ -1,29 +1,60 @@
 
---------
+# Monarch Game Engine — [![Build Status](https://travis-ci.org/monarch-games/engine.svg?branch=master)](https://travis-ci.org/monarch-games/engine)
 
-# Susa — [![Build Status](https://travis-ci.org/AkkadianGames/Susa.svg?branch=master)](https://travis-ci.org/AkkadianGames/Susa) [![Join the chat at https://gitter.im/AkkadianGames/AkkadianLounge](https://badges.gitter.im/AkkadianGames/AkkadianLounge.svg)](https://gitter.im/AkkadianGames/AkkadianLounge?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+## concept engine of chase moskal's dreams
 
-## Networked web game framework
+ - unstable hobby project
+ - built on top of the mighty [babylonjs](http://www.babylonjs.com/) web game engine
+ - typescript
 
-  - [**Roadmap**](https://trello.com/b/MGlfhN1a/susa-roadmap) — glean into Susa's future.
-  - [**Gitter**](https://gitter.im/AkkadianGames/AkkadianLounge) — text chat, pop in and say hi!
+## network architecture design
 
-### Susa is
+```
+┌─────────────────────────────────────────────────────────────────┐
+│          ~ HOST ~              │              ~ CLIENT ~        │
+│          ========              │              ==========        │
+│                                │                                │
+│     (Update: Messages)         │         (Update: Messages)     │
+│    ┌──────────────────┐        │        ┌──────────────────┐    │
+│    │                  │        │        ▼                  │    │
+│    │             ╔═════════╗   │   ╔═════════╗             │    │
+│    │             ║ NETWORK ║   │   ║ NETWORK ║             │    │
+│    │             ║    ▲    ║   │   ║    │    ║             │    │
+│    ▼             ║    └─[recv]◄┼─[send]─┘    ║             │    │
+│ ╔═══════════╗    ║       ▲ ║   │   ║         ║    ╔═══════════╗ │
+│ ║ SIMULATOR ║    ║       │ ║   │   ║         ║    ║ SIMULATOR ║ │
+│ ╚═══════════╝    ║       │ ║   │   ║         ║    ╚═══════════╝ │
+│    │             ║    ┌►[send]─┼►[recv]─┐    ║             ▲    │
+│    │             ║    │    ║   │   ║    ▼    ║             │    │
+│    │             ╚═════════╝   │   ╚═════════╝             │    │
+│    │                  ▲        │        │                  │    │
+│    └──────────────────┘        │        └──────────────────┘    │
+│  (Update: State + Messages)    │     (Update: State + Messages) │
+│                                │                                │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-  - Currently in early development.
-  - Free and open source — ISC licensed.
-  - Seeking collaborators.
-  - Written in TypeScript.
-  - Integrates with [BabylonJS](http://www.babylonjs.com/), the 3D web game engine.
-  - **An [❂ Akkadian Games](https://github.com/AkkadianGames) project:**
-    - [Nanoshooter](https://github.com/AkkadianGames/Nanoshooter#readme) → *robotic tank combat 3D multiplayer action web game, built on Susa.*
-    - [Susa](https://github.com/AkkadianGames/Susa#readme) → *networked web game framework.*
+### SIMULATOR
 
-### Vision
+ - COMMON
+    - simulator conforms to state (adds/removes entities)
+    - entities react to mandate messages from host
+ - HOST
+    - entities perform game simulation
+    - entities react to request messages
+    - entities write new state for everyone
+    - entities write mandate messages for everyone
+ - CLIENT
+    - entities mimic state entries
+    - entities write request messages for host
 
-  - A high level framework for online multiplayer action web games.
-  - Online multiplayer action via WebRTC (RTCDataChannel).
-  - A platform and workflow for rapid web game development.
-  - Realtime collaborative map editing experience.
+### NETWORK
 
-Susa's development is intertwined with its sister project, [Nanoshooter](https://github.com/AkkadianGames/Nanoshooter#readme), and is typically developed on as a submodule within the Nanoshooter project. We're keeping Susa and Nanoshooter's development workflow tightly integrated during these early stages, though are maintaining separated repositories, roadmaps, issue tracking, and versioning.
+ - HOST
+    - all sent updates are looped back into recv
+    - the host thus receives their own updates
+    - updates from clients are also ingested
+ - CLIENT
+    - received updates are simply fed into the simulator
+    - updates that come out of the simulator have only request messages
+    - these updates are sent to the host

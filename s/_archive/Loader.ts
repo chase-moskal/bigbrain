@@ -1,5 +1,5 @@
 
-import Logger from 'Susa/Logger'
+import Logger from './Logger'
 
 /**
  * Base class.
@@ -18,7 +18,7 @@ abstract class Loader {
   /**
    * Load an individual asset.
    */
-  abstract loadAsset(request: AssetRequest)
+  abstract loadAsset(request: AssetRequest): AssetReport
 }
 
 /** Export abstract class as default. */
@@ -32,13 +32,13 @@ export interface LoaderOptions {
 }
 
 /**
- * Input for loading an asset.
+ * Describe an asset to be loaded.
  */
 export interface AssetRequest {
   path: string
 }
 
 /**
- * Input for loading a single asset.
+ * Report the details of a loaded asset.
  */
 export interface AssetReport {}

@@ -9,15 +9,10 @@ export default class Ticker {
   private timeline: number = 0
 
   /** Action to be called for every tick while the ticker is running. */
-  private tick: TickAction
+  private action: TickAction
 
-  /** Time to relax in between ticks. */
+  /** Period of time to relax in between ticks. */
   private relax: number
-
-  /** Nifty statistics. */
-  private stats = {
-    totalTicks: 0
-  }
 
   /** The presence of this callback function is the indicator to stop ticking. It is called. */
   private stopTickingCallback: () => void
@@ -25,11 +20,16 @@ export default class Ticker {
   /** Timestamp of the previous tick. */
   private lastTickTime = performance.now()
 
+  /** Nifty statistics. */
+  private stats = {
+    totalTicks: 0
+  }
+
   /**
    * Instantiate a ticker with an action function which will be called repeatedly.
    */
-  constructor({tickAction, relax = 10}: TickerOptions) {
-    this.tick = tickAction
+  constructor({action, relax = 10}: TickerOptions) {
+    this.action = action
     this.relax = relax
   }
 
@@ -52,7 +52,7 @@ export default class Ticker {
     const tickStartTime = now
 
     // Call the tick action.
-    this.tick({
+    this.action({
       timeSinceLastTick,
       timeline: this.timeline
     })
@@ -87,7 +87,11 @@ export default class Ticker {
  * Options for instantiating a new ticker.
  */
 export interface TickerOptions {
-  tickAction: TickAction
+
+  /** Function to be executed on each tick. */
+  action: TickAction
+
+  /** Allowed relaxation period between ticks. */
   relax?: number
 }
 
@@ -95,12 +99,12 @@ export interface TickerOptions {
  * Action to take when a tick occurs.
  * A function that is called repeatedly, for each tick.
  */
-export type TickAction = (tickReport: TickReport) => void
+export type TickAction = (tick: Tick) => void
 
 /**
  * Package of information that is passed along with each tick action.
  */
-export interface TickReport {
+export interface Tick {
 
   /** Total place along ticker's timeline, which effectively freezes on stop() and resumes on start(). */
   timeline: number

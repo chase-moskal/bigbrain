@@ -1,5 +1,9 @@
 
-build
+o
+.nyc*
+coverage
 node_modules
-typings
 npm-debug.log*
+
+*.blend1
+*.log

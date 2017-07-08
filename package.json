@@ -1,29 +1,43 @@
 {
-  "name": "susa",
-  "version": "0.0.0",
-  "description": "Networked web game framework.",
+  "name": "@monarch/engine",
+  "version": "0.1.0-dev",
+  "description": "concept game engine",
   "scripts": {
-    "ready": "npm install",
-    "clean": "rimraf build",
-    "build": "echo Building Susa. && npm run clean --silent && tsc && tslint src/**/*.ts",
-    "watch": "tsc -w",
-    "test": "echo No tests yet, lol && exit 0"
+    "build": "rimraf o && run-p build-library build-playground lint && echo Done build",
+    "build-library": "tsc && npm test -s",
+    "build-playground": "mkdirp o/playground/ && browserify s/playground/index.ts --debug -p [ tsify ] > o/playground/index.bundle.js",
+    "lint": "tslint -c tslint.json -e 's/_archive/**' 's/**/*.ts'",
+    "start": "http-server",
+    "test": "nyc --reporter=text mocha -- o/**/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AkkadianGames/Susa.git"
+    "url": "git+https://github.com/monarch-games/engine.git"
   },
   "author": "Chase Moskal",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AkkadianGames/Susa/issues"
+    "url": "https://github.com/monarch-games/engine/issues"
   },
-  "homepage": "https://github.com/AkkadianGames/Susa#readme",
+  "homepage": "https://github.com/monarch-games/engine#readme",
   "devDependencies": {
-    "rimraf": "^2.5.4",
-    "tslint": "^3.14.0",
-    "typescript": "^2.0.0",
-    "typings": "^1.3.2"
+    "@types/chai": "4.0.1",
+    "@types/mocha": "2.2.41",
+    "@types/node": "8.0.9",
+    "browserify": "14.4.0",
+    "chai": "4.0.2",
+    "http-server": "0.10.0",
+    "is-utf8": "0.2.1",
+    "mkdirp": "0.5.1",
+    "mocha": "3.4.2",
+    "npm-run-all": "4.0.2",
+    "nyc": "11.0.3",
+    "rimraf": "2.6.1",
+    "tsify": "3.0.1",
+    "tslint": "5.5.0",
+    "typescript": "2.4.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "babylonjs": "3.0.4-beta"
+  }
 }

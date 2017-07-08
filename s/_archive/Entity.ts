@@ -1,13 +1,11 @@
 
-import Logger from 'Susa/Logger'
-import Game from 'Susa/Game'
-import World from 'Susa/World'
-import State from 'Susa/State'
-import Stage from 'Susa/Stage'
-import {TickReport} from 'Susa/Ticker'
-
-/** Export abstract class as default. */
-export default Entity
+import Game from './Game'
+import World from './World'
+import State from './State'
+import Stage from './Stage'
+import Logger from './Logger'
+import {Tick} from './Ticker'
+import WorldState from './WorldState'
 
 /**
  * Entity in the game world which responds to fresh entity state on logic ticks.
@@ -27,8 +25,17 @@ abstract class Entity {
   /** Searchable tag strings related to this entity. Optional. */
   readonly tags: string[]
 
-  /** Simple logging utility. */
-  protected readonly logger: Logger
+  /** Immutable official data which describes this entity. */
+  data: Object
+
+  /** Mutable local copy of entity data, serving to indicate changes to be sent over the network. */
+  delta: Object
+
+  /** Incoming entity messages. */
+  inbox: EntityMessage[]
+
+  /** Outgoing entity messages. */
+  outbox: EntityMessage[]
 
   /** Game instance. Entities can start/stop the game, add/remove entities, etc. */
   protected readonly game: Game
@@ -38,6 +45,9 @@ abstract class Entity {
 
   /** Stage instance. Entities can use the stage for rendering and to access Babylon components. */
   protected readonly stage: Stage
+
+  /** Simple logging utility. */
+  protected readonly logger: Logger
 
   /**
    * Create a new entity instance.
@@ -56,7 +66,13 @@ abstract class Entity {
    * Clean up this entity for removal from the game.
    * Tear down any event subscriptions, etc.
    */
-  destructor() {}
+  destructor(): Promise<void> {
+    return Promise.resolve()
+  }
+
+  worldStateDiff(state: WorldState): any {
+    return {}
+  }
 
   /**
    * Log formatting.
@@ -67,15 +83,18 @@ abstract class Entity {
    * Logic tick routine.
    * Respond to fresh entity state.
    */
-  abstract logic(input: EntityLogicInput): EntityLogicOutput
+  abstract logic(tick: Tick): void
 }
+
+/** Export abstract class as default. */
+export default Entity
 
 /**
  * Options for creating an Entity.
  */
 export interface EntityOptions {
   id: string
-  entityState: EntityState
+  data: EntityData
   tags?: string[]
   logger: Logger
   game: Game
@@ -84,24 +103,25 @@ export interface EntityOptions {
 }
 
 /**
- * Input for entity logic.
+ * Serializable networked message that messages can send to themselves.
  */
-export interface EntityLogicInput {
-  state: EntityState
-  tickReport: TickReport
+export interface EntityMessage {
+
+  /** Sender and recipient of the message. You see, entities are always sending messages to themselves: they're trying to reach the version of themselves which is on the host machine. */
+  entityId: string
 }
 
 /**
- * Output from entity logic.
+ * Input for entity logic.
  */
-export interface EntityLogicOutput {
-  entityStateDelta?: any
+export interface EntityLogicInput {
+  tick: Tick
 }
 
 /**
  * Entity's serializable, networkable, saveable state.
  */
-export interface EntityState {
+export interface EntityData {
   type: string
-  tags?: string[]
+  tags: string[]
 }

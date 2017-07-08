@@ -1,6 +1,6 @@
 
-import Stage, {RenderInfo} from 'Susa/Stage'
-import BabylonLoader from 'Susa/BabylonLoader'
+import Stage, {RenderInfo} from './Stage'
+import BabylonLoader from './BabylonLoader'
 
 /**
  * Govern a 3D Babylon scene from a high level.
@@ -44,11 +44,13 @@ export default class BabylonStage extends Stage {
 
     // Start and stop pointer lock input.
     pointerlockchange: () => {
-      const locked = (document.pointerLockElement === this.canvas)
-      if (locked)
-        this.scene.activeCamera.attachControl(this.canvas)
-      else
-        this.scene.activeCamera.detachControl(this.canvas)
+      if (this.scene.activeCamera) {
+        const locked = (document.pointerLockElement === this.canvas)
+        if (locked)
+          this.scene.activeCamera.attachControl(this.canvas)
+        else
+          this.scene.activeCamera.detachControl(this.canvas)
+      }
     }
   }
 
