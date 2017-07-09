@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rimraf o && run-p build-library build-playground lint && echo Done build",
     "build-library": "tsc",
-    "build-playground": "mkdirp o/playground/ && browserify s/playground/index.ts --debug -p [ tsify ] > o/playground/index.bundle.js",
+    "build-playground": "mkdirp o/playground/ && browserify --debug -p tsify s/playground/index.ts > o/playground/index.bundle.js",
     "lint": "tslint -c tslint.json -e 's/_archive/**' 's/**/*.ts'",
     "start": "http-server",
     "test": "nyc --reporter=text mocha -- o/**/*.test.js",
