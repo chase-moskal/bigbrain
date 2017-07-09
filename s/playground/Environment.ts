@@ -23,7 +23,7 @@ export default class Environment extends PlaygroundEntity {
     spectator.setTarget(new Vector3(0, 0, 0))
     spectator.speed = 0.25
 
-    loadBabylonFile(scene, "assets/playground-environment.babylon")
+    loadBabylonFile(scene, "assets/playground.babylon")
       .then(() => {
         const plane = <Mesh> scene.getMeshByName("Plane")
         const torus = <Mesh> scene.getMeshByName("Torus")
