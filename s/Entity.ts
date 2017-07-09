@@ -14,20 +14,22 @@ export interface LogicOutput<gEntry extends StateEntry = StateEntry, gMessage ex
   messages: gMessage[]
 }
 
-export abstract class Entity<gContext extends Context = Context> {
+export interface EntityOptions<gContext extends Context = Context> {
+  id: string
+  context: gContext
+}
+
+export abstract class Entity<gContext extends Context = Context, gStateEntry extends StateEntry = StateEntry, gMessage extends Message = Message> {
   readonly id: string
   protected readonly context: gContext
 
-  constructor(options: {
-    id: string
-    context: gContext
-  }) {
+  constructor(options: EntityOptions<gContext>) {
     this.id = options.id
     this.context = options.context
   }
 
   destructor() {}
-  logic(input: LogicInput): LogicOutput {
+  logic(input: LogicInput<gStateEntry, gMessage>): LogicOutput<gStateEntry, gMessage> {
     return null
   }
 }
