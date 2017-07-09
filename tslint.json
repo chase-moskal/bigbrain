@@ -14,9 +14,9 @@
     "no-internal-module": true,
     "no-trailing-whitespace": true,
     "no-var-keyword": true,
+    "no-irregular-whitespace": true,
     "one-line": [
       true,
-      "check-open-brace",
       "check-whitespace"
     ],
     "quotemark": [
