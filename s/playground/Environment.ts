@@ -7,15 +7,15 @@ import {Entity, LogicInput, LogicOutput} from "../Entity"
 
 import {PlaygroundEntity} from "./Playground"
 
-export interface EnvironmentEntry extends StateEntry {}
-export interface EnvironmentMessage extends Message {}
+export interface EnvironmentEntry extends StateEntry {
+  babylonFile: string
+}
 
 export default class Environment extends PlaygroundEntity {
   private readonly spectator = new FreeCamera("Camera", new Vector3(0, 5, -15), this.context.scene)
 
-  constructor(o) {
-    super(o)
-    const {host, scene, canvas} = this.context
+  async setup(entry: EnvironmentEntry) {
+    const {scene} = this.context
     const {spectator} = this
 
     scene.clearColor = new Color4(0.2, 0.2, 0.2, 1)
@@ -23,24 +23,22 @@ export default class Environment extends PlaygroundEntity {
     spectator.setTarget(new Vector3(0, 0, 0))
     spectator.speed = 0.25
 
-    loadBabylonFile(scene, "assets/playground.babylon")
-      .then(() => {
-        const plane = <Mesh> scene.getMeshByName("Plane")
-        const torus = <Mesh> scene.getMeshByName("Torus")
-        const icosphere = <Mesh> scene.getMeshByName("Icosphere")
-        const light = <SpotLight> scene.getLightByName("Spot")
+    await loadBabylonFile(scene, entry.babylonFile)
 
-        const shadowGenerator = new ShadowGenerator(1024, light)
-        const shadowCasters = [torus, icosphere]
-        const shadowReceivers = [plane, torus, icosphere]
-        shadowGenerator.getShadowMap().renderList.push(...shadowCasters)
-        plane.receiveShadows = true
-        shadowGenerator.usePoissonSampling = true
-      })
-      .catch(e => console.log(e))
+    const plane = <Mesh> scene.getMeshByName("Plane")
+    const torus = <Mesh> scene.getMeshByName("Torus")
+    const icosphere = <Mesh> scene.getMeshByName("Icosphere")
+    const light = <SpotLight> scene.getLightByName("Spot")
+
+    const shadowGenerator = new ShadowGenerator(1024, light)
+    const shadowCasters = [torus, icosphere]
+    const shadowReceivers = [plane, torus, icosphere]
+    shadowGenerator.getShadowMap().renderList.push(...shadowCasters)
+    plane.receiveShadows = true
+    shadowGenerator.usePoissonSampling = true
   }
 
-  logic({entry}: LogicInput<EnvironmentEntry>) {
+  logic({entry}: LogicInput<EnvironmentEntry>): LogicOutput<EnvironmentEntry> {
     const {host, scene, canvas} = this.context
 
     if (scene.activeCamera !== this.spectator) {

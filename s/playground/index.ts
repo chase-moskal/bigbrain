@@ -6,7 +6,10 @@ const game = new Playground({
   window,
   canvas: document.querySelector("canvas"),
   state: {
-    A123: <EnvironmentEntry>{type: "Environment"}
+    A123: <EnvironmentEntry>{
+      type: "Environment",
+      babylonFile: "assets/playground.babylon"
+    }
   },
   entityClasses: {Environment}
 })

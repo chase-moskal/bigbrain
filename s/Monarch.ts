@@ -1,6 +1,8 @@
 
 import {Network} from "./Network"
 import Ticker, {Tick} from "./Ticker"
+import {EntityClasses} from "./Entity"
+import {State, LoopbackNetwork} from "./Network"
 import {Service, ServiceMaster} from "./toolbox"
 import Simulator, {SimulationOutput} from "./Simulator"
 
@@ -8,27 +10,30 @@ export interface Context {
   readonly host: boolean
 }
 
+export interface CreateStandardOptionsProps {
+  context: Context
+  entityClasses: EntityClasses
+  state: State
+}
+
 export interface MonarchOptions {
   ticker: Ticker
   network: Network
   simulator: Simulator
-  services?: Service[]
+  services: Service[]
 }
 
 export default class Monarch extends ServiceMaster {
-  private readonly ticker: Ticker
-  private readonly network: Network
-  private readonly simulator: Simulator
 
-  constructor({ticker, network, simulator, services = []}: MonarchOptions) {
-    super([...services, ticker, network, simulator])
-    this.network = network
-    this.simulator = simulator
-    ticker.subscribe(tick => this.mainloop(tick))
-  }
+  static createStandardOptions = ({context, entityClasses, state}: CreateStandardOptionsProps) => ({
+    ticker: new Ticker(),
+    network: new LoopbackNetwork({context, state}),
+    simulator: new Simulator({context, entityClasses}),
+    services: []
+  })
 
-  private mainloop(tick: Tick) {
-    const {network, simulator} = this
-    network.send(simulator.simulate({tick, ...network.recv()}))
+  constructor({ticker, network, simulator, services}: MonarchOptions) {
+    ticker.subscribe(tick => network.send(simulator.simulate({tick, ...network.recv()})))
+    super([ticker, network, simulator, ...services])
   }
 }

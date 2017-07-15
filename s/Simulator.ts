@@ -44,6 +44,7 @@ export default class Simulator implements Service {
   }
 
   simulate({tick, state, messages}: SimulationInput): SimulationOutput {
+    const {context} = this
 
     // loop over state entries
     for (const id of Object.keys(state)) {
@@ -52,10 +53,7 @@ export default class Simulator implements Service {
       if (!(id in this.entities)) {
         const entry = state[id]
         const Entity = this.getEntityClass(entry.type)
-        this.entities[id] = new Entity({
-          id,
-          context: this.context
-        })
+        this.entities[id] = new Entity({id, context, entry})
       }
     }
 

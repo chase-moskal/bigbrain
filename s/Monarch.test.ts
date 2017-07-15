@@ -18,7 +18,7 @@ describe("Monarch", function() {
     const context = {host: true}
     const network = new LoopbackNetwork({context, state: {}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({ticker, network, simulator})
+    const monarch = new Monarch({ticker, network, simulator, services: []})
 
     expect(tickerReport.ticks).to.equal(0)
     monarch.start()
@@ -39,7 +39,7 @@ describe("Monarch", function() {
     const context = {host: true}
     const network = new LoopbackNetwork({context, state: {A123: {type: "Dog"}}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({ticker, network, simulator})
+    const monarch = new Monarch({ticker, network, simulator, services: []})
 
     monarch.start()
 
@@ -57,7 +57,7 @@ describe("Monarch", function() {
     const context = {host: true}
     const network = new LoopbackNetwork({context, state: {A123: {type: "Dog"}}})
     const simulator = new Simulator({context, entityClasses: {Dog}})
-    const monarch = new Monarch({ticker, network, simulator})
+    const monarch = new Monarch({ticker, network, simulator, services: []})
 
     monarch.start()
 

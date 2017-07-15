@@ -4,27 +4,29 @@ import {Context} from "./Monarch"
 import {StateEntry, Message} from "./Network"
 
 export interface LogicInput<
-  gEntry extends StateEntry = StateEntry,
+  gStateEntry extends StateEntry = StateEntry,
   gMessage extends Message = Message
 > {
   tick: Tick
-  entry: gEntry
+  entry: gStateEntry
   messages: gMessage[]
 }
 
 export interface LogicOutput<
-  gEntry extends StateEntry = StateEntry,
+  gStateEntry extends StateEntry = StateEntry,
   gMessage extends Message = Message
 > {
-  entry: gEntry
+  entry: gStateEntry
   messages: gMessage[]
 }
 
 export interface EntityOptions<
-  gContext extends Context = Context
+  gContext extends Context = Context,
+  gStateEntry extends StateEntry = StateEntry
 > {
   id: string
   context: gContext
+  entry: gStateEntry
 }
 
 export abstract class Entity<
@@ -35,12 +37,16 @@ export abstract class Entity<
   readonly id: string
   protected readonly context: gContext
 
-  constructor(options: EntityOptions<gContext>) {
+  constructor(options: EntityOptions<gContext, gStateEntry>) {
     this.id = options.id
     this.context = options.context
+    this.setup(options.entry)
   }
 
+  async setup(entry: gStateEntry) {}
+
   destructor() {}
+
   logic(input: LogicInput<gStateEntry, gMessage>): LogicOutput<gStateEntry, gMessage> {
     return null
   }
