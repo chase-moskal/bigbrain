@@ -40,10 +40,7 @@ export abstract class Entity<
   constructor(options: EntityOptions<gContext, gStateEntry>) {
     this.id = options.id
     this.context = options.context
-    this.setup(options.entry)
   }
-
-  async setup(entry: gStateEntry) {}
 
   destructor() {}
 

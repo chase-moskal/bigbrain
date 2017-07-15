@@ -13,6 +13,7 @@ export interface EnvironmentEntry extends StateEntry {
 
 export default class Environment extends PlaygroundEntity {
   private readonly spectator = new FreeCamera("Camera", new Vector3(0, 5, -15), this.context.scene)
+  private initialized = false
 
   async setup(entry: EnvironmentEntry) {
     const {scene} = this.context
@@ -43,6 +44,11 @@ export default class Environment extends PlaygroundEntity {
 
     if (scene.activeCamera !== this.spectator) {
       scene.activeCamera = this.spectator
+    }
+
+    if (!this.initialized) {
+      this.initialized = true
+      this.setup(entry)
     }
 
     return null
