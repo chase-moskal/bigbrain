@@ -39,6 +39,6 @@
     "typescript": "2.4.1"
   },
   "dependencies": {
-    "babylonjs": "3.0.4-beta"
+    "babylonjs": "3.0.7"
   }
 }
