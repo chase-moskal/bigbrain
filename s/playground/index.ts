@@ -5,15 +5,10 @@ import Environment, {EnvironmentEntry} from "./Environment"
 const game = new Playground({
   window,
   canvas: document.querySelector("canvas"),
-  state: {
-    A123: <EnvironmentEntry>{
-      type: "Environment",
-      babylonFile: "assets/playground.babylon"
-    }
-  },
   entityClasses: {Environment}
 })
 
-game.start()
+game.susa.start()
+game.state.entries.set("a123", <EnvironmentEntry>{type: "Environment", asset: "assets/playground.babylon"})
 
 ; (<any>window).game = game

@@ -1,41 +1,68 @@
 
-import {StatePatch} from './State'
-import {EntityMessage} from './Entity'
+import {observable} from "mobx"
 
-/**
- * Network component.
- * All game state changes are streaming through this component.
- * Perform necessary network interactions with the game state deltas, and stream back changes to our game state.
- */
-export default class Network {
+import {Service} from "./toolbox"
+import {Context} from "./Monarch"
+import {SimulationOutput} from "./Simulator"
 
-  /** Inbox array of network io packets which are ready to be received. */
-  private inbox: GameUpdate[] = []
+export interface StateEntry {}
 
-  /**
-   * Receive official game updates from the network.
-   */
-  receive(): GameUpdate {
+// export class StateEntry {
+//   constructor(public readonly id: string) {}
+// }
+
+export interface State<gStateEntry extends StateEntry = StateEntry> {
+  entries: { [id: string]: gStateEntry }
+}
+
+export const createObservableState = (): State => observable({entries: {}})
+
+export interface Message {
+  recipient: string
+}
+
+export interface Update<gMessage extends Message = Message> {
+  state?: State
+  messages: gMessage[]
+}
+
+export interface NetworkOptions {
+  context: Context
+  state: State
+}
+
+export abstract class Network implements Service {
+  protected state: State
+  protected readonly context: Context
+
+  constructor(options: NetworkOptions) {
+    this.state = options.state
+    this.context = options.context
+  }
+
+  destructor() {}
+  start() {}
+  stop() {}
+
+  abstract recv(): Update
+  abstract send(update: Update): void
+}
+
+export class LoopbackNetwork extends Network {
+  protected state: State
+  private inbox: Message[] = []
+
+  recv(): Update {
+    const messages = this.inbox
+    this.inbox = []
     return {
-      patches: [],
-      messages: []
+      state: this.state,
+      messages
     }
   }
 
-  /**
-   * Send local game update to the host.
-   */
-  send(update: GameUpdate) {}
-}
-
-/**
- * Information package which describes an update to the game.
- */
-export interface GameUpdate {
-
-  /** Patches representing changes to the world's state. */
-  patches: StatePatch[]
-
-  /** Messages for world entities. */
-  messages: EntityMessage[]
+  send({state, messages}: Update) {
+    this.state = state
+    this.inbox = [...this.inbox, ...messages]
+  }
 }

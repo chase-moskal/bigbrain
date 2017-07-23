@@ -1,39 +1,139 @@
 
-import {Network} from "./Network"
-import Ticker, {Tick} from "./Ticker"
-import {EntityClasses} from "./Entity"
-import {State, LoopbackNetwork} from "./Network"
-import {Service, ServiceMaster} from "./toolbox"
-import Simulator, {SimulationOutput} from "./Simulator"
+import * as deepFreeze from "deep-freeze"
+import {observable, autorun, reaction, action, computed} from "mobx"
+
+function copy<T>(o: T): T { return JSON.parse(JSON.stringify(o)) }
 
 export interface Context {
   readonly host: boolean
 }
 
-export interface CreateStandardOptionsProps {
-  context: Context
-  entityClasses: EntityClasses
-  state: State
+export interface StateEntry { readonly type: string }
+export type StateEntries = Map<string, StateEntry>
+export interface State { entries: StateEntries }
+export interface Message { readonly to: string }
+export interface Update {
+  messages: Message[]
+  allEntries?: { [id: string]: StateEntry }
+  someEntries?: { [id: string]: StateEntry }
 }
 
-export interface MonarchOptions {
-  ticker: Ticker
-  network: Network
-  simulator: Simulator
-  services: Service[]
+export abstract class Entity {
+  @observable inbox: Message[] = []
+  get entry() { return deepFreeze(copy(this.state.entries.get(this.id))) }
+  constructor(
+    public readonly id: string,
+    protected readonly context: Context,
+    private readonly state: State
+  ) { this.initialize() }
+  abstract initialize(): void
+  abstract terminate(): void
 }
 
-export default class Monarch extends ServiceMaster {
+export class GenericEntity extends Entity {
+  initialize() {}
+  terminate() {}
+}
 
-  static createStandardOptions = ({context, entityClasses, state}: CreateStandardOptionsProps) => ({
-    ticker: new Ticker(),
-    network: new LoopbackNetwork({context, state}),
-    simulator: new Simulator({context, entityClasses}),
-    services: []
-  })
+export type EntityClasses = {[name: string]: typeof GenericEntity}
 
-  constructor({ticker, network, simulator, services}: MonarchOptions) {
-    ticker.subscribe(tick => network.send(simulator.simulate({tick, ...network.recv()})))
-    super([ticker, network, simulator, ...services])
+function assignPropsOntoMap(obj: Object, map: Map<string, any>) {
+  Object.keys(obj).forEach(key => map.set(key, obj[key]))
+}
+
+export abstract class Network {
+  constructor(
+    protected readonly state: State,
+    protected readonly context: Context,
+    protected readonly handleMessages: (messages: Message[]) => void
+  ) {}
+
+  @action
+  applyUpdate(update: Update) {
+    if (update.allEntries) {
+      this.state.entries.clear()
+    }
+    if (update.allEntries || update.someEntries) {
+      assignPropsOntoMap(copy(update.allEntries), this.state.entries)
+    }
+    this.handleMessages(update.messages)
+  }
+
+  abstract send(update: Update): void
+}
+
+export class LoopbackNetwork extends Network {
+  send(update: Update): void {
+    this.applyUpdate(update)
+  }
+}
+
+export class Simulator {
+  private entities: Map<string, GenericEntity> = new Map()
+
+  constructor(
+    protected readonly context: Context,
+    protected readonly entityClasses: EntityClasses,
+    protected readonly state: State
+  ) {
+    autorun(() => this.createAndDestroyEntitiesToMatch(this.getEntryReports()))
+  }
+
+  handleMessages(messages: Message[]): void {
+    for (const message of messages) {
+      const entity = this.entities.get(message.to)
+      if (entity) entity.inbox.unshift(message)
+      else console.warn(`Message undeliverable: to entity id "${message.to}"`, message)
+    }
+  }
+
+  private getEntryReports() {
+    return Array.from(this.state.entries.keys())
+      .map(id => ({id, entry: this.state.entries.get(id)}))
+  }
+
+  private getEntityClass(type: string): typeof GenericEntity {
+    const Class = <typeof GenericEntity><any>this.entityClasses[type]
+    if (!Class) throw new Error(`unknown entity class "${type}"`)
+    return Class
+  }
+
+  private createAndDestroyEntitiesToMatch(reports: {id: string, entry: StateEntry}[]) {
+
+    // add new entities
+    reports.forEach(({id, entry}) => {
+      if (!this.entities.has(id)) {
+        const entry = this.state.entries.get(id)
+        const Entity = this.getEntityClass(entry.type)
+        this.entities.set(id, new Entity(id, this.context, this.state))
+      }
+    })
+
+    // remove old entities
+    for (const id of this.entities.keys()) {
+      if (!this.state.entries.has(id)) {
+        const entity = this.entities.get(id)
+        entity.terminate()
+        this.entities.delete(id)
+      }
+    }
+  }
+
+  terminate() {
+    this.entities.forEach((entity) => entity.terminate())
+  }
+}
+
+export default class Monarch {
+  @observable readonly state: State = {entries: new Map}
+  readonly network: Network
+  readonly simulator: Simulator
+
+  constructor(
+    public readonly context: Context,
+    public readonly entityClasses: EntityClasses
+  ) {
+    this.simulator = new Simulator(context, entityClasses, this.state)
+    this.network = new LoopbackNetwork(this.state, context, messages => this.simulator.handleMessages(messages))
   }
 }

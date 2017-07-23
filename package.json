@@ -24,9 +24,9 @@
   "devDependencies": {
     "@types/chai": "4.0.1",
     "@types/mocha": "2.2.41",
-    "@types/node": "8.0.9",
+    "@types/node": "8.0.15",
     "browserify": "14.4.0",
-    "chai": "4.0.2",
+    "chai": "4.1.0",
     "http-server": "0.10.0",
     "is-utf8": "0.2.1",
     "mkdirp": "0.5.1",
@@ -36,9 +36,11 @@
     "rimraf": "2.6.1",
     "tsify": "3.0.1",
     "tslint": "5.5.0",
-    "typescript": "2.4.1"
+    "typescript": "2.4.2"
   },
   "dependencies": {
-    "babylonjs": "3.0.7"
+    "babylonjs": "3.1.0-alpha0",
+    "deep-freeze": "0.0.1",
+    "mobx": "3.2.1"
   }
 }
