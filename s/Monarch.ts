@@ -1,4 +1,5 @@
 
+import * as uuid from "uuid/v4"
 import * as deepFreeze from "deep-freeze"
 import {observable, autorun, reaction, action, computed} from "mobx"
 
@@ -135,5 +136,17 @@ export default class Monarch {
   ) {
     this.simulator = new Simulator(context, entityClasses, this.state)
     this.network = new LoopbackNetwork(this.state, context, messages => this.simulator.handleMessages(messages))
+  }
+
+  private generateFreshIdentifier() {
+    return uuid()
+  }
+
+  addEntry<T extends StateEntry = StateEntry>(entry: T) {
+    this.state.entries.set(this.generateFreshIdentifier(), entry)
+  }
+
+  removeEntry(id: string) {
+    this.state.entries.delete(id)
   }
 }

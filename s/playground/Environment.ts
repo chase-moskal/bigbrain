@@ -8,6 +8,7 @@ import {Entity, StateEntry, Message} from "../Monarch"
 import {PlaygroundContext} from "./Playground"
 
 export interface EnvironmentEntry extends StateEntry {
+  type: "Environment"
   asset: string
 }
 
@@ -28,9 +29,6 @@ export default class EnvironmentEntity extends Entity {
         shadowGenerator.getShadowMap().renderList.push(...shadowCasters)
         plane.receiveShadows = true
         shadowGenerator.usePoissonSampling = true
-
-        const camera = <FreeCamera> scene.getCameraByName("PlaygroundCamera")
-        if (camera) scene.activeCamera = camera
       })
   }
 
