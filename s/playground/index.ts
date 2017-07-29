@@ -18,7 +18,7 @@ game.addEntry<EnvironmentEntry>({
 
 game.addEntry<SpectatorEntry>({
   type: "Spectator",
-  position: [0, 0, 0]
+  position: [0, 2, -5]
 })
 
 ; (<any>window).game = game
