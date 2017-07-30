@@ -19,20 +19,30 @@ export interface Update {
   someEntries?: { [id: string]: StateEntry }
 }
 
+export interface EntityOptions {
+  id: string
+  context: Context
+  state: State
+}
+
 export abstract class Entity {
-  @observable inbox: Message[] = []
+  readonly id: string
+  protected readonly context: Context
+  private readonly state: State
   get entry() { return deepFreeze(copy(this.state.entries.get(this.id))) }
-  constructor(
-    public readonly id: string,
-    protected readonly context: Context,
-    private readonly state: State
-  ) { this.initialize() }
-  abstract initialize(): void
+
+  @observable inbox: Message[] = []
+
+  constructor({id, context, state}: EntityOptions) {
+    this.id = id
+    this.context = context
+    this.state = state
+  }
+
   abstract terminate(): void
 }
 
 export class GenericEntity extends Entity {
-  initialize() {}
   terminate() {}
 }
 
@@ -106,7 +116,7 @@ export class Simulator {
       if (!this.entities.has(id)) {
         const entry = this.state.entries.get(id)
         const Entity = this.getEntityClass(entry.type)
-        this.entities.set(id, new Entity(id, this.context, this.state))
+        this.entities.set(id, new Entity({id, context: this.context, state: this.state}))
       }
     })
 

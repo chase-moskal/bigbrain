@@ -14,7 +14,8 @@ export interface EnvironmentEntry extends StateEntry {
 
 export default class EnvironmentEntity extends Entity {
 
-  initialize() {
+  constructor(o) {
+    super(o)
     const {host, scene} = <PlaygroundContext>(this.context)
     loadBabylonFile(scene, this.entry.asset)
       .then(() => {

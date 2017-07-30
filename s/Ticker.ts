@@ -9,8 +9,7 @@ export interface Tick {
 export type TickAction = (tick: Tick) => void
 
 export interface TickerOptions {
-
-  /** Time period between ticks */
+  action?: TickAction
   relax?: number
 }
 
@@ -25,7 +24,8 @@ export default class Ticker implements Service {
   private stoppage = false
   private lastTime = now()
 
-  constructor({relax = 10}: TickerOptions = {}) {
+  constructor({action, relax = 10}: TickerOptions = {}) {
+    if (action) this.actions.push(action)
     this.relax = relax
   }
 

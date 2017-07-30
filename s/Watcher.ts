@@ -6,11 +6,11 @@ export enum Input {
   // Coming soon:
   //   Q, W, E, R, T, Y, U, I, O, P, BracketLeft, BracketRight
   //   A, S, D, F, G, H, J, K, L, Semicolon, Quote
-  //   Z, X, C, V, B, N, M, Comma, Period, Slash
+  //   V, B, N, M, Comma, Period, Slash
 
   One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero,
   Shift, Ctrl, Alt, Space,
-  W, A, S, D, Q, E
+  W, A, S, D, Q, E, Z, X, C
 }
 
 export const inputKeyCodeRelationships: {
@@ -24,6 +24,9 @@ export const inputKeyCodeRelationships: {
 
   {input: Input.Q,     code: 81},
   {input: Input.E,     code: 69},
+  {input: Input.Z,     code: 90},
+  {input: Input.X,     code: 88},
+  {input: Input.C,     code: 67},
 
   {input: Input.Shift, code: 16},
   {input: Input.Ctrl,  code: 17},
@@ -98,6 +101,8 @@ export default class Watcher<Bindings extends WatcherBindings = WatcherBindings,
     if (struckInput === null) return
     for (const struckAlias of this.getAliasesForInput(struckInput))
       this.status[struckAlias] = true
+    event.preventDefault()
+    event.stopPropagation()
   }
 
   private keyup = (event: KeyboardEvent) => {
@@ -105,5 +110,7 @@ export default class Watcher<Bindings extends WatcherBindings = WatcherBindings,
     if (releasedInput === null) return
     for (const releasedAlias of this.getAliasesForInput(releasedInput))
       this.status[releasedAlias] = false
+    event.preventDefault()
+    event.stopPropagation()
   }
 }
