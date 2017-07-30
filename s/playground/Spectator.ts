@@ -20,6 +20,7 @@ export default class Spectator extends Entity {
   private readonly camera: FreeCamera = (() => {
     const {scene} = this.context
     const camera = new FreeCamera("Spectator Camera", Vector3.FromArray(this.entry.position), scene)
+    camera.setTarget(Vector3.Zero())
     camera.speed = 0.1
     camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
     if (!camera._localDirection) camera._localDirection = Vector3.Zero()

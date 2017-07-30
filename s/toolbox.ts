@@ -29,7 +29,7 @@ export class ServiceMaster implements Service {
   }
 }
 
-export const clone = value => JSON.parse(JSON.stringify(value))
+export const copy = value => JSON.parse(JSON.stringify(value))
 
 export const sleep = (milliseconds: number) =>
   new Promise((resolve, reject) => setTimeout(resolve, milliseconds))

@@ -137,8 +137,8 @@ export class Simulator {
 
 export default class Monarch {
   @observable readonly state: State = {entries: new Map}
-  readonly network: Network
-  readonly simulator: Simulator
+  private readonly simulator: Simulator
+  private readonly network: Network
 
   constructor(
     public readonly context: Context,
