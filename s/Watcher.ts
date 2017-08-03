@@ -2,15 +2,18 @@
 import {observable, IObservableObject} from "mobx"
 
 export enum Input {
+  Esc,
 
-  // Coming soon:
-  //   Q, W, E, R, T, Y, U, I, O, P, BracketLeft, BracketRight
-  //   A, S, D, F, G, H, J, K, L, Semicolon, Quote
-  //   V, B, N, M, Comma, Period, Slash
+  Backtick, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero, Minus, Plus, Backspace,
+  Tab, Q, W, E, R, T, Y, U, I, O, P, BracketLeft, BracketRight, Backslash,
+  CapsLock, A, S, D, F, G, H, J, K, L, Semicolon, Quote, Enter,
+  Shift, Z, X, C, V, B, N, M, Comma, Period, Slash, ShiftRight,
+  Ctrl, Super, Alt, Space, AltRight, SuperRight, CtrlRight,
 
-  One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero,
-  Shift, Ctrl, Alt, Space,
-  W, A, S, D, Q, E, Z, X, C
+  Insert, Home, PageUp,
+  Delete, End, PageDown,
+
+  ArrowUp, ArrowDown, ArrowLeft, ArrowRight
 }
 
 export const inputKeyCodeRelationships: {
@@ -50,20 +53,22 @@ export interface InputReport {
   status: boolean
 }
 
-export type WatcherBindings = { [alias: string]: Input[] }
-export type WatcherStatus = { [alias: string]: boolean }
+export type Bindings = { [alias: string]: Input[] }
+export type Status = { [alias: string]: boolean }
 
-export default class Watcher<Bindings extends WatcherBindings = WatcherBindings, Status extends WatcherStatus = WatcherStatus> {
-  private readonly bindings: Bindings
-  readonly status: Status
+export default class Watcher<gBindings extends Bindings = Bindings, gStatus extends Status = Status> {
+  private readonly eventTarget: EventTarget
+  private readonly bindings: gBindings
+  readonly status: gStatus
 
-  constructor({bindings}: {bindings: Bindings}) {
+  constructor({eventTarget, bindings}: {eventTarget: EventTarget, bindings: gBindings}) {
+    this.eventTarget = eventTarget
     this.bindings = bindings
 
     const status = {}
     for (const alias of Object.keys(bindings))
       status[alias] = null
-    this.status = <Status & IObservableObject>observable(status)
+    this.status = <gStatus & IObservableObject>observable(status)
 
     Object.keys(bindings).forEach(alias => {
       const inputs = bindings[alias]
@@ -77,13 +82,13 @@ export default class Watcher<Bindings extends WatcherBindings = WatcherBindings,
   }
 
   start() {
-    addEventListener("keydown", event => this.keydown(event))
-    addEventListener("keyup", event => this.keyup(event))
+    this.eventTarget.addEventListener("keydown", (event: KeyboardEvent) => this.keydown(event))
+    this.eventTarget.addEventListener("keyup", (event: KeyboardEvent) => this.keyup(event))
   }
 
   stop() {
-    removeEventListener("keydown", (event: KeyboardEvent) => this.keydown(event))
-    removeEventListener("keyup", (event: KeyboardEvent) => this.keyup(event))
+    this.eventTarget.removeEventListener("keydown", (event: KeyboardEvent) => this.keydown(event))
+    this.eventTarget.removeEventListener("keyup", (event: KeyboardEvent) => this.keyup(event))
   }
 
   private getInputByKeyCode(keyCode: number): Input {

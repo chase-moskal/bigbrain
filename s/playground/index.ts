@@ -1,7 +1,7 @@
 
 import Playground from "./Playground"
-import Environment, {EnvironmentEntry} from "./Environment"
 import Spectator, {SpectatorEntry} from "./Spectator"
+import Environment, {EnvironmentEntry} from "./Environment"
 
 const game = new Playground({
   window,
@@ -11,12 +11,12 @@ const game = new Playground({
 
 game.susa.start()
 
-game.addEntry<EnvironmentEntry>({
+game.monarch.addEntry<EnvironmentEntry>({
   type: "Environment",
   asset: "assets/playground.babylon"
 })
 
-game.addEntry<SpectatorEntry>({
+game.monarch.addEntry<SpectatorEntry>({
   type: "Spectator",
   position: [0, 2, -5]
 })

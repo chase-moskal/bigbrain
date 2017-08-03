@@ -33,5 +33,5 @@ export default class EnvironmentEntity extends Entity {
       })
   }
 
-  terminate() {}
+  destructor() {}
 }

@@ -37,7 +37,10 @@ export default class Ticker implements Service {
     this.actions = []
   }
 
-  destructor() {}
+  destructor() {
+    this.stop()
+    this.clear()
+  }
 
   start() {
 

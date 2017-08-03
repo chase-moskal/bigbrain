@@ -39,11 +39,11 @@ export abstract class Entity {
     this.state = state
   }
 
-  abstract terminate(): void
+  abstract destructor(): void
 }
 
 export class GenericEntity extends Entity {
-  terminate() {}
+  destructor() {}
 }
 
 export type EntityClasses = {[name: string]: typeof GenericEntity}
@@ -124,14 +124,14 @@ export class Simulator {
     for (const id of this.entities.keys()) {
       if (!this.state.entries.has(id)) {
         const entity = this.entities.get(id)
-        entity.terminate()
+        entity.destructor()
         this.entities.delete(id)
       }
     }
   }
 
-  terminate() {
-    this.entities.forEach((entity) => entity.terminate())
+  destructor() {
+    this.entities.forEach((entity) => entity.destructor())
   }
 }
 
