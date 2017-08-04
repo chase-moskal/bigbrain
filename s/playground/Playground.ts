@@ -25,7 +25,7 @@ export default class Playground {
 
     const context: PlaygroundContext = {window, host: true, scene, canvas}
 
-    this.monarch = new Monarch(context, entityClasses)
+    this.monarch = new Monarch({context, entityClasses})
     this.susa = new Susa({window, canvas, engine, scene})
   }
 }

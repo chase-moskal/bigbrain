@@ -135,15 +135,21 @@ export class Simulator {
   }
 }
 
+export interface MonarchOptions {
+  context: Context
+  entityClasses: EntityClasses
+}
+
 export default class Monarch {
-  @observable readonly state: State = {entries: new Map}
+  private readonly context: Context
+  private readonly entityClasses: EntityClasses
   private readonly simulator: Simulator
   private readonly network: Network
+  @observable readonly state: State = {entries: new Map}
 
-  constructor(
-    public readonly context: Context,
-    public readonly entityClasses: EntityClasses
-  ) {
+  constructor({context, entityClasses}: MonarchOptions) {
+    this.context = context
+    this.entityClasses = entityClasses
     this.simulator = new Simulator(context, entityClasses, this.state)
     this.network = new LoopbackNetwork(this.state, context, messages => this.simulator.handleMessages(messages))
   }
