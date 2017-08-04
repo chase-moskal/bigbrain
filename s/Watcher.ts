@@ -16,25 +16,32 @@ export enum Input {
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight
 }
 
-export const inputKeyCodeRelationships: {
+export interface InputKeycodeRelation {
   input: Input
   code: number
-}[] = [
-  {input: Input.W,     code: 87},
-  {input: Input.A,     code: 65},
-  {input: Input.S,     code: 83},
-  {input: Input.D,     code: 68},
+}
 
-  {input: Input.Q,     code: 81},
-  {input: Input.E,     code: 69},
-  {input: Input.Z,     code: 90},
-  {input: Input.X,     code: 88},
-  {input: Input.C,     code: 67},
+export const inputKeycodeRelations: InputKeycodeRelation[] = [
+  {input: Input.W, code: 87},
+  {input: Input.A, code: 65},
+  {input: Input.S, code: 83},
+  {input: Input.D, code: 68},
+
+  {input: Input.Q, code: 81},
+  {input: Input.E, code: 69},
+  {input: Input.Z, code: 90},
+  {input: Input.X, code: 88},
+  {input: Input.C, code: 67},
 
   {input: Input.Shift, code: 16},
   {input: Input.Ctrl,  code: 17},
   {input: Input.Alt,   code: 18},
   {input: Input.Space, code: 32},
+
+  {input: Input.ArrowLeft,  code: 37},
+  {input: Input.ArrowUp,    code: 38},
+  {input: Input.ArrowRight, code: 39},
+  {input: Input.ArrowDown,  code: 40},
 
   {input: Input.One,   code: 49},
   {input: Input.Two,   code: 50},
@@ -56,26 +63,35 @@ export interface InputReport {
 export type Bindings = { [alias: string]: Input[] }
 export type Status = { [alias: string]: boolean }
 
+export interface WatcherOptions<gBindings extends Bindings = Bindings> {
+  eventTarget: EventTarget
+  bindings: gBindings
+  relations?: InputKeycodeRelation[]
+}
+
 export default class Watcher<gBindings extends Bindings = Bindings, gStatus extends Status = Status> {
   private readonly eventTarget: EventTarget
   private readonly bindings: gBindings
+  private readonly relations: InputKeycodeRelation[]
+
   readonly status: gStatus
 
-  constructor({eventTarget, bindings}: {eventTarget: EventTarget, bindings: gBindings}) {
+  constructor({eventTarget, bindings, relations = inputKeycodeRelations}: WatcherOptions<gBindings>) {
     this.eventTarget = eventTarget
     this.bindings = bindings
+    this.relations = relations
 
     const status = {}
     for (const alias of Object.keys(bindings))
       status[alias] = null
     this.status = <gStatus & IObservableObject>observable(status)
 
+    // initialize status for each binding, throw error on unknown input
     Object.keys(bindings).forEach(alias => {
       const inputs = bindings[alias]
-      for (const input of inputs) {
-        if (!(input in inputKeyCodeRelationships)) throw `Unknown input: ${input}`
-        this.status[alias] = null
-      }
+      for (const input of inputs)
+        if (!this.relations.find(relation => relation.input === input)) throw `Unknown input: ${input}`
+      this.status[alias] = null
     })
 
     this.start()
@@ -91,8 +107,8 @@ export default class Watcher<gBindings extends Bindings = Bindings, gStatus exte
     this.eventTarget.removeEventListener("keyup", (event: KeyboardEvent) => this.keyup(event))
   }
 
-  private getInputByKeyCode(keyCode: number): Input {
-    const relation = inputKeyCodeRelationships.find(relationship => relationship.code === keyCode)
+  private getInputByKeycode(code: number): Input {
+    const relation = inputKeycodeRelations.find(relationship => relationship.code === code)
     return relation ? relation.input : null
   }
 
@@ -102,7 +118,7 @@ export default class Watcher<gBindings extends Bindings = Bindings, gStatus exte
   }
 
   private keydown = (event: KeyboardEvent) => {
-    const struckInput = this.getInputByKeyCode(event.keyCode)
+    const struckInput = this.getInputByKeycode(event.keyCode)
     if (struckInput === null) return
     for (const struckAlias of this.getAliasesForInput(struckInput))
       this.status[struckAlias] = true
@@ -111,7 +127,7 @@ export default class Watcher<gBindings extends Bindings = Bindings, gStatus exte
   }
 
   private keyup = (event: KeyboardEvent) => {
-    const releasedInput = this.getInputByKeyCode(event.keyCode)
+    const releasedInput = this.getInputByKeycode(event.keyCode)
     if (releasedInput === null) return
     for (const releasedAlias of this.getAliasesForInput(releasedInput))
       this.status[releasedAlias] = false

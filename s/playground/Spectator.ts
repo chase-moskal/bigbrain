@@ -16,10 +16,10 @@ export interface SpectatorEntry extends StateEntry {
 
 export default class Spectator extends Entity {
   static readonly bindings: Bindings = {
-    forward: [Input.W],
-    left: [Input.A],
-    backward: [Input.S],
-    right: [Input.D],
+    forward: [Input.W, Input.ArrowUp],
+    backward: [Input.S, Input.ArrowDown],
+    left: [Input.A, Input.ArrowLeft],
+    right: [Input.D, Input.ArrowRight],
     raise: [Input.Space],
     lower: [Input.Z, Input.C],
     sprint: [Input.Shift]
