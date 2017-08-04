@@ -27,7 +27,7 @@ export function pathBreakdown(path: string) {
   return {dirpath, filename}
 }
 
-export async function loadBabylonFile(scene, path: string, onProgress: Function = () => {}) {
+export async function loadBabylonFile(scene, path: string, onProgress: (event: ProgressEvent) => void = event => {}) {
   SceneLoader.ShowLoadingScreen = false
   const {dirpath, filename} = pathBreakdown(path)
   return new Promise((resolve, reject) => {
