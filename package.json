@@ -5,9 +5,11 @@
   "main": "o/Monarch",
   "types": "o/Monarch.d.ts",
   "scripts": {
-    "build": "rimraf o && run-p build-library build-playground lint && echo Done build",
+    "build": "rimraf o && run-p build-library build-playground lint && echo Done production build",
+    "build-debug": "rimraf o && run-p build-library build-playground-debug lint && echo Done debug build",
     "build-library": "tsc",
-    "build-playground": "mkdirp o/playground/ && browserify --debug -p tsify s/playground/index.ts > o/playground/index.bundle.js",
+    "build-playground": "mkdirp o/playground/ && browserify -p tsify s/playground/index.ts > o/playground/index.bundle.js",
+    "build-playground-debug": "mkdirp o/playground/ && browserify --debug -p tsify s/playground/index.ts > o/playground/index.bundle.js",
     "lint": "tslint -c tslint.json -e 's/_archive/**' 's/**/*.ts'",
     "start": "http-server",
     "test-old": "nyc --reporter=text mocha -- o/**/*.test.js",
