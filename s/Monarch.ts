@@ -19,21 +19,21 @@ export interface Update {
   someEntries?: { [id: string]: StateEntry }
 }
 
-export interface EntityOptions {
+export interface EntityOptions<gContext extends Context = Context> {
   id: string
-  context: Context
+  context: gContext
   state: State
 }
 
-export abstract class Entity {
+export abstract class Entity<gContext extends Context = Context, gStateEntry extends StateEntry = StateEntry> {
   readonly id: string
-  protected readonly context: Context
+  protected readonly context: gContext
   private readonly state: State
-  get entry() { return deepFreeze(copy(this.state.entries.get(this.id))) }
+  get entry(): gStateEntry { return deepFreeze(copy(this.state.entries.get(this.id))) }
 
   @observable inbox: Message[] = []
 
-  constructor({id, context, state}: EntityOptions) {
+  constructor({id, context, state}: EntityOptions<gContext>) {
     this.id = id
     this.context = context
     this.state = state

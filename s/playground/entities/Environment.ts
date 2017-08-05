@@ -2,21 +2,20 @@
 import {observable, computed, reaction} from "mobx"
 import {FreeCamera, Mesh, ShadowGenerator, SpotLight} from "babylonjs"
 
-import {loadBabylonFile} from "../Susa"
-import {Entity, StateEntry, Message} from "../Monarch"
-
-import {PlaygroundContext} from "./Playground"
+import {loadBabylonFile} from "../../Susa"
+import {PlaygroundContext} from "./../Playground"
+import {Entity, StateEntry, Message} from "../../Monarch"
 
 export interface EnvironmentEntry extends StateEntry {
   type: "Environment"
   asset: string
 }
 
-export default class EnvironmentEntity extends Entity {
+export default class EnvironmentEntity extends Entity<PlaygroundContext, EnvironmentEntry> {
 
   constructor(o) {
     super(o)
-    const {host, scene} = <PlaygroundContext>(this.context)
+    const {scene} = this.context
     loadBabylonFile(scene, this.entry.asset)
       .then(() => {
         const plane = <Mesh> scene.getMeshByName("Plane")

@@ -1,12 +1,15 @@
 
 import Playground from "./Playground"
-import Spectator, {SpectatorEntry} from "./Spectator"
-import Environment, {EnvironmentEntry} from "./Environment"
+
+import Cube, {CubeEntry} from "./entities/Cube"
+import Editor, {EditorEntry} from "./entities/Editor"
+import Spectator, {SpectatorEntry} from "./entities/Spectator"
+import Environment, {EnvironmentEntry} from "./entities/Environment"
 
 const game = new Playground({
   window,
   canvas: document.querySelector("canvas"),
-  entityClasses: {Environment, Spectator}
+  entityClasses: {Environment, Spectator, Editor, Cube}
 })
 
 game.susa.start()
@@ -16,8 +19,8 @@ game.monarch.addEntry<EnvironmentEntry>({
   asset: "assets/playground.babylon"
 })
 
-game.monarch.addEntry<SpectatorEntry>({
-  type: "Spectator",
+game.monarch.addEntry<EditorEntry>({
+  type: "Editor",
   position: [0, 2, -5]
 })
 

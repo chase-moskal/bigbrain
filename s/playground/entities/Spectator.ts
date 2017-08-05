@@ -3,12 +3,12 @@ import * as deepFreeze from "deep-freeze"
 import {observable, computed, reaction, autorun} from "mobx"
 import {Scene, FreeCamera, Mesh, ShadowGenerator, SpotLight, Vector3} from "babylonjs"
 
-import Ticker, {Tick} from "../Ticker"
-import {loadBabylonFile} from "../Susa"
-import {Entity, StateEntry, Message} from "../Monarch"
-import Watcher, {Input, Bindings, Status} from "../Watcher"
+import Ticker, {Tick} from "../../Ticker"
+import {loadBabylonFile} from "../../Susa"
+import {Entity, StateEntry, Message} from "../../Monarch"
+import Watcher, {Input, Bindings, Status} from "../../Watcher"
 
-import {PlaygroundContext} from "./Playground"
+import {PlaygroundContext} from "./../Playground"
 
 export interface SpectatorEntry extends StateEntry {
   type: "Spectator"
@@ -17,6 +17,7 @@ export interface SpectatorEntry extends StateEntry {
 
 export const makeCamera = ({scene, position}: {scene: Scene, position: [number, number, number]}) => {
   const camera = new FreeCamera("Spectator Camera", Vector3.FromArray(position), scene)
+  camera.position = Vector3.FromArray(position)
   camera.setTarget(Vector3.Zero())
   camera.speed = 0.1
   camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
@@ -47,19 +48,20 @@ export const applyLogicalMovement = ({tick, camera, watcher}: {tick: Tick, camer
   camera.cameraDirection.addInPlace(camera._transformedDirection)
 }
 
-export default class Spectator extends Entity {
-  static readonly bindings: Bindings = deepFreeze({
-    forward: [Input.W, Input.ArrowUp],
-    backward: [Input.S, Input.ArrowDown],
-    left: [Input.A, Input.ArrowLeft],
-    right: [Input.D, Input.ArrowRight],
-    raise: [Input.Space],
-    lower: [Input.Z, Input.C],
-    sprint: [Input.Shift]
-  })
+export const bindings: Bindings = deepFreeze({
+  forward: [Input.W, Input.ArrowUp],
+  backward: [Input.S, Input.ArrowDown],
+  left: [Input.A, Input.ArrowLeft],
+  right: [Input.D, Input.ArrowRight],
+  raise: [Input.Space],
+  lower: [Input.Z, Input.C],
+  sprint: [Input.Shift]
+})
+
+export default class Spectator extends Entity<PlaygroundContext, SpectatorEntry> {
   protected readonly context: PlaygroundContext
   private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position})
-  private readonly watcher = new Watcher({eventTarget: this.context.window, bindings: {...Spectator.bindings}})
+  private readonly watcher = new Watcher({eventTarget: this.context.window, bindings})
   private readonly ticker: Ticker = (() => {
     const {camera, watcher} = this
     const ticker = new Ticker({action: tick => applyLogicalMovement({tick, camera, watcher})})
