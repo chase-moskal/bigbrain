@@ -1,11 +1,16 @@
 
-# Monarch Game Engine — [![Build Status](https://travis-ci.org/monarch-games/engine.svg?branch=master)](https://travis-ci.org/monarch-games/engine)
+# MONARCH GAME ENGINE — [![Build Status](https://travis-ci.org/monarch-games/engine.svg?branch=master)](https://travis-ci.org/monarch-games/engine)
+
+## ***[» play now «](https://monarch-games.github.io/engine/)***
+
+ - WASD and the mouse to fly around
+ - hold E key and click to place cubes
+ - remove them by looking at them and pressing X
 
 ## concept engine of chase moskal's dreams
 
- - unstable hobby project
  - built on top of the mighty [babylonjs](http://www.babylonjs.com/) web game engine
- - typescript
+ - wip — unstable hobby project
 
 ## network architecture design
 
@@ -33,28 +38,3 @@
 │                                │                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-### SIMULATOR
-
- - COMMON
-    - simulator conforms to state (adds/removes entities)
-    - entities react to mandate messages from host
- - HOST
-    - entities perform game simulation
-    - entities react to request messages
-    - entities write new state for everyone
-    - entities write mandate messages for everyone
- - CLIENT
-    - entities mimic state entries
-    - entities write request messages for host
-
-### NETWORK
-
- - HOST
-    - all sent updates are looped back into recv
-    - the host thus receives their own updates
-    - updates from clients are also ingested
- - CLIENT
-    - received updates are simply fed into the simulator
-    - updates that come out of the simulator have only request messages
-    - these updates are sent to the host
