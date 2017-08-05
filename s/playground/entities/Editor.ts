@@ -8,7 +8,7 @@ import {PlaygroundContext} from "./../Playground"
 import {Entity, StateEntry, Message} from "../../Monarch"
 import Watcher, {Input, Bindings, Status} from "../../Watcher"
 
-import {CubeEntry, createCubeMesh} from "./Cube"
+import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./Cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./Spectator"
 
 export interface EditorEntry {
@@ -20,7 +20,8 @@ export default class Editor extends Entity<PlaygroundContext, EditorEntry> {
   static readonly bindings = {
     ...spectatorBindings,
     ghost: [Input.E],
-    place: [Input.MouseLeft]
+    place: [Input.MouseLeft],
+    remove: [Input.X, Input.Backspace, Input.Delete]
   }
 
   protected readonly context: PlaygroundContext
@@ -28,6 +29,7 @@ export default class Editor extends Entity<PlaygroundContext, EditorEntry> {
   private readonly watcher = new Watcher<typeof Editor.bindings, {
     ghost: boolean
     place: boolean
+    remove: boolean
   }>({eventTarget: this.context.window, bindings: Editor.bindings})
 
   private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position})
@@ -43,6 +45,11 @@ export default class Editor extends Entity<PlaygroundContext, EditorEntry> {
     const {scene, canvas} = this.context
     const {pickedPoint: aimpoint} = scene.pick(canvas.width / 2, canvas.height / 2)
     return aimpoint
+  }
+
+  private middlePick() {
+    const {scene, canvas} = this.context
+    return scene.pick(canvas.width / 2, canvas.height / 2)
   }
 
   private ghostMesh: Mesh = null
@@ -86,6 +93,18 @@ export default class Editor extends Entity<PlaygroundContext, EditorEntry> {
       const {ghostMesh} = this
       if (place && ghostMesh) {
         addEntry(<CubeEntry>{type: "Cube", size: 1, position: ghostMesh.position.asArray()})
+      }
+    }),
+
+    // removal action
+    reaction(() => this.watcher.status.remove, remove => {
+      const {scene, canvas, addEntry, removeEntry} = this.context
+      if (remove) {
+        const pick = this.middlePick()
+        if (pick && pick.pickedMesh) {
+          const mesh = <IdentifiableMesh>pick.pickedMesh
+          if (mesh.entryId) removeEntry(mesh.entryId)
+        }
       }
     })
   ]

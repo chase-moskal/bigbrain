@@ -10,6 +10,7 @@ export interface PlaygroundContext extends Context {
   scene: Scene
   canvas: HTMLCanvasElement
   addEntry: (entry: StateEntry) => void
+  removeEntry: (id: string) => void
 }
 
 export default class Playground {
@@ -27,7 +28,8 @@ export default class Playground {
     const context: PlaygroundContext = {
       host: true,
       window, scene, canvas,
-      addEntry: entry => this.monarch.addEntry(entry)
+      addEntry: entry => this.monarch.addEntry(entry),
+      removeEntry: id => this.monarch.removeEntry(id)
     }
 
     this.monarch = new Monarch({context, entityClasses})

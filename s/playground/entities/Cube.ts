@@ -10,18 +10,24 @@ export interface CubeEntry {
   position: [number, number, number]
 }
 
-export const createCubeMesh = ({scene, size, position}: {
+export interface IdentifiableMesh extends Mesh {
+  entryId: string
+}
+
+export const createCubeMesh = ({scene, size, position, entryId}: {
   scene: Scene
   size: number
   position: [number, number, number]
+  entryId?: string
 }): Mesh => {
   const material = new StandardMaterial("Cube", scene)
   material.emissiveColor = new Color3(0.1, 0.6, 0.9)
 
-  const mesh = Mesh.CreateBox("Cube", size, scene)
+  const mesh = <IdentifiableMesh>Mesh.CreateBox("Cube", size, scene)
   mesh.position = Vector3.FromArray(position)
   mesh.material = material
 
+  if (entryId) mesh.entryId = entryId
   return mesh
 }
 
@@ -30,7 +36,7 @@ export default class Cube extends Entity<PlaygroundContext, CubeEntry> {
   private readonly mesh: Mesh = (() => {
     const {scene} = this.context
     const {size, position} = this.entry
-    return createCubeMesh({scene, size, position})
+    return createCubeMesh({scene, size, position, entryId: this.id})
   })()
 
   destructor() {
