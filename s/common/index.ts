@@ -1,12 +1,12 @@
 
-import Playground from "./Playground"
+import Game from "./game"
 
-import Cube, {CubeEntry} from "./entities/Cube"
-import Editor, {EditorEntry} from "./entities/Editor"
-import Spectator, {SpectatorEntry} from "./entities/Spectator"
-import Environment, {EnvironmentEntry} from "./entities/Environment"
+import Cube, {CubeEntry} from "./entities/cube"
+import Editor, {EditorEntry} from "./entities/editor"
+import Spectator, {SpectatorEntry} from "./entities/spectator"
+import Environment, {EnvironmentEntry} from "./entities/environment"
 
-const game = new Playground({
+const game = new Game({
   window,
   canvas: document.querySelector("canvas"),
   entityClasses: {Environment, Spectator, Editor, Cube}

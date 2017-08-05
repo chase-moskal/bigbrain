@@ -2,21 +2,21 @@
 import {observable, computed, reaction, autorun} from "mobx"
 import {Scene, FreeCamera, Mesh, ShadowGenerator, SpotLight, Vector3, StandardMaterial} from "babylonjs"
 
-import Ticker, {Tick} from "../../Ticker"
-import {loadBabylonFile} from "../../Susa"
-import {PlaygroundContext} from "./../Playground"
-import {Entity, StateEntry, Message} from "../../Monarch"
-import Watcher, {Input, Bindings, Status} from "../../Watcher"
+import Ticker, {Tick} from "../../ticker"
+import {loadBabylonFile} from "../../susa"
+import {GameContext} from "./../game"
+import {Entity, StateEntry, Message} from "../../monarch"
+import Watcher, {Input, Bindings, Status} from "../../watcher"
 
-import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./Cube"
-import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./Spectator"
+import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./cube"
+import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
 
 export interface EditorEntry {
   type: "Editor"
   position: [number, number, number]
 }
 
-export default class Editor extends Entity<PlaygroundContext, EditorEntry> {
+export default class Editor extends Entity<GameContext, EditorEntry> {
   static readonly bindings = {
     ...spectatorBindings,
     ghost: [Input.E],
@@ -24,7 +24,7 @@ export default class Editor extends Entity<PlaygroundContext, EditorEntry> {
     remove: [Input.X, Input.Backspace, Input.Delete]
   }
 
-  protected readonly context: PlaygroundContext
+  protected readonly context: GameContext
 
   private readonly watcher = new Watcher<typeof Editor.bindings, {
     ghost: boolean
