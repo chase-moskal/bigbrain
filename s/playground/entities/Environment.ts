@@ -11,11 +11,11 @@ export interface EnvironmentEntry extends StateEntry {
   asset: string
 }
 
-export default class EnvironmentEntity extends Entity {
+export default class EnvironmentEntity extends Entity<PlaygroundContext, EnvironmentEntry> {
 
   constructor(o) {
     super(o)
-    const {host, scene} = <PlaygroundContext>(this.context)
+    const {scene} = this.context
     loadBabylonFile(scene, this.entry.asset)
       .then(() => {
         const plane = <Mesh> scene.getMeshByName("Plane")

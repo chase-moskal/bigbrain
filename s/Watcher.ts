@@ -2,6 +2,8 @@
 import {observable, IObservableObject} from "mobx"
 
 export enum Input {
+  MouseLeft, MouseRight, MouseMiddle,
+
   Esc,
 
   Backtick, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero, Minus, Plus, Backspace,
@@ -33,6 +35,10 @@ export const inputKeycodeRelations: InputKeycodeRelation[] = [
   {input: Input.X, code: 88},
   {input: Input.C, code: 67},
 
+  {input: Input.R, code: 82},
+  {input: Input.F, code: 70},
+  {input: Input.V, code: 86},
+
   {input: Input.Shift, code: 16},
   {input: Input.Ctrl,  code: 17},
   {input: Input.Alt,   code: 18},
@@ -52,7 +58,16 @@ export const inputKeycodeRelations: InputKeycodeRelation[] = [
   {input: Input.Seven, code: 55},
   {input: Input.Eight, code: 56},
   {input: Input.Nine,  code: 57},
-  {input: Input.Zero,  code: 48}
+  {input: Input.Zero,  code: 48},
+
+  {input: Input.Backspace, code: 8},
+  {input: Input.Delete, code: 46}
+]
+
+export const otherwiseSupportedInputs: Input[] = [
+  Input.MouseLeft,
+  Input.MouseMiddle,
+  Input.MouseRight
 ]
 
 export interface InputReport {
@@ -66,20 +81,17 @@ export type Status = { [alias: string]: boolean }
 export interface WatcherOptions<gBindings extends Bindings = Bindings> {
   eventTarget: EventTarget
   bindings: gBindings
-  relations?: InputKeycodeRelation[]
 }
 
 export default class Watcher<gBindings extends Bindings = Bindings, gStatus extends Status = Status> {
   private readonly eventTarget: EventTarget
   private readonly bindings: gBindings
-  private readonly relations: InputKeycodeRelation[]
 
   readonly status: gStatus
 
-  constructor({eventTarget, bindings, relations = inputKeycodeRelations}: WatcherOptions<gBindings>) {
+  constructor({eventTarget, bindings}: WatcherOptions<gBindings>) {
     this.eventTarget = eventTarget
     this.bindings = bindings
-    this.relations = relations
 
     const status = {}
     for (const alias of Object.keys(bindings))
@@ -90,21 +102,63 @@ export default class Watcher<gBindings extends Bindings = Bindings, gStatus exte
     Object.keys(bindings).forEach(alias => {
       const inputs = bindings[alias]
       for (const input of inputs)
-        if (!this.relations.find(relation => relation.input === input)) throw `Unknown input: ${input}`
+        if (
+          inputKeycodeRelations.find(relation => relation.input === input) !== undefined
+          && otherwiseSupportedInputs.find(supported => supported === input) !== undefined
+        ) throw `Unknown input: ${input}`
       this.status[alias] = null
     })
 
     this.start()
   }
 
+  private readonly listeners = {
+    keydown: (event: KeyboardEvent) => {
+      const struckInput = this.getInputByKeycode(event.keyCode)
+      if (struckInput === null) return
+      for (const struckAlias of this.getAliasesForInput(struckInput))
+        this.status[struckAlias] = true
+      event.preventDefault()
+      event.stopPropagation()
+    },
+    keyup: (event: KeyboardEvent) => {
+      const releasedInput = this.getInputByKeycode(event.keyCode)
+      if (releasedInput === null) return
+      for (const releasedAlias of this.getAliasesForInput(releasedInput))
+        this.status[releasedAlias] = false
+      event.preventDefault()
+      event.stopPropagation()
+    },
+    mousedown: (event: MouseEvent) => {
+      for (const struckAlias of this.getAliasesForInput(Input.MouseLeft))
+        this.status[struckAlias] = true
+      event.preventDefault()
+      event.stopPropagation()
+    },
+    mouseup: (event: MouseEvent) => {
+      for (const releasedAlias of this.getAliasesForInput(Input.MouseLeft))
+        this.status[releasedAlias] = false
+      event.preventDefault()
+      event.stopPropagation()
+    }
+  }
+
   start() {
-    this.eventTarget.addEventListener("keydown", (event: KeyboardEvent) => this.keydown(event))
-    this.eventTarget.addEventListener("keyup", (event: KeyboardEvent) => this.keyup(event))
+    for (const eventType of Object.keys(this.listeners)) {
+      const listener = this.listeners[eventType]
+      this.eventTarget.addEventListener(eventType, listener)
+    }
   }
 
   stop() {
-    this.eventTarget.removeEventListener("keydown", (event: KeyboardEvent) => this.keydown(event))
-    this.eventTarget.removeEventListener("keyup", (event: KeyboardEvent) => this.keyup(event))
+    for (const eventType of Object.keys(this.listeners)) {
+      const listener = this.listeners[eventType]
+      this.eventTarget.removeEventListener(eventType, listener)
+    }
+  }
+
+  destructor() {
+    this.stop()
   }
 
   private getInputByKeycode(code: number): Input {
@@ -115,23 +169,5 @@ export default class Watcher<gBindings extends Bindings = Bindings, gStatus exte
   private getAliasesForInput(input: Input): string[] {
     return Object.keys(this.bindings)
       .filter(alias => this.bindings[alias].some(i => i === input))
-  }
-
-  private keydown = (event: KeyboardEvent) => {
-    const struckInput = this.getInputByKeycode(event.keyCode)
-    if (struckInput === null) return
-    for (const struckAlias of this.getAliasesForInput(struckInput))
-      this.status[struckAlias] = true
-    event.preventDefault()
-    event.stopPropagation()
-  }
-
-  private keyup = (event: KeyboardEvent) => {
-    const releasedInput = this.getInputByKeycode(event.keyCode)
-    if (releasedInput === null) return
-    for (const releasedAlias of this.getAliasesForInput(releasedInput))
-      this.status[releasedAlias] = false
-    event.preventDefault()
-    event.stopPropagation()
   }
 }

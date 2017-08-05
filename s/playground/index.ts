@@ -1,13 +1,15 @@
 
 import Playground from "./Playground"
-import Spectator, {SpectatorEntry} from "./entities/Spectator"
+
+import Cube, {CubeEntry} from "./entities/Cube"
 import Editor, {EditorEntry} from "./entities/Editor"
+import Spectator, {SpectatorEntry} from "./entities/Spectator"
 import Environment, {EnvironmentEntry} from "./entities/Environment"
 
 const game = new Playground({
   window,
   canvas: document.querySelector("canvas"),
-  entityClasses: {Environment, Spectator, Editor}
+  entityClasses: {Environment, Spectator, Editor, Cube}
 })
 
 game.susa.start()
