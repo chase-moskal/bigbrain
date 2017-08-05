@@ -1,6 +1,6 @@
 {
   "name": "monarch-engine",
-  "version": "0.3.0-dev",
+  "version": "0.3.0",
   "description": "concept game engine",
   "main": "o/Monarch",
   "types": "o/Monarch.d.ts",
