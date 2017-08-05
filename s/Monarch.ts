@@ -1,12 +1,13 @@
 
 import * as uuid from "uuid/v4"
 import * as deepFreeze from "deep-freeze"
-import {observable, autorun, reaction, action, computed} from "mobx"
+import {observable, autorun, action} from "mobx"
 
 function copy<T>(o: T): T { return JSON.parse(JSON.stringify(o)) }
 
-export interface Context {
+export interface StandardContext {
   readonly host: boolean
+  readonly manager: Manager
 }
 
 export interface StateEntry { readonly type: string }
@@ -19,13 +20,13 @@ export interface Update {
   someEntries?: { [id: string]: StateEntry }
 }
 
-export interface EntityOptions<gContext extends Context = Context> {
+export interface EntityOptions<gContext extends StandardContext = StandardContext> {
   id: string
   context: gContext
   state: State
 }
 
-export abstract class Entity<gContext extends Context = Context, gStateEntry extends StateEntry = StateEntry> {
+export abstract class Entity<gContext extends StandardContext = StandardContext, gStateEntry extends StateEntry = StateEntry> {
   readonly id: string
   protected readonly context: gContext
   private readonly state: State
@@ -55,7 +56,7 @@ function assignPropsOntoMap(obj: Object, map: Map<string, any>) {
 export abstract class Network {
   constructor(
     protected readonly state: State,
-    protected readonly context: Context,
+    protected readonly context: StandardContext,
     protected readonly handleMessages: (messages: Message[]) => void
   ) {}
 
@@ -79,90 +80,82 @@ export class LoopbackNetwork extends Network {
   }
 }
 
-export class Simulator {
-  private entities: Map<string, GenericEntity> = new Map()
+export const getEntityClass = (type: string, entityClasses: EntityClasses): typeof GenericEntity => {
+  const Class = <typeof GenericEntity><any>entityClasses[type]
+  if (!Class) throw new Error(`Unknown entity class "${type}"`)
+  return Class
+}
 
-  constructor(
-    protected readonly context: Context,
-    protected readonly entityClasses: EntityClasses,
-    protected readonly state: State
-  ) {
-    autorun(() => this.createAndDestroyEntitiesToMatch(this.getEntryReports()))
-  }
+export function replicate(state: State, entities: Map<string, Entity>, context: StandardContext, entityClasses: EntityClasses) {
 
-  handleMessages(messages: Message[]): void {
-    for (const message of messages) {
-      const entity = this.entities.get(message.to)
-      if (entity) entity.inbox.unshift(message)
-      else console.warn(`Message undeliverable: to entity id "${message.to}"`, message)
+  // add new entities
+  for (const [id, entry] of Array.from(state.entries)) {
+    if (!entities.has(id)) {
+      const entry = state.entries.get(id)
+      const Entity = getEntityClass(entry.type, entityClasses)
+      entities.set(id, new Entity({id, context, state}))
     }
   }
 
-  private getEntryReports() {
-    return Array.from(this.state.entries.keys())
-      .map(id => ({id, entry: this.state.entries.get(id)}))
+  // remove old entities
+  for (const id of entities.keys()) {
+    if (!state.entries.has(id)) {
+      const entity = entities.get(id)
+      entity.destructor()
+      entities.delete(id)
+    }
+  }
+}
+
+export class Manager {
+  constructor(private readonly state: State, private readonly entities: Map<string, Entity>) {}
+
+  addEntry<T extends StateEntry = StateEntry>(entry: T): string {
+    const id: string = uuid()
+    this.state.entries.set(id, entry)
+    return id
   }
 
-  private getEntityClass(type: string): typeof GenericEntity {
-    const Class = <typeof GenericEntity><any>this.entityClasses[type]
-    if (!Class) throw new Error(`unknown entity class "${type}"`)
-    return Class
+  removeEntry(id: string): void {
+    this.state.entries.delete(id)
   }
 
-  private createAndDestroyEntitiesToMatch(reports: {id: string, entry: StateEntry}[]) {
+  listEntities(): [string, Entity][] {
+    return Array.from(this.entities)
+  }
+}
 
-    // add new entities
-    reports.forEach(({id, entry}) => {
-      if (!this.entities.has(id)) {
-        const entry = this.state.entries.get(id)
-        const Entity = this.getEntityClass(entry.type)
-        this.entities.set(id, new Entity({id, context: this.context, state: this.state}))
+export interface MonarchOptions<MoreContext = any> {
+  window: Window
+  canvas: HTMLCanvasElement
+  entityClasses: EntityClasses
+  context?: MoreContext
+}
+
+export default class Monarch<MoreContext = any> {
+  readonly manager: Manager
+
+  constructor({window, canvas, entityClasses, context: moreContext = {}}: MonarchOptions<MoreContext>) {
+    const state: State = observable({entries: new Map})
+    const entities: Map<string, Entity> = new Map()
+    const manager = new Manager(state, entities)
+
+    const context = <StandardContext & MoreContext>{
+      host: true,
+      manager,
+      ...moreContext
+    }
+
+    autorun(() => replicate(state, entities, context, entityClasses))
+
+    const network = new LoopbackNetwork(state, context, messages => {
+      for (const message of messages) {
+        const entity = entities.get(message.to)
+        if (entity) entity.inbox.unshift(message)
+        else console.warn(`Message undeliverable: to entity id "${message.to}"`, message)
       }
     })
 
-    // remove old entities
-    for (const id of this.entities.keys()) {
-      if (!this.state.entries.has(id)) {
-        const entity = this.entities.get(id)
-        entity.destructor()
-        this.entities.delete(id)
-      }
-    }
-  }
-
-  destructor() {
-    this.entities.forEach((entity) => entity.destructor())
-  }
-}
-
-export interface MonarchOptions {
-  context: Context
-  entityClasses: EntityClasses
-}
-
-export default class Monarch {
-  private readonly context: Context
-  private readonly entityClasses: EntityClasses
-  private readonly simulator: Simulator
-  private readonly network: Network
-  @observable readonly state: State = {entries: new Map}
-
-  constructor({context, entityClasses}: MonarchOptions) {
-    this.context = context
-    this.entityClasses = entityClasses
-    this.simulator = new Simulator(context, entityClasses, this.state)
-    this.network = new LoopbackNetwork(this.state, context, messages => this.simulator.handleMessages(messages))
-  }
-
-  private generateFreshIdentifier() {
-    return uuid()
-  }
-
-  addEntry<T extends StateEntry = StateEntry>(entry: T) {
-    this.state.entries.set(this.generateFreshIdentifier(), entry)
-  }
-
-  removeEntry(id: string) {
-    this.state.entries.delete(id)
+    this.manager = manager
   }
 }

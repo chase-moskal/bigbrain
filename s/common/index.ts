@@ -3,23 +3,34 @@ import Game from "./game"
 
 import Cube, {CubeEntry} from "./entities/cube"
 import Editor, {EditorEntry} from "./entities/editor"
+import Director, {DirectorEntry} from "./entities/director"
 import Spectator, {SpectatorEntry} from "./entities/spectator"
 import Environment, {EnvironmentEntry} from "./entities/environment"
 
 const game = new Game({
   window,
   canvas: document.querySelector("canvas"),
-  entityClasses: {Environment, Spectator, Editor, Cube}
+  entityClasses: {
+    Environment,
+    Spectator,
+    Editor,
+    Cube,
+    Director
+  }
 })
 
-game.susa.start()
+const {manager} = game
 
-game.monarch.addEntry<EnvironmentEntry>({
+manager.addEntry<EnvironmentEntry>({
   type: "Environment",
   asset: "assets/playground.babylon"
 })
 
-game.monarch.addEntry<EditorEntry>({
+manager.addEntry<DirectorEntry>({
+  type: "Director"
+})
+
+manager.addEntry<EditorEntry>({
   type: "Editor",
   position: [0, 2, -5]
 })
