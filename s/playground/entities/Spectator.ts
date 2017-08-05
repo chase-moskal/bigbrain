@@ -3,12 +3,12 @@ import * as deepFreeze from "deep-freeze"
 import {observable, computed, reaction, autorun} from "mobx"
 import {Scene, FreeCamera, Mesh, ShadowGenerator, SpotLight, Vector3} from "babylonjs"
 
-import Ticker, {Tick} from "../Ticker"
-import {loadBabylonFile} from "../Susa"
-import {Entity, StateEntry, Message} from "../Monarch"
-import Watcher, {Input, Bindings, Status} from "../Watcher"
+import Ticker, {Tick} from "../../Ticker"
+import {loadBabylonFile} from "../../Susa"
+import {Entity, StateEntry, Message} from "../../Monarch"
+import Watcher, {Input, Bindings, Status} from "../../Watcher"
 
-import {PlaygroundContext} from "./Playground"
+import {PlaygroundContext} from "./../Playground"
 
 export interface SpectatorEntry extends StateEntry {
   type: "Spectator"

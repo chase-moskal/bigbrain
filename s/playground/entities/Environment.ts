@@ -2,10 +2,9 @@
 import {observable, computed, reaction} from "mobx"
 import {FreeCamera, Mesh, ShadowGenerator, SpotLight} from "babylonjs"
 
-import {loadBabylonFile} from "../Susa"
-import {Entity, StateEntry, Message} from "../Monarch"
-
-import {PlaygroundContext} from "./Playground"
+import {loadBabylonFile} from "../../Susa"
+import {PlaygroundContext} from "./../Playground"
+import {Entity, StateEntry, Message} from "../../Monarch"
 
 export interface EnvironmentEntry extends StateEntry {
   type: "Environment"
