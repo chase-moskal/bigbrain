@@ -1,11 +1,10 @@
 
 import {Engine, Scene} from "babylonjs"
 
-import Susa from "../Susa"
-import {ServiceMaster} from "../toolbox"
-import Monarch, {Context, State, StateEntry, EntityClasses} from "../Monarch"
+import Susa from "../susa"
+import Monarch, {Context, State, StateEntry, EntityClasses} from "../monarch"
 
-export interface PlaygroundContext extends Context {
+export interface GameContext extends Context {
   window: Window
   scene: Scene
   canvas: HTMLCanvasElement
@@ -13,7 +12,7 @@ export interface PlaygroundContext extends Context {
   removeEntry: (id: string) => void
 }
 
-export default class Playground {
+export default class Game {
   readonly monarch: Monarch
   readonly susa: Susa
 
@@ -25,7 +24,7 @@ export default class Playground {
     const engine = new Engine(canvas, true)
     const scene = new Scene(engine)
 
-    const context: PlaygroundContext = {
+    const context: GameContext = {
       host: true,
       window, scene, canvas,
       addEntry: entry => this.monarch.addEntry(entry),

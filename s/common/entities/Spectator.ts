@@ -3,12 +3,11 @@ import * as deepFreeze from "deep-freeze"
 import {observable, computed, reaction, autorun} from "mobx"
 import {Scene, FreeCamera, Mesh, ShadowGenerator, SpotLight, Vector3} from "babylonjs"
 
-import Ticker, {Tick} from "../../Ticker"
-import {loadBabylonFile} from "../../Susa"
-import {Entity, StateEntry, Message} from "../../Monarch"
-import Watcher, {Input, Bindings, Status} from "../../Watcher"
-
-import {PlaygroundContext} from "./../Playground"
+import {GameContext} from "../game"
+import Ticker, {Tick} from "../../ticker"
+import {loadBabylonFile} from "../../susa"
+import {Entity, StateEntry, Message} from "../../monarch"
+import Watcher, {Input, Bindings, Status} from "../../watcher"
 
 export interface SpectatorEntry extends StateEntry {
   type: "Spectator"
@@ -58,8 +57,8 @@ export const bindings: Bindings = deepFreeze({
   sprint: [Input.Shift]
 })
 
-export default class Spectator extends Entity<PlaygroundContext, SpectatorEntry> {
-  protected readonly context: PlaygroundContext
+export default class Spectator extends Entity<GameContext, SpectatorEntry> {
+  protected readonly context: GameContext
   private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position})
   private readonly watcher = new Watcher({eventTarget: this.context.window, bindings})
   private readonly ticker: Ticker = (() => {
