@@ -1,9 +1,9 @@
 
 import * as deepFreeze from "deep-freeze"
 import {observable, computed, reaction, autorun} from "mobx"
-import {Scene, FreeCamera, Mesh, ShadowGenerator, SpotLight, Vector3} from "babylonjs"
+import {Scene, FreeCamera, Vector3} from "babylonjs"
 
-import {GameContext} from "../game"
+import {Context} from "../game"
 import Ticker, {Tick} from "../../ticker"
 import {loadBabylonFile} from "../../susa"
 import {Entity, StateEntry, Message} from "../../monarch"
@@ -14,11 +14,11 @@ export interface SpectatorEntry extends StateEntry {
   position: [number, number, number]
 }
 
-export const makeCamera = ({scene, position}: {scene: Scene, position: [number, number, number]}) => {
+export const makeCamera = ({scene, position, speed}: {scene: Scene, position: [number, number, number], speed: number}) => {
   const camera = new FreeCamera("Spectator Camera", Vector3.FromArray(position), scene)
   camera.position = Vector3.FromArray(position)
   camera.setTarget(Vector3.Zero())
-  camera.speed = 0.1
+  camera.speed = speed
   camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
   if (!camera._localDirection) camera._localDirection = Vector3.Zero()
   if (!camera._transformedDirection) camera._transformedDirection = Vector3.Zero()
@@ -57,9 +57,9 @@ export const bindings: Bindings = deepFreeze({
   sprint: [Input.Shift]
 })
 
-export default class Spectator extends Entity<GameContext, SpectatorEntry> {
-  protected readonly context: GameContext
-  private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position})
+export default class Spectator extends Entity<Context, SpectatorEntry> {
+  protected readonly context: Context
+  private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position, speed: 0.1})
   private readonly watcher = new Watcher({eventTarget: this.context.window, bindings})
   private readonly ticker: Ticker = (() => {
     const {camera, watcher} = this

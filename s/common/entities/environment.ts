@@ -1,9 +1,8 @@
 
-import {observable, computed, reaction} from "mobx"
-import {FreeCamera, Mesh, ShadowGenerator, SpotLight} from "babylonjs"
+import {Mesh, ShadowGenerator, SpotLight} from "babylonjs"
 
+import {Context} from "./../game"
 import {loadBabylonFile} from "../../susa"
-import {GameContext} from "./../game"
 import {Entity, StateEntry, Message} from "../../monarch"
 
 export interface EnvironmentEntry extends StateEntry {
@@ -11,7 +10,7 @@ export interface EnvironmentEntry extends StateEntry {
   asset: string
 }
 
-export default class EnvironmentEntity extends Entity<GameContext, EnvironmentEntry> {
+export default class EnvironmentEntity extends Entity<Context, EnvironmentEntry> {
 
   constructor(o) {
     super(o)

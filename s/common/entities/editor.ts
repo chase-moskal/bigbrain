@@ -1,12 +1,11 @@
 
-import {observable, computed, reaction, autorun} from "mobx"
-import {Scene, FreeCamera, Mesh, ShadowGenerator, SpotLight, Vector3, StandardMaterial} from "babylonjs"
+import {reaction} from "mobx"
+import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
-import Ticker, {Tick} from "../../ticker"
-import {loadBabylonFile} from "../../susa"
-import {GameContext} from "./../game"
-import {Entity, StateEntry, Message} from "../../monarch"
-import Watcher, {Input, Bindings, Status} from "../../watcher"
+import {Context} from "./../game"
+import Ticker from "../../ticker"
+import {Entity} from "../../monarch"
+import Watcher, {Input} from "../../watcher"
 
 import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
@@ -16,23 +15,23 @@ export interface EditorEntry {
   position: [number, number, number]
 }
 
-export default class Editor extends Entity<GameContext, EditorEntry> {
-  static readonly bindings = {
-    ...spectatorBindings,
-    ghost: [Input.E],
-    place: [Input.MouseLeft],
-    remove: [Input.X, Input.Backspace, Input.Delete]
-  }
+export const bindings = {
+  ...spectatorBindings,
+  ghost: [Input.E],
+  place: [Input.MouseLeft],
+  remove: [Input.X, Input.Backspace, Input.Delete]
+}
 
-  protected readonly context: GameContext
+export default class Editor extends Entity<Context, EditorEntry> {
+  protected readonly context: Context
 
-  private readonly watcher = new Watcher<typeof Editor.bindings, {
+  private readonly watcher = new Watcher<typeof bindings, {
     ghost: boolean
     place: boolean
     remove: boolean
-  }>({eventTarget: this.context.window, bindings: Editor.bindings})
+  }>({eventTarget: this.context.window, bindings})
 
-  private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position})
+  private readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position, speed: 0.1})
 
   private readonly ticker: Ticker = (() => {
     const {camera, watcher} = this
@@ -89,21 +88,21 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 
     // placement action
     reaction(() => this.watcher.status.place, place => {
-      const {scene, canvas, addEntry} = this.context
+      const {scene, canvas, manager} = this.context
       const {ghostMesh} = this
       if (place && ghostMesh) {
-        addEntry(<CubeEntry>{type: "Cube", size: 1, position: ghostMesh.position.asArray()})
+        manager.addEntry(<CubeEntry>{type: "Cube", size: 1, position: ghostMesh.position.asArray()})
       }
     }),
 
     // removal action
     reaction(() => this.watcher.status.remove, remove => {
-      const {scene, canvas, addEntry, removeEntry} = this.context
+      const {scene, canvas, manager} = this.context
       if (remove) {
         const pick = this.middlePick()
         if (pick && pick.pickedMesh) {
           const mesh = <IdentifiableMesh>pick.pickedMesh
-          if (mesh.entryId) removeEntry(mesh.entryId)
+          if (mesh.entryId) manager.removeEntry(mesh.entryId)
         }
       }
     })
