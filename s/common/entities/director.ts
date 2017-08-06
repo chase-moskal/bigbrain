@@ -31,8 +31,7 @@ export default class Director extends Entity<Context, DirectorEntry> {
       if (spawnPlayer) {
         const {manager} = this.context
 
-        const players = <Agent[]>manager.listEntities()
-          .map(([id, entity]) => entity)
+        const players = <Agent[]>manager.getEntities()
           .filter(entity => entity instanceof Agent && entity.player)
 
         if (players.length === 0) {

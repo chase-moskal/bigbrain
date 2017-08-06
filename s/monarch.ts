@@ -27,11 +27,11 @@ export interface EntityOptions<gContext extends StandardContext = StandardContex
 }
 
 export abstract class Entity<gContext extends StandardContext = StandardContext, gStateEntry extends StateEntry = StateEntry> {
-  readonly id: string
   protected readonly context: gContext
   private readonly state: State
-  get entry(): gStateEntry { return deepFreeze(copy(this.state.entries.get(this.id))) }
 
+  readonly id: string
+  get entry(): gStateEntry { return deepFreeze(copy(this.state.entries.get(this.id))) }
   @observable inbox: Message[] = []
 
   constructor({id, context, state}: EntityOptions<gContext>) {
@@ -110,6 +110,10 @@ export function replicate(state: State, entities: Map<string, Entity>, context: 
 export class Manager {
   constructor(private readonly state: State, private readonly entities: Map<string, Entity>) {}
 
+  getEntities(): Entity[] {
+    return Array.from(this.entities).map(([id, entity]) => entity)
+  }
+
   addEntry<T extends StateEntry = StateEntry>(entry: T): string {
     const id: string = uuid()
     this.state.entries.set(id, entry)
@@ -118,10 +122,6 @@ export class Manager {
 
   removeEntry(id: string): void {
     this.state.entries.delete(id)
-  }
-
-  listEntities(): [string, Entity][] {
-    return Array.from(this.entities)
   }
 }
 

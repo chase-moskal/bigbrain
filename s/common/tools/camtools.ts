@@ -10,7 +10,7 @@ export class RoundCameraRig {
   updatePosition(position: Vector3) {}
 }
 
-export const makeCamera = ({scene, position, speed}: {scene: Scene, position: [number, number, number], speed: number}) => {
+export const makeActiveCamera = ({scene, position, speed}: {scene: Scene, position: [number, number, number], speed: number}) => {
   const camera = new FreeCamera("Spectator Camera", Vector3.FromArray(position), scene)
   camera.position = Vector3.FromArray(position)
   camera.setTarget(Vector3.Zero())
@@ -18,6 +18,7 @@ export const makeCamera = ({scene, position, speed}: {scene: Scene, position: [n
   camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
   if (!camera._localDirection) camera._localDirection = Vector3.Zero()
   if (!camera._transformedDirection) camera._transformedDirection = Vector3.Zero()
+  // scene.activeCameras.push(camera)
   scene.activeCamera = camera
   return camera
 }
