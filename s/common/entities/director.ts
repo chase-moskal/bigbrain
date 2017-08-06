@@ -24,19 +24,24 @@ export default class Director extends Entity<Context, DirectorEntry> {
     }
   })
 
-  private player: boolean
   private npcs = []
 
   private readonly reactions = [
     reaction(() => this.watcher.status.spawnPlayer, spawnPlayer => {
-      if (spawnPlayer && !this.player) {
-        console.log("TODO spawn NPC at origin")
-        // const {manager} = this.context
-        // this.player = true
-        // manager.addEntry(<AgentEntry>{
-        //   type: "Agent",
-        //   position: [0, 0, 0]
-        // })
+      if (spawnPlayer) {
+        const {manager} = this.context
+
+        const players = <Agent[]>manager.listEntities()
+          .map(([id, entity]) => entity)
+          .filter(entity => entity instanceof Agent && entity.player)
+
+        if (players.length === 0) {
+          manager.addEntry(<AgentEntry>{
+            type: "Agent",
+            player: true,
+            position: [0, 0, 0]
+          })
+        }
       }
     }),
     reaction(() => this.watcher.status.spawnNpc, spawnNpc => {
