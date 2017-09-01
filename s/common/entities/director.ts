@@ -1,5 +1,5 @@
 
-import {reaction} from "mobx"
+import {autorun, reaction} from "mobx"
 
 import {Context} from "../game"
 import {StateEntry, Entity} from "../../monarch"
@@ -27,7 +27,8 @@ export default class Director extends Entity<Context, DirectorEntry> {
   private npcs = []
 
   private readonly reactions = [
-    reaction(() => this.watcher.status.spawnPlayer, spawnPlayer => {
+    autorun(() => {
+      const spawnPlayer = this.watcher.status.spawnPlayer
       if (spawnPlayer) {
         const {manager} = this.context
 
@@ -43,7 +44,8 @@ export default class Director extends Entity<Context, DirectorEntry> {
         }
       }
     }),
-    reaction(() => this.watcher.status.spawnNpc, spawnNpc => {
+    autorun(() => {
+      const spawnNpc = this.watcher.status.spawnNpc
       if (spawnNpc) {
         console.log("TODO spawn NPC at origin")
       }
