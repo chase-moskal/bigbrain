@@ -25,7 +25,11 @@ export const bindings = {
 export default class Editor extends Entity<Context, EditorEntry> {
   protected readonly context: Context
 
-  readonly camera: FreeCamera = makeCamera({scene: this.context.scene, position: this.entry.position, speed: 0.1})
+  readonly camera: FreeCamera = makeCamera({
+    scene: this.context.scene,
+    position: this.entry.position,
+    speed: 0.1
+  })
 
   private readonly watcher = new Watcher<typeof bindings, {
     ghost: boolean

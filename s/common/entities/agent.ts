@@ -5,7 +5,7 @@ import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 import {Context} from "../game"
 import {Entity} from "../../monarch"
 import Watcher, {Input} from "../../watcher"
-import {makeActiveCamera} from "../tools/camtools"
+import {makeActiveCamera, createRoundCameraRig} from "../tools/camtools"
 
 import Editor from "./editor"
 
@@ -24,10 +24,14 @@ export default class Agent extends Entity<Context, AgentEntry> {
     }
   })
 
-  private readonly camera = makeActiveCamera({
+  private tank = Mesh.CreateBox(`agent-${Date.now()}`, 1, this.context.scene, true)
+
+  private readonly camera = createRoundCameraRig({
     scene: this.context.scene,
-    position: [0, 5, 5],
-    speed: 0.1
+    canvas: this.context.canvas,
+    targetPosition: [0, 0, 0],
+    radius: 4,
+    active: true
   })
 
   private readonly reactions = [
@@ -48,10 +52,11 @@ export default class Agent extends Entity<Context, AgentEntry> {
 
   destructor() {
     for (const dispose of this.reactions) dispose()
-    {
-      const editor = <Editor>this.context.manager.getEntities().find(entity => entity instanceof Editor)
-      this.context.scene.activeCamera = editor.camera
-    }
+
+    const editor = <Editor>this.context.manager.getEntities().find(entity => entity instanceof Editor)
+    this.context.scene.activeCamera = editor.camera
+
     this.camera.dispose()
+    this.tank.dispose()
   }
 }

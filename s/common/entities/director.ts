@@ -2,7 +2,7 @@
 import {autorun, reaction} from "mobx"
 
 import {Context} from "../game"
-import {StateEntry, Entity} from "../../monarch"
+import {StateEntry, Entity, Manager} from "../../monarch"
 import Watcher, {Input, Bindings} from "../../watcher"
 
 import Agent, {AgentEntry} from "./agent"
@@ -26,6 +26,14 @@ export default class Director extends Entity<Context, DirectorEntry> {
 
   private npcs = []
 
+  private spawnPlayer(manager: Manager) {
+    manager.addEntry(<AgentEntry>{
+      type: "Agent",
+      player: true,
+      position: [0, 0, 0]
+    })
+  }
+
   private readonly reactions = [
     autorun(() => {
       const spawnPlayer = this.watcher.status.spawnPlayer
@@ -35,13 +43,7 @@ export default class Director extends Entity<Context, DirectorEntry> {
         const players = <Agent[]>manager.getEntities()
           .filter(entity => entity instanceof Agent && entity.player)
 
-        if (players.length === 0) {
-          manager.addEntry(<AgentEntry>{
-            type: "Agent",
-            player: true,
-            position: [0, 0, 0]
-          })
-        }
+        if (players.length === 0) this.spawnPlayer(manager)
       }
     }),
     autorun(() => {
