@@ -1,8 +1,9 @@
 
-o/common
-o/**/*.test.js
+source
 
-s
+dist/_archive
+dist/**/*.test.js
+
 .nyc*
 travis*
 tslint*

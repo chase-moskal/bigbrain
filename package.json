@@ -1,52 +1,52 @@
 {
-  "name": "monarch-engine",
-  "version": "0.4.0-dev",
-  "description": "concept game engine",
-  "main": "o/Monarch",
-  "types": "o/Monarch.d.ts",
-  "scripts": {
-    "build": "rimraf o && run-p build-library build-playground lint && echo Done production build",
-    "build-debug": "rimraf o && run-p build-library build-playground-debug lint && echo Done debug build",
-    "build-library": "tsc",
-    "build-playground": "mkdirp o/common/ && browserify -p tsify s/common/index.ts > o/common/index.bundle.js",
-    "build-playground-debug": "mkdirp o/common/ && browserify --debug -p tsify s/common/index.ts > o/common/index.bundle.js",
-    "lint": "tslint -c tslint.json -e 's/_archive/**' 's/**/*.ts'",
-    "start": "http-server",
-    "test-old": "nyc --reporter=text mocha -- o/**/*.test.js",
-    "test": "exit 0",
-    "prepare": "npm run build -s && npm test -s"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/monarch-games/engine.git"
-  },
-  "author": "Chase Moskal",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/monarch-games/engine/issues"
-  },
-  "homepage": "https://github.com/monarch-games/engine#readme",
-  "devDependencies": {
-    "@types/chai": "4.0.2",
-    "@types/mocha": "2.2.41",
-    "@types/node": "8.0.19",
-    "browserify": "14.4.0",
-    "chai": "4.1.0",
-    "http-server": "0.10.0",
-    "is-utf8": "0.2.1",
-    "mkdirp": "0.5.1",
-    "mocha": "3.5.0",
-    "npm-run-all": "4.0.2",
-    "nyc": "11.1.0",
-    "rimraf": "2.6.1",
-    "tsify": "3.0.1",
-    "tslint": "5.5.0",
-    "typescript": "2.4.2"
-  },
-  "dependencies": {
-    "babylonjs": "3.1.0-alpha1",
-    "deep-freeze": "0.0.1",
-    "mobx": "3.2.2",
-    "uuid": "3.1.0"
-  }
+	"name": "monarch-engine",
+	"version": "0.4.0-dev",
+	"description": "concept game engine",
+	"main": "dist/monarch",
+	"types": "dist/monarch.d.ts",
+	"scripts": {
+		"build": "rimraf dist && run-p build-library build-playground lint && echo Done production build",
+		"build-debug": "rimraf dist && run-p build-library build-playground-debug lint && echo Done debug build",
+		"build-library": "tsc",
+		"build-playground": "mkdirp dist/common/ && browserify -p tsify source/common/index.ts > dist/common/index.bundle.js",
+		"build-playground-debug": "mkdirp dist/common/ && browserify --debug -p tsify source/common/index.ts > dist/common/index.bundle.js",
+		"lint": "tslint -c tslint.json -e 'source/_archive/**' 'source/**/*.ts'",
+		"start": "http-server",
+		"test-old": "nyc --reporter=text mocha -- dist/**/*.test.js",
+		"test": "exit 0",
+		"prepare": "npm run build -s && npm test -s"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/monarch-games/engine.git"
+	},
+	"author": "Chase Moskal",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/monarch-games/engine/issues"
+	},
+	"homepage": "https://github.com/monarch-games/engine#readme",
+	"devDependencies": {
+		"@types/chai": "4.0.2",
+		"@types/mocha": "2.2.41",
+		"@types/node": "8.0.19",
+		"browserify": "14.4.0",
+		"chai": "4.1.0",
+		"http-server": "0.10.0",
+		"is-utf8": "0.2.1",
+		"mkdirp": "0.5.1",
+		"mocha": "3.5.0",
+		"npm-run-all": "4.0.2",
+		"nyc": "11.1.0",
+		"rimraf": "2.6.1",
+		"tsify": "3.0.1",
+		"tslint": "5.5.0",
+		"typescript": "2.4.2"
+	},
+	"dependencies": {
+		"babylonjs": "3.1.0-alpha1",
+		"deep-freeze": "0.0.1",
+		"mobx": "3.2.2",
+		"uuid": "3.1.0"
+	}
 }

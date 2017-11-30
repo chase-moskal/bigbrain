@@ -1,5 +1,5 @@
 
-o
+dist
 .nyc*
 coverage
 node_modules
