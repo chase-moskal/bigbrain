@@ -2,8 +2,8 @@
   "name": "monarch-engine",
   "version": "0.4.0-dev",
   "description": "concept game engine",
-  "main": "o/Monarch",
-  "types": "o/Monarch.d.ts",
+  "main": "o/monarch",
+  "types": "o/monarch.d.ts",
   "scripts": {
     "build": "rimraf o && run-p build-library build-playground lint && echo Done production build",
     "build-debug": "rimraf o && run-p build-library build-playground-debug lint && echo Done debug build",
