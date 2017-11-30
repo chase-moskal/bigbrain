@@ -2,6 +2,7 @@
 import Game from "./game"
 
 import Cube, {CubeEntry} from "./entities/cube"
+import Agent, {AgentEntry} from "./entities/agent"
 import Editor, {EditorEntry} from "./entities/editor"
 import Director, {DirectorEntry} from "./entities/director"
 import Spectator, {SpectatorEntry} from "./entities/spectator"
@@ -15,7 +16,8 @@ const game = new Game({
     Spectator,
     Editor,
     Cube,
-    Director
+    Director,
+    Agent
   }
 })
 
