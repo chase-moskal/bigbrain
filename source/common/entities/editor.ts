@@ -31,11 +31,7 @@ export default class Editor extends Entity<Context, EditorEntry> {
 		speed: 0.1
 	})
 
-	private readonly watcher = new Watcher<typeof bindings, {
-		ghost: boolean
-		place: boolean
-		remove: boolean
-	}>({eventTarget: this.context.window, bindings})
+	private readonly watcher = new Watcher<typeof bindings>({eventTarget: this.context.window, bindings})
 
 	private readonly ticker: Ticker = (() => {
 		const {camera, watcher} = this

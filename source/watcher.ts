@@ -76,38 +76,36 @@ export interface InputReport {
 }
 
 export type Bindings = { [alias: string]: Input[] }
-export type Status = { [alias: string]: boolean }
+export type Status<gBindings extends Bindings = Bindings> = { [P in keyof gBindings]: boolean }
 
 export interface WatcherOptions<gBindings extends Bindings = Bindings> {
 	eventTarget: EventTarget
 	bindings: gBindings
 }
 
-export default class Watcher<gBindings extends Bindings = Bindings, gStatus extends Status = Status> {
+export default class Watcher<gBindings extends Bindings = Bindings> {
 	private readonly eventTarget: EventTarget
 	private readonly bindings: gBindings
 
-	readonly status: gStatus
+	@observable
+	readonly status: Status<gBindings>
 
 	constructor({eventTarget, bindings}: WatcherOptions<gBindings>) {
 		this.eventTarget = eventTarget
 		this.bindings = bindings
 
-		const status = {}
-		for (const alias of Object.keys(bindings))
-			status[alias] = null
-		this.status = <gStatus & IObservableObject>observable(status)
-
 		// initialize status for each binding, throw error on unknown input
-		Object.keys(bindings).forEach(alias => {
+		const status = <Status<gBindings>>{}
+		for (const alias of Object.keys(bindings)) {
 			const inputs = bindings[alias]
 			for (const input of inputs)
 				if (
 					inputKeycodeRelations.find(relation => relation.input === input) !== undefined
 					&& otherwiseSupportedInputs.find(supported => supported === input) !== undefined
-				) throw `Unknown input: ${input}`
-			this.status[alias] = null
-		})
+				) throw `unknown input: ${input}`
+			status[alias] = null
+		}
+		this.status = status
 
 		this.start()
 	}

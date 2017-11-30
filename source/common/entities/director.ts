@@ -11,17 +11,16 @@ export interface DirectorEntry extends StateEntry {
 	type: "Director"
 }
 
+const bindings = {
+	spawnPlayer: [Input.R],
+	spawnNpc: [Input.F]
+}
+
 export default class Director extends Entity<Context, DirectorEntry> {
 
-	private readonly watcher = new Watcher<Bindings, {
-		spawnPlayer: boolean
-		spawnNpc: boolean
-	}>({
+	private readonly watcher = new Watcher<typeof bindings>({
 		eventTarget: this.context.window,
-		bindings: {
-			spawnPlayer: [Input.R],
-			spawnNpc: [Input.F]
-		}
+		bindings
 	})
 
 	private npcs = []
