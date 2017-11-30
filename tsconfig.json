@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
 		"baseUrl": ".",
-		"rootDir": "s",
-		"outDir": "o",
+		"rootDir": "source",
+		"outDir": "dist",
 		"lib": ["es2016", "dom"],
 		"module": "umd",
 		"target": "es6",
@@ -12,8 +12,8 @@
 		"declaration": true
 	},
 	"exclude": [
-		"o",
+		"dist",
 		"node_modules",
-		"s/_archive"
+		"source/_archive"
 	]
 }
