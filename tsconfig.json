@@ -1,19 +1,19 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "rootDir": "s",
-    "outDir": "o",
-    "lib": ["es2016", "dom"],
-    "module": "umd",
-    "target": "es6",
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "sourceMap": true,
-    "declaration": true
-  },
-  "exclude": [
-    "o",
-    "node_modules",
-    "s/_archive"
-  ]
+	"compilerOptions": {
+		"baseUrl": ".",
+		"rootDir": "s",
+		"outDir": "o",
+		"lib": ["es2016", "dom"],
+		"module": "umd",
+		"target": "es6",
+		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"sourceMap": true,
+		"declaration": true
+	},
+	"exclude": [
+		"o",
+		"node_modules",
+		"s/_archive"
+	]
 }

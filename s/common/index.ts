@@ -9,32 +9,32 @@ import Spectator, {SpectatorEntry} from "./entities/spectator"
 import Environment, {EnvironmentEntry} from "./entities/environment"
 
 const game = new Game({
-  window,
-  canvas: document.querySelector("canvas"),
-  entityClasses: {
-    Environment,
-    Spectator,
-    Editor,
-    Cube,
-    Director,
-    Agent
-  }
+	window,
+	canvas: document.querySelector("canvas"),
+	entityClasses: {
+		Environment,
+		Spectator,
+		Editor,
+		Cube,
+		Director,
+		Agent
+	}
 })
 
 const {manager} = game
 
 manager.addEntry<EnvironmentEntry>({
-  type: "Environment",
-  asset: "assets/playground.babylon"
+	type: "Environment",
+	asset: "assets/playground.babylon"
 })
 
 manager.addEntry<DirectorEntry>({
-  type: "Director"
+	type: "Director"
 })
 
 manager.addEntry<EditorEntry>({
-  type: "Editor",
-  position: [0, 2, -5]
+	type: "Editor",
+	position: [0, 2, -5]
 })
 
 ; (<any>window).game = game
