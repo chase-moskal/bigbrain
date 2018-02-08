@@ -2,9 +2,9 @@
 import {reaction} from "mobx"
 import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
-import {Context} from "./../game"
 import Ticker from "../../ticker"
 import {Entity} from "../../monarch"
+import {GameContext} from "./../game"
 import Watcher, {Input} from "../../watcher"
 
 import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./cube"
@@ -22,8 +22,8 @@ export const bindings = {
 	remove: [Input.X, Input.Backspace, Input.Delete]
 }
 
-export default class Editor extends Entity<Context, EditorEntry> {
-	protected readonly context: Context
+export default class Editor extends Entity<GameContext, EditorEntry> {
+	protected readonly context: GameContext
 
 	readonly camera: FreeCamera = makeCamera({
 		scene: this.context.scene,

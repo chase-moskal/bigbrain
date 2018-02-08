@@ -2,26 +2,35 @@
 import {Engine, Scene} from "babylonjs"
 
 import Susa from "../susa"
-import Monarch, {MonarchOptions, StandardContext} from "../monarch"
+import Monarch, {MonarchOptions, StandardContext, EntityClasses} from "../monarch"
 
-export interface GameSpecifics {
+export interface GameContext extends Partial<StandardContext> {
 	window: Window
 	scene: Scene
 	canvas: HTMLCanvasElement
 }
 
-export interface Context extends GameSpecifics, StandardContext {}
+export interface MakeGameOptions {
+	canvas: HTMLCanvasElement
+	entityClasses: EntityClasses
+}
 
-export default class Game extends Monarch<GameSpecifics> {
-	constructor(options: MonarchOptions) {
-		const {window, canvas} = options
+export function makeGame({canvas, entityClasses}: MakeGameOptions) {
+	const engine = new Engine(canvas, true)
+	const scene = new Scene(engine)
 
-		const engine = new Engine(canvas, true)
-		const scene = new Scene(engine)
+	const monarch = new Monarch<GameContext>({
+		window,
+		entityClasses,
+		context: {
+			window,
+			canvas,
+			scene
+		}
+	})
 
-		super({...options, context: {window, scene, canvas}})
+	const susa = new Susa({window, canvas, engine, scene})
+	susa.start()
 
-		const susa = new Susa({window, canvas, engine, scene})
-		susa.start()
-	}
+	return {monarch, susa, engine, scene}
 }

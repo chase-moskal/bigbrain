@@ -20,13 +20,13 @@ export interface Update {
 	someEntries?: { [id: string]: StateEntry }
 }
 
-export interface EntityOptions<gContext extends StandardContext = StandardContext> {
+export interface EntityOptions<gContext = Partial<StandardContext>> {
 	id: string
 	context: gContext
 	state: State
 }
 
-export abstract class Entity<gContext extends StandardContext = StandardContext, gStateEntry extends StateEntry = StateEntry> {
+export abstract class Entity<gContext = Partial<StandardContext>, gStateEntry extends StateEntry = StateEntry> {
 	protected readonly context: gContext
 	private readonly state: State
 
@@ -125,17 +125,16 @@ export class Manager {
 	}
 }
 
-export interface MonarchOptions<MoreContext = any> {
+export interface MonarchOptions<MoreContext = StandardContext & any> {
 	window: Window
-	canvas: HTMLCanvasElement
 	entityClasses: EntityClasses
 	context?: MoreContext
 }
 
-export default class Monarch<MoreContext = any> {
+export default class Monarch<MoreContext = StandardContext & any> {
 	readonly manager: Manager
 
-	constructor({window, canvas, entityClasses, context: moreContext = {}}: MonarchOptions<MoreContext>) {
+	constructor({window, entityClasses, context: moreContext = {}}: MonarchOptions<MoreContext>) {
 		const state: State = observable({entries: new Map})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager(state, entities)

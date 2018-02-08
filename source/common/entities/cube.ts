@@ -1,7 +1,7 @@
 
 import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 
-import {Context} from "../game"
+import {GameContext} from "../game"
 import {Entity} from "../../monarch"
 
 export interface CubeEntry {
@@ -31,7 +31,7 @@ export const createCubeMesh = ({scene, size, position, entryId}: {
 	return mesh
 }
 
-export default class Cube extends Entity<Context, CubeEntry> {
+export default class Cube extends Entity<GameContext, CubeEntry> {
 
 	private readonly mesh: Mesh = (() => {
 		const {scene} = this.context

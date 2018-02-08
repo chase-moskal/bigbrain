@@ -1,6 +1,5 @@
 
-import Game from "./game"
-
+import {makeGame} from "./game"
 import Cube, {CubeEntry} from "./entities/cube"
 import Agent, {AgentEntry} from "./entities/agent"
 import Editor, {EditorEntry} from "./entities/editor"
@@ -8,8 +7,7 @@ import Director, {DirectorEntry} from "./entities/director"
 import Spectator, {SpectatorEntry} from "./entities/spectator"
 import Environment, {EnvironmentEntry} from "./entities/environment"
 
-const game = new Game({
-	window,
+const {monarch} = makeGame({
 	canvas: document.querySelector("canvas"),
 	entityClasses: {
 		Environment,
@@ -21,7 +19,7 @@ const game = new Game({
 	}
 })
 
-const {manager} = game
+const {manager} = monarch
 
 manager.addEntry<EnvironmentEntry>({
 	type: "Environment",
@@ -36,5 +34,3 @@ manager.addEntry<EditorEntry>({
 	type: "Editor",
 	position: [0, 2, -5]
 })
-
-; (<any>window).game = game
