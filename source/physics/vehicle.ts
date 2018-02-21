@@ -36,7 +36,7 @@ const enum Fourwheel {
 }
 
 export interface VehicleParams {
-	ammo: Ammo
+	ammo: typeof Ammo
 	world: any
 	bearings: Bearings
 	physique: VehiclePhysique
