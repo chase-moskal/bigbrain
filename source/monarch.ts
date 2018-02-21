@@ -108,7 +108,10 @@ export function replicate(state: State, entities: Map<string, Entity>, context: 
 }
 
 export class Manager {
-	constructor(private readonly state: State, private readonly entities: Map<string, Entity>) {}
+	constructor(
+		private readonly state: State,
+		private readonly entities: Map<string, Entity>
+	) {}
 
 	getEntities(): Entity[] {
 		return Array.from(this.entities).map(([id, entity]) => entity)

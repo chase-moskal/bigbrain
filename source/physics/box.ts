@@ -3,20 +3,25 @@ import {Bearings, Physique, Vector, Quaternion} from "./data"
 import {Ammo, conversionTools, vect, quat} from "./ammo-liaison"
 
 export interface BoxParams {
-	ammo: Ammo
-	world: any
+	ammo: typeof Ammo
+	world: Ammo.btDiscreteDynamicsWorld
 	bearings: Bearings
 	physique: Physique
 }
 
 export default class Box {
-	private readonly body
-	private readonly transformAux
+	private readonly ammo: typeof Ammo
+	private readonly world: Ammo.btDiscreteDynamicsWorld
+	private readonly body: Ammo.btRigidBody
+	private readonly transformAux: Ammo.btTransform
 
 	constructor({ammo, world, bearings, physique}: BoxParams) {
 		const {position, rotation} = bearings
 		const {mass, size, friction} = physique
 		const {bvect, bquat} = conversionTools(ammo)
+
+		this.ammo = ammo
+		this.world = world
 
 		this.transformAux = new ammo.btTransform()
 		const transform = new ammo.btTransform()
@@ -36,7 +41,7 @@ export default class Box {
 		// this.body.setRestitution(restitution)
 		// this.body.setDamping(damping)
 
-		world.addRigidBody(this.body)
+		this.world.addRigidBody(this.body)
 	}
 
 	getBearings(): {position: Vector; rotation: Quaternion} {
@@ -49,5 +54,9 @@ export default class Box {
 				rotation: quat(transformAux.getRotation())
 			}
 		}
+	}
+
+	destructor() {
+		this.world.removeRigidBody(this.body)
 	}
 }

@@ -1,7 +1,7 @@
 
 import {Vector, Quaternion} from "./data"
 
-export declare namespace AmmoNS {
+export declare namespace Ammo {
 	export const enum ActivationState {
 		DisableDeactivation = 4
 	}
@@ -17,11 +17,14 @@ export declare namespace AmmoNS {
 		setIdentity()
 		setOrigin(v: btVector3)
 		setRotation(q: btQuaternion)
+		getOrigin(): btVector3
+		getRotation(): btQuaternion
 	}
 	export class btCollisionConfiguration {}
 	export class btDefaultCollisionConfiguration extends btCollisionConfiguration {}
 	export class btMotionState {
 		constructor(transform: btTransform)
+		getWorldTransform(transform: btTransform)
 	}
 	export class btDefaultMotionState extends btMotionState {}
 	export class btRigidBodyConstructionInfo {
@@ -35,6 +38,8 @@ export declare namespace AmmoNS {
 	export class btRigidBody {
 		constructor(bodyInfo: btRigidBodyConstructionInfo)
 		setActivationState(state: ActivationState)
+		setFriction(friction: number)
+		getMotionState(): btMotionState
 	}
 	export class btVehicleTuning {}
 	export class btVehicleRaycaster {
@@ -73,17 +78,16 @@ export declare namespace AmmoNS {
 			config: btCollisionConfiguration
 		)
 		setGravity(v: btVector3): void
+		stepSimulation(time: number, maxStepSubdivisions?: number): void
+		addRigidBody(body: btRigidBody)
+		removeRigidBody(body: btRigidBody)
 	}
 }
-
-export type Ammo = typeof AmmoNS
-
-
 
 export const vect = p => <Vector>[p.x(), p.y(), p.z()]
 export const quat = q => <Quaternion>[q.x(), q.y(), q.z(), q.w()]
 
-export const conversionTools = (ammo: Ammo) => {
+export const conversionTools = (ammo: typeof Ammo) => {
 	return {
 		vect,
 		quat,

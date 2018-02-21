@@ -1,13 +1,16 @@
 
 import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 
-import {GameContext} from "../game"
+import Box from "../../physics/box"
 import {Entity} from "../../monarch"
+import {Vector, Bearings, Physique} from "../../physics/data"
+
+import {GameContext} from "../game"
 
 export interface CubeEntry {
 	type: "Cube",
 	size: number
-	position: [number, number, number]
+	position: Vector
 }
 
 export interface IdentifiableMesh extends Mesh {
@@ -17,7 +20,7 @@ export interface IdentifiableMesh extends Mesh {
 export const createCubeMesh = ({scene, size, position, entryId}: {
 	scene: Scene
 	size: number
-	position: [number, number, number]
+	position: Vector
 	entryId?: string
 }): Mesh => {
 	const material = new StandardMaterial("Cube", scene)
@@ -39,7 +42,23 @@ export default class Cube extends Entity<GameContext, CubeEntry> {
 		return createCubeMesh({scene, size, position, entryId: this.id})
 	})()
 
+	private readonly box: Box = (() => {
+		const {physics} = this.context
+		const {size, position} = this.entry
+		return physics.addBox({
+			bearings: {
+				position,
+				rotation: [0, 0, 0, 0]
+			},
+			physique: {
+				mass: 1,
+				size: [size, size, size]
+			}
+		})
+	})()
+
 	destructor() {
 		this.mesh.dispose()
+		this.box.destructor()
 	}
 }
