@@ -1,6 +1,6 @@
 
-import {Bearings, Physique, Vector, Quaternion} from "./data"
-import {Ammo, conversionTools, vect, quat} from "./ammo-liaison"
+import {Bearings, Physique, Vector, Quaternion} from "../data"
+import {Ammo, conversionTools, vect, quat} from "../ammo-liaison"
 
 export interface BoxParams {
 	ammo: typeof Ammo
@@ -9,11 +9,30 @@ export interface BoxParams {
 	physique: Physique
 }
 
-export default class Box {
+export interface Body {
+	readonly bearings: Bearings
+	readonly physique: Physique
+}
+
+export default class Box implements Body {
 	private readonly ammo: typeof Ammo
 	private readonly world: Ammo.btDiscreteDynamicsWorld
-	private readonly body: Ammo.btRigidBody
+	private readonly rigidBody: Ammo.btRigidBody
 	private readonly transformAux: Ammo.btTransform
+
+	readonly physique: Physique
+
+	get bearings(): Bearings {
+		const state = this.rigidBody.getMotionState()
+		if (state) {
+			const {transformAux} = this
+			state.getWorldTransform(transformAux)
+			return {
+				position: vect(transformAux.getOrigin()),
+				rotation: quat(transformAux.getRotation())
+			}
+		}
+	}
 
 	constructor({ammo, world, bearings, physique}: BoxParams) {
 		const {position, rotation} = bearings
@@ -22,6 +41,7 @@ export default class Box {
 
 		this.ammo = ammo
 		this.world = world
+		this.physique = physique
 
 		this.transformAux = new ammo.btTransform()
 		const transform = new ammo.btTransform()
@@ -34,29 +54,17 @@ export default class Box {
 		geometry.calculateLocalInertia(mass, localInertia)
 
 		const bodyInfo = new ammo.btRigidBodyConstructionInfo(mass, motionState, geometry, localInertia)
-		this.body = new ammo.btRigidBody(bodyInfo)
+		this.rigidBody = new ammo.btRigidBody(bodyInfo)
 
-		this.body.setFriction(friction)
-		this.body.setActivationState(ammo.ActivationState.DisableDeactivation)
+		this.rigidBody.setFriction(friction)
+		this.rigidBody.setActivationState(ammo.ActivationState.DisableDeactivation)
 		// this.body.setRestitution(restitution)
 		// this.body.setDamping(damping)
 
-		this.world.addRigidBody(this.body)
-	}
-
-	getBearings(): {position: Vector; rotation: Quaternion} {
-		const state = this.body.getMotionState()
-		if (state) {
-			const {transformAux} = this
-			state.getWorldTransform(transformAux)
-			return {
-				position: vect(transformAux.getOrigin()),
-				rotation: quat(transformAux.getRotation())
-			}
-		}
+		this.world.addRigidBody(this.rigidBody)
 	}
 
 	destructor() {
-		this.world.removeRigidBody(this.body)
+		this.world.removeRigidBody(this.rigidBody)
 	}
 }

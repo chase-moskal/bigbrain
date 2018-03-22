@@ -1,13 +1,13 @@
 
 import {now, Service} from "../toolbox"
 
-import Box from "./box"
+import Box from "./bodies/box"
 import {Vector, Quaternion, Bearings, Physique} from "./data"
 import {Ammo, conversionTools, vect, quat} from "./ammo-liaison"
 
 export interface PhysicsParams {
-	ammo?: typeof Ammo
-	gravity?: number
+	ammo: typeof Ammo
+	gravity?: Vector
 }
 
 export default class Physics implements Service {
@@ -17,16 +17,18 @@ export default class Physics implements Service {
 	private lastStep: number = now()
 
 	constructor({
-		ammo = <typeof Ammo>window["Ammo"],
-		gravity = 9.82
-	}: PhysicsParams = {}) {
+		ammo,
+		gravity = [0, -9.82, 0]
+	}: PhysicsParams) {
+		if (!ammo) throw new Error("'ammo.js' not loaded for physics")
 		this.ammo = ammo
+		const {bvect, bquat} = conversionTools(ammo)
 		const config = new ammo.btDefaultCollisionConfiguration()
 		const dispatcher = new ammo.btCollisionDispatcher(config)
 		const broadphase = new ammo.btDbvtBroadphase()
 		const solver = new ammo.btSequentialImpulseConstraintSolver()
 		this.world = new ammo.btDiscreteDynamicsWorld(dispatcher, broadphase, solver, config)
-		this.world.setGravity(new ammo.btVector3(0, -gravity, 0))
+		this.world.setGravity(bvect(gravity))
 	}
 
 	addBox({bearings, physique}: {bearings: Bearings; physique: Physique}) {
@@ -36,12 +38,13 @@ export default class Physics implements Service {
 
 	start() {
 		this.active = true
+		const that = this
 		requestAnimationFrame(function r() {
-			if (!this.active) return null
+			if (!that.active) return null
 			const n = now()
-			const since = n - this.lastStep
-			this.lastStep = n
-			this.world.stepSimulation(since, 2)
+			const since = n - that.lastStep
+			that.lastStep = n
+			that.world.stepSimulation(since, 2)
 			requestAnimationFrame(r)
 		})
 	}

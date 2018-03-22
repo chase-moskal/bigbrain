@@ -2,8 +2,11 @@
 export type Vector = [number, number, number]
 export type Quaternion = [number, number, number, number]
 
+export const VectorZero = [0, 0, 0]
+export const QuaternionZero = [0, 0, 0, 0]
+
 /**
- * Data which describes a spatial relationship with the world
+ * Spatial relationship with the world
  */
 export interface Bearings {
 	position: Vector
@@ -11,7 +14,7 @@ export interface Bearings {
 }
 
 /**
- * Data which describes physical characteristics
+ * Physical characteristics
  */
 export interface Physique {
 	mass: number

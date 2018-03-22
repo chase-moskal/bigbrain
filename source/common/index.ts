@@ -7,30 +7,36 @@ import Director, {DirectorEntry} from "./entities/director"
 import Spectator, {SpectatorEntry} from "./entities/spectator"
 import Environment, {EnvironmentEntry} from "./entities/environment"
 
-const {monarch} = makeGame({
-	canvas: document.querySelector("canvas"),
-	entityClasses: {
-		Environment,
-		Spectator,
-		Editor,
-		Cube,
-		Director,
-		Agent
-	}
-})
+import {loadAmmo} from "../physics/ammo-liaison"
 
-const {manager} = monarch
+loadAmmo(async ammo => {
+	const {monarch} = makeGame({
+		ammo,
+		canvas: document.querySelector("canvas"),
+		entityClasses: {
+			Environment,
+			Spectator,
+			Editor,
+			Cube,
+			Director,
+			Agent
+		}
+	})
 
-manager.addEntry<EnvironmentEntry>({
-	type: "Environment",
-	asset: "assets/playground.babylon"
-})
+	monarch.manager.addEntry<EnvironmentEntry>({
+		type: "Environment",
+		asset: "assets/playground.babylon"
+	})
 
-manager.addEntry<DirectorEntry>({
-	type: "Director"
-})
+	monarch.manager.addEntry<DirectorEntry>({
+		type: "Director"
+	})
 
-manager.addEntry<EditorEntry>({
-	type: "Editor",
-	position: [0, 2, -5]
+	monarch.manager.addEntry<EditorEntry>({
+		type: "Editor",
+		bearings: {
+			position: [0, 2, -5],
+			rotation: [0, 0, 0, 0]
+		}
+	})
 })

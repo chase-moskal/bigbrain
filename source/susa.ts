@@ -42,6 +42,7 @@ export async function loadBabylonFile(scene, path: string, onProgress: (event: P
 
 /**
  * Game world
+ *  - orchestrate babylon scene, html dom, and physics engine
  */
 export default class Susa implements Service {
 	private readonly scene: Scene
