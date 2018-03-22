@@ -44,14 +44,14 @@ export default class Cube extends Entity<GameContext, CubeEntry> {
 		bearings: this.entry.bearings
 	})
 
-	// box to simulate the cube physically
-	private readonly box: Box = this.context.physics.addBox({
-		physique: this.entry.physique,
-		bearings: this.entry.bearings
-	})
+	// // box to simulate the cube physically
+	// private readonly box: Box = this.context.physics.addBox({
+	// 	physique: this.entry.physique,
+	// 	bearings: this.entry.bearings
+	// })
 
 	destructor() {
 		this.mesh.dispose()
-		this.box.destructor()
+		// this.box.destructor()
 	}
 }

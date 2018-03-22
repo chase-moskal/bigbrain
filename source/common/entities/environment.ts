@@ -24,16 +24,16 @@ export default class EnvironmentEntity extends Entity<GameContext, EnvironmentEn
 				const light = <SpotLight> scene.getLightByName("Spot")
 				// const planeBoundingInfo = plane.getBoundingInfo()
 
-				const body: Box = this.context.physics.addBox({
-					physique: {
-						mass: 0,
-						size: [100, 0.01, 100]
-					},
-					bearings: {
-						position: [0, 0, 0],
-						rotation: [0, 0, 0, 0]
-					}
-				})
+				// const body: Box = this.context.physics.addBox({
+				// 	physique: {
+				// 		mass: 0,
+				// 		size: [100, 0.01, 100]
+				// 	},
+				// 	bearings: {
+				// 		position: [0, 0, 0],
+				// 		rotation: [0, 0, 0, 0]
+				// 	}
+				// })
 
 				const shadowGenerator = new ShadowGenerator(1024, light)
 				const shadowCasters = [torus, icosphere]

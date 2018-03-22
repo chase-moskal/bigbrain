@@ -3,7 +3,7 @@ import {Engine, Scene} from "babylonjs"
 
 import Susa from "../susa"
 import Physics from "../physics"
-import {Ammo, AmmoModule, loadAmmo} from "../physics/ammo-liaison"
+import {Ammo, AmmoModule} from "../physics/ammo-liaison"
 import Monarch, {MonarchOptions, StandardContext, EntityClasses} from "../monarch"
 
 export interface GameContext extends Partial<StandardContext> {
@@ -14,7 +14,6 @@ export interface GameContext extends Partial<StandardContext> {
 }
 
 export interface MakeGameOptions {
-	ammo: typeof Ammo
 	canvas: HTMLCanvasElement
 	entityClasses: EntityClasses
 }
@@ -27,10 +26,10 @@ export interface MakeGameResults {
 	physics: Physics
 }
 
-export function makeGame({ammo, canvas, entityClasses}: MakeGameOptions): MakeGameResults {
+export function makeGame({canvas, entityClasses}: MakeGameOptions): MakeGameResults {
 	const engine = new Engine(canvas, true)
 	const scene = new Scene(engine)
-	const physics = new Physics({ammo})
+	const physics = new Physics()
 
 	const monarch = new Monarch<GameContext>({
 		window,

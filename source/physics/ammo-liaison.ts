@@ -3,11 +3,11 @@ import {Vector, Quaternion} from "./data"
 
 export type AmmoModule = typeof Ammo
 
-export function loadAmmo(onLoad: (ammo: AmmoModule) => void) {
-	const Ammo = window["Ammo"]
-	if (!Ammo) throw new Error("'ammo.js' not loaded")
-	Ammo().then(ammo => onLoad(ammo))
-}
+// export function loadAmmo(onLoad: (ammo: AmmoModule) => void) {
+// 	const Ammo = window["Ammo"]
+// 	if (!Ammo) throw new Error("'ammo.js' not loaded")
+// 	Ammo().then(ammo => onLoad(ammo))
+// }
 
 export declare namespace Ammo {
 	export const enum ActivationState {
