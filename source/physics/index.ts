@@ -1,10 +1,9 @@
 
 import {now, Service} from "../toolbox"
 
+import Box from "./box"
 import {Vector, Quaternion, Bearings, Physique} from "./data"
 import {Ammo, conversionTools, vect, quat} from "./ammo-liaison"
-
-import Box from "./box"
 
 export interface PhysicsParams {
 	ammo?: typeof Ammo

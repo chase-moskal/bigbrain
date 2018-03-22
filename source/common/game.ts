@@ -1,7 +1,6 @@
 
 import {Engine, Scene} from "babylonjs"
 
-
 import Susa from "../susa"
 import Physics from "../physics"
 import Monarch, {MonarchOptions, StandardContext, EntityClasses} from "../monarch"
