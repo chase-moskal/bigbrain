@@ -7,7 +7,7 @@ import Box from "../../physics/bodies/box"
 import {Vector, Bearings, Physique} from "../../physics/data"
 
 export interface CubeEntry {
-	type: "Cube",
+	type: "Cube"
 	physique: Physique
 	bearings: Bearings
 }
