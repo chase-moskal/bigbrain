@@ -3,6 +3,8 @@ export interface PhysicsManagerOptions {
 	workerUrl: string
 }
 
+const enum ResultType {}
+
 export default class PhysicsManager {
 	private readonly worker: Worker
 	private count: number = 0

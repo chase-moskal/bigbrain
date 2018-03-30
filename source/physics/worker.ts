@@ -12,6 +12,14 @@ interface WorkOrder {
 	}
 }
 
+const enum OrderType {
+	StartSimulation,
+	StopSimulation,
+	AddBody,
+	RemoveBody,
+	UpdateBody
+}
+
 class PhysicsWorker {
 	private ammo: AmmoModule
 
