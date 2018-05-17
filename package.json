@@ -7,7 +7,7 @@
 	"scripts": {
 		"build": "rimraf dist && run-p build-library build-playground lint && echo Done production build",
 		"build-debug": "rimraf dist && run-p build-library build-playground-debug lint && echo Done debug build",
-		"build-library": "tsc && tsc -p tsconfig.workers.json",
+		"build-library": "tsc",
 		"build-playground": "mkdirp dist/common/ && browserify -p tsify source/common/index.ts > dist/common/index.bundle.js",
 		"build-playground-debug": "mkdirp dist/common/ && browserify --debug -p tsify source/common/index.ts > dist/common/index.bundle.js",
 		"lint": "tslint -c tslint.json -e 'source/_archive/**' 'source/**/*.ts'",

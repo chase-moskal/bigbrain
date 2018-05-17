@@ -78,10 +78,10 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 						position,
 						rotation: [0, 0, 0, 0]
 					}
-					const mesh = createCubeMesh({scene, physique, bearings})
+					const mesh = createCubeMesh({scene, physique, bearings, physical: false})
 					mesh.material.wireframe = true
 					mesh.isPickable = false
-					mesh.position.y += 0.5
+					mesh.position.y += 0.6
 					this.ghostMesh = mesh
 					this.ghostTicker.start()
 				}

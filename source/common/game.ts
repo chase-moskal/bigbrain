@@ -1,5 +1,5 @@
 
-import {Engine, Scene} from "babylonjs"
+import {Engine, Scene, Vector3, CannonJSPlugin} from "babylonjs"
 
 import Susa from "../susa"
 import Monarch, {MonarchOptions, StandardContext, EntityClasses} from "../monarch"
@@ -25,6 +25,7 @@ export interface MakeGameResults {
 export function makeGame({canvas, entityClasses}: MakeGameOptions): MakeGameResults {
 	const engine = new Engine(canvas, true)
 	const scene = new Scene(engine)
+	scene.enablePhysics(new Vector3(0, -9.8, 0), new CannonJSPlugin())
 
 	const monarch = new Monarch<GameContext>({
 		window,

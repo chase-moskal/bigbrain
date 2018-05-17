@@ -22,10 +22,6 @@
 - entities react (via mobx) to observable changes in the entity's state
 - entities are networked -- client entities can send messages to their host counterparts
 
-## `monarch/physics`
-
-- 
-
 ## monarch physics architecture
 
 - [bullet physics](https://github.com/bulletphysics/bullet3) via [ammo.js](https://github.com/kripken/ammo.js/)

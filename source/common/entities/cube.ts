@@ -1,5 +1,5 @@
 
-import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
+import {Scene, Mesh, Vector3, StandardMaterial, Color3, PhysicsImpostor} from "babylonjs"
 
 import {GameContext} from "../game"
 import {Entity} from "../../monarch"
@@ -15,10 +15,11 @@ export interface IdentifiableMesh extends Mesh {
 	entryId: string
 }
 
-export const createCubeMesh = ({scene, physique, bearings, entryId}: {
+export const createCubeMesh = ({scene, physique, bearings, physical, entryId}: {
 	scene: Scene
 	physique: Physique
 	bearings: Bearings
+	physical: boolean
 	entryId?: string
 }): Mesh => {
 	const material = new StandardMaterial("Cube", scene)
@@ -29,18 +30,24 @@ export const createCubeMesh = ({scene, physique, bearings, entryId}: {
 	mesh.position = Vector3.FromArray(bearings.position)
 	mesh.material = material
 
+	if (physical) {
+		const {mass, restitution} = physique
+		mesh.physicsImpostor = new PhysicsImpostor(mesh, PhysicsImpostor.BoxImpostor, {mass, restitution}, scene)
+	}
+
 	if (entryId) mesh.entryId = entryId
 	return mesh
 }
 
 export default class Cube extends Entity<GameContext, CubeEntry> {
 
-	// mesh to represent the cube visually
+	// babylon mesh with physics
 	private readonly mesh: Mesh = createCubeMesh({
 		scene: this.context.scene,
 		entryId: this.id,
 		physique: this.entry.physique,
-		bearings: this.entry.bearings
+		bearings: this.entry.bearings,
+		physical: true
 	})
 
 	// // box to simulate the cube physically
