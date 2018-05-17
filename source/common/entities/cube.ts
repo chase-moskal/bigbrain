@@ -3,8 +3,7 @@ import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 
 import {GameContext} from "../game"
 import {Entity} from "../../monarch"
-import Box from "../../physics/bodies/box"
-import {Vector, Bearings, Physique} from "../../physics/data"
+import {Vector, Bearings, Physique} from "../../data"
 
 export interface CubeEntry {
 	type: "Cube"

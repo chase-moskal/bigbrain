@@ -6,7 +6,7 @@ import {Scene, FreeCamera, Vector3} from "babylonjs"
 import {GameContext} from "../game"
 import Ticker, {Tick} from "../../ticker"
 import {loadBabylonFile} from "../../susa"
-import {Vector, Bearings} from "../../physics/data"
+import {Vector, Bearings} from "../../data"
 import {Entity, StateEntry, Message} from "../../monarch"
 import Watcher, {Input, Bindings, Status} from "../../watcher"
 

@@ -2,7 +2,6 @@
 import {Mesh, ShadowGenerator, SpotLight} from "babylonjs"
 
 import {GameContext} from "../game"
-import Box from "../../physics/bodies/box"
 import {loadBabylonFile} from "../../susa"
 import {Entity, StateEntry, Message} from "../../monarch"
 

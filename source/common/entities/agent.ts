@@ -2,9 +2,9 @@
 import {reaction} from "mobx"
 import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 
+import {Vector} from "../../data"
 import {GameContext} from "../game"
 import {Entity} from "../../monarch"
-import {Vector} from "../../physics/data"
 import Watcher, {Input} from "../../watcher"
 import {makeActiveCamera, createRoundCameraRig} from "../tools/camtools"
 

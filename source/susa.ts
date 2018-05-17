@@ -1,13 +1,10 @@
 
 import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader} from "babylonjs"
-
-import Physics from "./physics"
 import {now, Service} from "./toolbox"
 
 export interface SusaOptions {
 	scene: Scene
 	engine: Engine
-	physics: Physics
 	window: Window
 	canvas: HTMLCanvasElement
 }
@@ -47,7 +44,6 @@ export async function loadBabylonFile(scene, path: string, onProgress: (event: P
 export default class Susa implements Service {
 	private readonly scene: Scene
 	private readonly engine: Engine
-	private readonly physics: Physics
 	private readonly window: Window
 	private readonly canvas: HTMLCanvasElement
 
@@ -75,12 +71,11 @@ export default class Susa implements Service {
 		}
 	}
 
-	constructor(options: SusaOptions) {
-		this.engine = options.engine
-		this.scene = options.scene
-		this.physics = options.physics
-		this.window = options.window
-		this.canvas = options.canvas
+	constructor({engine, scene, window, canvas}: SusaOptions) {
+		this.engine = engine
+		this.scene = scene
+		this.window = window
+		this.canvas = canvas
 
 		this.canvas.onclick = () => this.canvas.requestPointerLock()
 		this.engine.isPointerLock = true
@@ -89,9 +84,7 @@ export default class Susa implements Service {
 		if (!this.scene.activeCamera) this.scene.activeCamera = this.fallbackCamera
 	}
 
-	destructor() {
-		this.physics.destructor()
-	}
+	destructor() {}
 
 	start() {
 		this.active = true
@@ -106,8 +99,6 @@ export default class Susa implements Service {
 			this.scene.render()
 			this.lastFrameTime = now()
 		})
-
-		this.physics.start()
 	}
 
 	stop() {
@@ -118,6 +109,5 @@ export default class Susa implements Service {
 		this.window.document.removeEventListener("pointerlockchange", this.listeners.pointerlockchange)
 
 		this.engine.stopRenderLoop()
-		this.physics.stop()
 	}
 }
