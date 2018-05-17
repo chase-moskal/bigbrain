@@ -3,16 +3,17 @@ import {reaction} from "mobx"
 import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
 import Ticker from "../../ticker"
+import {GameContext} from "../game"
 import {Entity} from "../../monarch"
-import {GameContext} from "./../game"
 import Watcher, {Input} from "../../watcher"
+import {Vector, Physique, Bearings, Quaternion} from "../../data"
 
 import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
 
 export interface EditorEntry {
 	type: "Editor"
-	position: [number, number, number]
+	bearings: Bearings
 }
 
 export const bindings = {
@@ -27,7 +28,7 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 
 	readonly camera: FreeCamera = makeCamera({
 		scene: this.context.scene,
-		position: this.entry.position,
+		bearings: this.entry.bearings,
 		speed: 0.1
 	})
 
@@ -68,11 +69,19 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 				if (!this.ghostMesh) {
 					const {scene} = this.context
 					const {aimpoint} = this
-					const position = <[number, number, number]>(aimpoint ? aimpoint.asArray() : [0, 0, 0])
-					const mesh = createCubeMesh({scene, size: 1, position})
+					const position = <Vector>(aimpoint ? aimpoint.asArray() : [0, 0, 0])
+					const physique: Physique = {
+						mass: 1,
+						size: [1, 1, 1]
+					}
+					const bearings: Bearings = {
+						position,
+						rotation: [0, 0, 0, 0]
+					}
+					const mesh = createCubeMesh({scene, physique, bearings, physical: false})
 					mesh.material.wireframe = true
 					mesh.isPickable = false
-					mesh.position.y += 0.5
+					mesh.position.y += 0.6
 					this.ghostMesh = mesh
 					this.ghostTicker.start()
 				}
@@ -91,7 +100,17 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 			const {scene, canvas, manager} = this.context
 			const {ghostMesh} = this
 			if (place && ghostMesh) {
-				manager.addEntry(<CubeEntry>{type: "Cube", size: 1, position: ghostMesh.position.asArray()})
+				manager.addEntry(<CubeEntry>{
+					type: "Cube",
+					physique: {
+						mass: 1,
+						size: [1, 1, 1]
+					},
+					bearings: {
+						position: <Vector> ghostMesh.position.asArray(),
+						rotation: <Quaternion> ghostMesh.rotation.asArray()
+					}
+				})
 			}
 		}),
 

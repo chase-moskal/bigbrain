@@ -2,6 +2,7 @@
 import {reaction} from "mobx"
 import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 
+import {Vector} from "../../data"
 import {GameContext} from "../game"
 import {Entity} from "../../monarch"
 import Watcher, {Input} from "../../watcher"
@@ -12,7 +13,7 @@ import Editor from "./editor"
 export interface AgentEntry {
 	type: "Agent"
 	player: boolean
-	position: [number, number, number]
+	position: Vector
 }
 
 export default class Agent extends Entity<GameContext, AgentEntry> {

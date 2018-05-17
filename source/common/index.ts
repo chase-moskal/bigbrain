@@ -19,18 +19,19 @@ const {monarch} = makeGame({
 	}
 })
 
-const {manager} = monarch
-
-manager.addEntry<EnvironmentEntry>({
+monarch.manager.addEntry<EnvironmentEntry>({
 	type: "Environment",
 	asset: "assets/playground.babylon"
 })
 
-manager.addEntry<DirectorEntry>({
+monarch.manager.addEntry<DirectorEntry>({
 	type: "Director"
 })
 
-manager.addEntry<EditorEntry>({
+monarch.manager.addEntry<EditorEntry>({
 	type: "Editor",
-	position: [0, 2, -5]
+	bearings: {
+		position: [0, 2, -5],
+		rotation: [0, 0, 0, 0]
+	}
 })

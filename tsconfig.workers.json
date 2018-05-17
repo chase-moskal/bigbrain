@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"rootDir": "source",
+		"outDir": "dist",
+		"lib": ["es2016", "webworker"],
+		"module": "none",
+		"target": "es6",
+		"moduleResolution": "node",
+		"experimentalDecorators": true,
+		"sourceMap": true,
+		"declaration": true
+	},
+	"include": [
+		"source/**/*worker.ts"
+	]
+}

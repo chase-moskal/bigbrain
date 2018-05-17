@@ -1,11 +1,6 @@
 
 import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader} from "babylonjs"
-
 import {now, Service} from "./toolbox"
-
-export interface RenderInfo {
-	since: number
-}
 
 export interface SusaOptions {
 	scene: Scene
@@ -42,6 +37,10 @@ export async function loadBabylonFile(scene, path: string, onProgress: (event: P
 	})
 }
 
+/**
+ * Game world
+ *  - orchestrate babylon scene, html dom, and physics engine
+ */
 export default class Susa implements Service {
 	private readonly scene: Scene
 	private readonly engine: Engine
@@ -49,8 +48,9 @@ export default class Susa implements Service {
 	private readonly canvas: HTMLCanvasElement
 
 	private readonly fallbackCamera: Camera
+	private active: boolean = false
 	private pick: PickingInfo = new PickingInfo()
-	private lastRenderTime = now()
+	private lastFrameTime = now()
 
 	private readonly listeners: { [eventName: string]: () => void } = {
 
@@ -71,11 +71,11 @@ export default class Susa implements Service {
 		}
 	}
 
-	constructor(options: SusaOptions) {
-		this.window = options.window
-		this.canvas = options.canvas
-		this.engine = options.engine
-		this.scene = options.scene
+	constructor({engine, scene, window, canvas}: SusaOptions) {
+		this.engine = engine
+		this.scene = scene
+		this.window = window
+		this.canvas = canvas
 
 		this.canvas.onclick = () => this.canvas.requestPointerLock()
 		this.engine.isPointerLock = true
@@ -86,37 +86,28 @@ export default class Susa implements Service {
 
 	destructor() {}
 
-	/**
-	 * Add all stage listeners to the document
-	 * Start the Babylon rendering loop
-	 */
 	start() {
-		this.window.addEventListener("resize", this.listeners.resize.bind(this))
-		this.window.addEventListener("mousemove", this.listeners.mousemove.bind(this))
-		this.window.document.addEventListener("pointerlockchange", this.listeners.pointerlockchange.bind(this))
+		this.active = true
+
+		this.window.addEventListener("resize", this.listeners.resize)
+		this.window.addEventListener("mousemove", this.listeners.mousemove)
+		this.window.document.addEventListener("pointerlockchange", this.listeners.pointerlockchange)
 
 		this.engine.runRenderLoop(() => {
-			const since = now() - this.lastRenderTime
-			const info: RenderInfo = {since}
-			this.render(info)
-			this.lastRenderTime = now()
+			if (!this.active) return null
+			const since = now() - this.lastFrameTime
+			this.scene.render()
+			this.lastFrameTime = now()
 		})
 	}
 
-	/**
-	 * Stop the Babylon rendering loop
-	 * Remove all stage listeners from the document
-	 */
 	stop() {
-		this.engine.stopRenderLoop()
-		for (const eventName of Object.keys(this.listeners))
-			this.window.removeEventListener(eventName, this.listeners[eventName])
-	}
+		this.active = false
 
-	/**
-	 * Render a frame
-	 */
-	protected render(info: RenderInfo) {
-		this.scene.render()
+		this.window.removeEventListener("resize", this.listeners.resize)
+		this.window.removeEventListener("mousemove", this.listeners.mousemove)
+		this.window.document.removeEventListener("pointerlockchange", this.listeners.pointerlockchange)
+
+		this.engine.stopRenderLoop()
 	}
 }

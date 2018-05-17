@@ -2,7 +2,9 @@
 dist
 .nyc*
 coverage
-node_modules
+
+/node_modules/**
+!/node_modules/ammo.js/build/ammo.js
 
 *.blend1
 *.log

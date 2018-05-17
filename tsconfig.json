@@ -4,7 +4,7 @@
 		"rootDir": "source",
 		"outDir": "dist",
 		"lib": ["es2016", "dom"],
-		"module": "umd",
+		"module": "commonjs",
 		"target": "es6",
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
@@ -14,6 +14,8 @@
 	"exclude": [
 		"dist",
 		"node_modules",
-		"source/_archive"
+		"source/_archive",
+		"source/physics/**/*",
+		"source/**/*worker.ts"
 	]
 }

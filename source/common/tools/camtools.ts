@@ -1,10 +1,11 @@
 
 import {Scene, Vector3, FreeCamera, ArcRotateCamera} from "babylonjs"
+import {Vector} from "../../data"
 
 export interface RoundCameraRigOptions {
 	scene: Scene
 	canvas: HTMLCanvasElement
-	targetPosition: [number, number, number]
+	targetPosition: Vector
 	radius: number
 	active: boolean
 }
@@ -26,7 +27,7 @@ export const createRoundCameraRig = ({
 	return camera
 }
 
-export const makeActiveCamera = ({scene, position, speed}: {scene: Scene, position: [number, number, number], speed: number}) => {
+export const makeActiveCamera = ({scene, position, speed}: {scene: Scene, position: Vector, speed: number}) => {
 	const camera = new FreeCamera("camera", Vector3.FromArray(position), scene)
 	camera.position = Vector3.FromArray(position)
 	camera.setTarget(Vector3.Zero())
