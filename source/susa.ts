@@ -1,47 +1,16 @@
 
-import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader} from "babylonjs"
+import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader, CannonJSPlugin} from "babylonjs"
+
+import {Vector} from "./interfaces"
 import {now, Service} from "./toolbox"
 
-export interface SusaOptions {
-	scene: Scene
-	engine: Engine
-	window: Window
-	canvas: HTMLCanvasElement
-}
-
-export function pathBreakdown(path: string) {
-	let dirpath = ""
-	let filename = ""
-	if (path.includes("/")) {
-		const parts = path.split("/")
-		filename = parts.pop()
-		dirpath = parts.join("/") + "/"
-	} else {
-		filename = path
-	}
-	return {dirpath, filename}
-}
-
-export async function loadBabylonFile(scene, path: string, onProgress: (event: ProgressEvent) => void = event => {}) {
-	SceneLoader.ShowLoadingScreen = false
-	const {dirpath, filename} = pathBreakdown(path)
-	return new Promise((resolve, reject) => {
-		SceneLoader.Append(
-			dirpath,
-			filename,
-			scene,
-			() => resolve(),
-			onProgress,
-			() => reject(new Error(`Error loading babylon file: "${path}"`))
-		)
-	})
-}
-
 /**
- * Game world
- *  - orchestrate babylon scene, html dom, and physics engine
+ * SUSA GAME WORLD CLASS
+ *  - establishes a 3d babylon game world scene
+ *  - manages html dom event bindings for input locking
+ *  - coordinates game physics through babylon
  */
-export default class Susa implements Service {
+export class Susa implements Service {
 	private readonly scene: Scene
 	private readonly engine: Engine
 	private readonly window: Window
@@ -71,17 +40,17 @@ export default class Susa implements Service {
 		}
 	}
 
-	constructor({engine, scene, window, canvas}: SusaOptions) {
-		this.engine = engine
-		this.scene = scene
-		this.window = window
-		this.canvas = canvas
+	constructor({engine, scene, window, canvas, physics}: SusaOptions) {
+		if (physics) {
+			scene.enablePhysics(Vector3.FromArray(physics.gravity), new CannonJSPlugin())
+		}
+		canvas.onclick = () => canvas.requestPointerLock()
+		engine.isPointerLock = true
 
-		this.canvas.onclick = () => this.canvas.requestPointerLock()
-		this.engine.isPointerLock = true
+		const fallbackCamera = new Camera("FallbackCamera", new Vector3(0, 1, -15), scene)
+		if (!scene.activeCamera) scene.activeCamera = fallbackCamera
 
-		this.fallbackCamera = new Camera("FallbackCamera", new Vector3(0, 1, -15), this.scene)
-		if (!this.scene.activeCamera) this.scene.activeCamera = this.fallbackCamera
+		Object.assign(this, {engine, scene, window, canvas, fallbackCamera})
 	}
 
 	destructor() {}
@@ -109,5 +78,15 @@ export default class Susa implements Service {
 		this.window.document.removeEventListener("pointerlockchange", this.listeners.pointerlockchange)
 
 		this.engine.stopRenderLoop()
+	}
+}
+
+export interface SusaOptions {
+	scene: Scene
+	engine: Engine
+	window: Window
+	canvas: HTMLCanvasElement
+	physics?: {
+		gravity: Vector
 	}
 }

@@ -1,6 +1,6 @@
 
 import {Scene, Vector3, FreeCamera, ArcRotateCamera} from "babylonjs"
-import {Vector} from "../../data"
+import {Vector} from "../../interfaces"
 
 export interface RoundCameraRigOptions {
 	scene: Scene

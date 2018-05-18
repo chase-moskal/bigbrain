@@ -1,23 +1,12 @@
 
 import {Service, now, environment} from "./toolbox"
 
-export interface Tick {
-	timeline: number
-	timeSinceLastTick: number
-}
-
-export type TickAction = (tick: Tick) => void
-
-export interface TickerOptions {
-	action?: TickAction
-	relax?: number
-}
-
 /**
- * Ticking loop with start/stop controls
- *  - keep a consistent timeline
+ * TICKER CLASS
+ *  - create a ticking loop with start/stop controls
+ *  - keep a consistent timeline (doesn't progress when paused)
  */
-export default class Ticker implements Service {
+export class Ticker implements Service {
 	private timeline: number = 0
 	private actions: TickAction[] = []
 	private relax: number
@@ -77,4 +66,16 @@ export default class Ticker implements Service {
 	stop() {
 		this.stoppage = true
 	}
+}
+
+export interface Tick {
+	timeline: number
+	timeSinceLastTick: number
+}
+
+export type TickAction = (tick: Tick) => void
+
+export interface TickerOptions {
+	action?: TickAction
+	relax?: number
 }

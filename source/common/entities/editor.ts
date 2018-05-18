@@ -2,11 +2,11 @@
 import {reaction} from "mobx"
 import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
-import Ticker from "../../ticker"
+import {Ticker} from "../../ticker"
 import {GameContext} from "../game"
-import {Entity} from "../../monarch"
-import Watcher, {Input} from "../../watcher"
-import {Vector, Physique, Bearings, Quaternion} from "../../data"
+import {Entity} from "../../entity"
+import {Watcher, Input} from "../../watcher"
+import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
 
 import {CubeEntry, createCubeMesh, createCubeProposalMesh, IdentifiableMesh} from "./cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
@@ -25,7 +25,7 @@ export const bindings = {
 
 const proposalHeight = 0.6
 
-export default class Editor extends Entity<GameContext, EditorEntry> {
+export class Editor extends Entity<GameContext, EditorEntry> {
 	protected readonly context: GameContext
 
 	readonly camera: FreeCamera = makeCamera({

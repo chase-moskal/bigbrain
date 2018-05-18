@@ -5,8 +5,8 @@
 	"main": "dist/monarch",
 	"types": "dist/monarch.d.ts",
 	"scripts": {
-		"build": "rimraf dist && run-p build-library build-playground lint && echo Done production build",
-		"build-debug": "rimraf dist && run-p build-library build-playground-debug lint && echo Done debug build",
+		"build": "rimraf dist && run-p build-library build-playground lint && echo done production build",
+		"build-debug": "rimraf dist && run-p build-library build-playground-debug lint && echo done debug build",
 		"build-library": "tsc",
 		"build-playground": "mkdirp dist/common/ && browserify -p tsify source/common/index.ts > dist/common/index.bundle.js",
 		"build-playground-debug": "mkdirp dist/common/ && browserify --debug -p tsify source/common/index.ts > dist/common/index.bundle.js",

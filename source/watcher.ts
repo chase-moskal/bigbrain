@@ -1,89 +1,7 @@
 
 import {observable, IObservableObject} from "mobx"
 
-export enum Input {
-	MouseLeft, MouseRight, MouseMiddle,
-
-	Esc,
-
-	Backtick, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero, Minus, Plus, Backspace,
-	Tab, Q, W, E, R, T, Y, U, I, O, P, BracketLeft, BracketRight, Backslash,
-	CapsLock, A, S, D, F, G, H, J, K, L, Semicolon, Quote, Enter,
-	Shift, Z, X, C, V, B, N, M, Comma, Period, Slash, ShiftRight,
-	Ctrl, Super, Alt, Space, AltRight, SuperRight, CtrlRight,
-
-	Insert, Home, PageUp,
-	Delete, End, PageDown,
-
-	ArrowUp, ArrowDown, ArrowLeft, ArrowRight
-}
-
-export interface InputKeycodeRelation {
-	input: Input
-	code: number
-}
-
-export const inputKeycodeRelations: InputKeycodeRelation[] = [
-	{input: Input.W, code: 87},
-	{input: Input.A, code: 65},
-	{input: Input.S, code: 83},
-	{input: Input.D, code: 68},
-
-	{input: Input.Q, code: 81},
-	{input: Input.E, code: 69},
-	{input: Input.Z, code: 90},
-	{input: Input.X, code: 88},
-	{input: Input.C, code: 67},
-
-	{input: Input.R, code: 82},
-	{input: Input.F, code: 70},
-	{input: Input.V, code: 86},
-
-	{input: Input.Shift, code: 16},
-	{input: Input.Ctrl,  code: 17},
-	{input: Input.Alt,   code: 18},
-	{input: Input.Space, code: 32},
-
-	{input: Input.ArrowLeft,  code: 37},
-	{input: Input.ArrowUp,    code: 38},
-	{input: Input.ArrowRight, code: 39},
-	{input: Input.ArrowDown,  code: 40},
-
-	{input: Input.One,   code: 49},
-	{input: Input.Two,   code: 50},
-	{input: Input.Three, code: 51},
-	{input: Input.Four,  code: 52},
-	{input: Input.Five,  code: 53},
-	{input: Input.Six,   code: 54},
-	{input: Input.Seven, code: 55},
-	{input: Input.Eight, code: 56},
-	{input: Input.Nine,  code: 57},
-	{input: Input.Zero,  code: 48},
-
-	{input: Input.Backspace, code: 8},
-	{input: Input.Delete, code: 46}
-]
-
-export const otherwiseSupportedInputs: Input[] = [
-	Input.MouseLeft,
-	Input.MouseMiddle,
-	Input.MouseRight
-]
-
-export interface InputReport {
-	input: Input,
-	status: boolean
-}
-
-export type Bindings = { [alias: string]: Input[] }
-export type Status<gBindings extends Bindings = Bindings> = { [P in keyof gBindings]: boolean }
-
-export interface WatcherOptions<gBindings extends Bindings = Bindings> {
-	eventTarget: EventTarget
-	bindings: gBindings
-}
-
-export default class Watcher<gBindings extends Bindings = Bindings> {
+export class Watcher<gBindings extends Bindings = Bindings> {
 	private readonly eventTarget: EventTarget
 	private readonly bindings: gBindings
 
@@ -168,4 +86,86 @@ export default class Watcher<gBindings extends Bindings = Bindings> {
 		return Object.keys(this.bindings)
 			.filter(alias => this.bindings[alias].some(i => i === input))
 	}
+}
+
+export enum Input {
+	MouseLeft, MouseRight, MouseMiddle,
+
+	Esc,
+
+	Backtick, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero, Minus, Plus, Backspace,
+	Tab, Q, W, E, R, T, Y, U, I, O, P, BracketLeft, BracketRight, Backslash,
+	CapsLock, A, S, D, F, G, H, J, K, L, Semicolon, Quote, Enter,
+	Shift, Z, X, C, V, B, N, M, Comma, Period, Slash, ShiftRight,
+	Ctrl, Super, Alt, Space, AltRight, SuperRight, CtrlRight,
+
+	Insert, Home, PageUp,
+	Delete, End, PageDown,
+
+	ArrowUp, ArrowDown, ArrowLeft, ArrowRight
+}
+
+export const inputKeycodeRelations: InputKeycodeRelation[] = [
+	{input: Input.W, code: 87},
+	{input: Input.A, code: 65},
+	{input: Input.S, code: 83},
+	{input: Input.D, code: 68},
+
+	{input: Input.Q, code: 81},
+	{input: Input.E, code: 69},
+	{input: Input.Z, code: 90},
+	{input: Input.X, code: 88},
+	{input: Input.C, code: 67},
+
+	{input: Input.R, code: 82},
+	{input: Input.F, code: 70},
+	{input: Input.V, code: 86},
+
+	{input: Input.Shift, code: 16},
+	{input: Input.Ctrl,  code: 17},
+	{input: Input.Alt,   code: 18},
+	{input: Input.Space, code: 32},
+
+	{input: Input.ArrowLeft,  code: 37},
+	{input: Input.ArrowUp,    code: 38},
+	{input: Input.ArrowRight, code: 39},
+	{input: Input.ArrowDown,  code: 40},
+
+	{input: Input.One,   code: 49},
+	{input: Input.Two,   code: 50},
+	{input: Input.Three, code: 51},
+	{input: Input.Four,  code: 52},
+	{input: Input.Five,  code: 53},
+	{input: Input.Six,   code: 54},
+	{input: Input.Seven, code: 55},
+	{input: Input.Eight, code: 56},
+	{input: Input.Nine,  code: 57},
+	{input: Input.Zero,  code: 48},
+
+	{input: Input.Backspace, code: 8},
+	{input: Input.Delete, code: 46}
+]
+
+export const otherwiseSupportedInputs: Input[] = [
+	Input.MouseLeft,
+	Input.MouseMiddle,
+	Input.MouseRight
+]
+
+export interface InputKeycodeRelation {
+	input: Input
+	code: number
+}
+
+export interface InputReport {
+	input: Input,
+	status: boolean
+}
+
+export type Bindings = { [alias: string]: Input[] }
+export type Status<gBindings extends Bindings = Bindings> = { [P in keyof gBindings]: boolean }
+
+export interface WatcherOptions<gBindings extends Bindings = Bindings> {
+	eventTarget: EventTarget
+	bindings: gBindings
 }

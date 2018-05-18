@@ -2,8 +2,8 @@
 import {Scene, Mesh, Vector3, StandardMaterial, Color3, PhysicsImpostor, InstancedMesh} from "babylonjs"
 
 import {GameContext} from "../game"
-import {Entity} from "../../monarch"
-import {Vector, Bearings, Physique} from "../../data"
+import {Entity} from "../../entity"
+import {Vector, Bearings, Physique} from "../../interfaces"
 
 export interface CubeEntry {
 	type: "Cube"
@@ -42,10 +42,10 @@ export interface CubeAssets {
 	cubeProposalMesh: Mesh
 }
 
-export default class Cube extends Entity<GameContext, CubeEntry, CubeAssets> {
+export class Cube extends Entity<GameContext, CubeEntry, CubeAssets> {
 
-	static async loadAssets(context: GameContext) {
-		console.log("LOAD ASSETS", Date.now())
+	static async load(context: GameContext) {
+		console.log("LOAD CUBE ASSETS", Date.now())
 		const {scene} = context
 		const cubeMesh = createCubeMesh(scene)
 		cubeMesh.isVisible = false

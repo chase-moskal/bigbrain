@@ -1,16 +1,17 @@
 
 import {Mesh, ShadowGenerator, SpotLight, PhysicsImpostor} from "babylonjs"
 
+import {Entity} from "../../entity"
 import {GameContext} from "../game"
-import {loadBabylonFile} from "../../susa"
-import {Entity, StateEntry, Message} from "../../monarch"
+import {loadBabylonFile} from "../../toolbox"
+import {StateEntry, Message} from "../../interfaces"
 
 export interface EnvironmentEntry extends StateEntry {
 	type: "Environment"
 	asset: string
 }
 
-export default class EnvironmentEntity extends Entity<GameContext, EnvironmentEntry> {
+export class Environment extends Entity<GameContext, EnvironmentEntry> {
 
 	constructor(o) {
 		super(o)
@@ -23,18 +24,6 @@ export default class EnvironmentEntity extends Entity<GameContext, EnvironmentEn
 				const light = <SpotLight>scene.getLightByName("Spot")
 
 				plane.physicsImpostor = new PhysicsImpostor(plane, PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 0.1}, scene)
-				// const planeBoundingInfo = plane.getBoundingInfo()
-
-				// const body: Box = this.context.physics.addBox({
-				// 	physique: {
-				// 		mass: 0,
-				// 		size: [100, 0.01, 100]
-				// 	},
-				// 	bearings: {
-				// 		position: [0, 0, 0],
-				// 		rotation: [0, 0, 0, 0]
-				// 	}
-				// })
 
 				const shadowGenerator = new ShadowGenerator(1024, light)
 				const shadowCasters = [torus, icosphere]

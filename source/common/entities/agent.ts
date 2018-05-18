@@ -2,13 +2,13 @@
 import {reaction} from "mobx"
 import {Scene, Mesh, Vector3, StandardMaterial, Color3} from "babylonjs"
 
-import {Vector} from "../../data"
+import {Entity} from "../../entity"
 import {GameContext} from "../game"
-import {Entity} from "../../monarch"
-import Watcher, {Input} from "../../watcher"
+import {Vector} from "../../interfaces"
+import {Watcher, Input} from "../../watcher"
 import {makeActiveCamera, createRoundCameraRig} from "../tools/camtools"
 
-import Editor from "./editor"
+import {Editor} from "./editor"
 
 export interface AgentEntry {
 	type: "Agent"
@@ -16,7 +16,7 @@ export interface AgentEntry {
 	position: Vector
 }
 
-export default class Agent extends Entity<GameContext, AgentEntry> {
+export class Agent extends Entity<GameContext, AgentEntry> {
 
 	private readonly watcher = new Watcher({
 		eventTarget: this.context.window,

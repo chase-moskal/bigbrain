@@ -1,4 +1,48 @@
 
+import {SceneLoader} from "babylonjs"
+
+import {GenericEntity, EntityClasses} from "./entity"
+
+export function copy<T>(o: T): T { return JSON.parse(JSON.stringify(o)) }
+
+export function assignPropsOntoMap(obj: Object, map: Map<string, any>) {
+	Object.keys(obj).forEach(key => map.set(key, obj[key]))
+}
+
+export const getEntityClass = (type: string, entityClasses: EntityClasses): typeof GenericEntity => {
+	const Class = <typeof GenericEntity><any>entityClasses[type]
+	if (!Class) throw new Error(`Unknown entity class "${type}"`)
+	return Class
+}
+
+export function pathBreakdown(path: string) {
+	let dirpath = ""
+	let filename = ""
+	if (path.includes("/")) {
+		const parts = path.split("/")
+		filename = parts.pop()
+		dirpath = parts.join("/") + "/"
+	} else {
+		filename = path
+	}
+	return {dirpath, filename}
+}
+
+export async function loadBabylonFile(scene, path: string, onProgress: (event: ProgressEvent) => void = event => {}) {
+	SceneLoader.ShowLoadingScreen = false
+	const {dirpath, filename} = pathBreakdown(path)
+	return new Promise((resolve, reject) => {
+		SceneLoader.Append(
+			dirpath,
+			filename,
+			scene,
+			() => resolve(),
+			onProgress,
+			() => reject(new Error(`Error loading babylon file: "${path}"`))
+		)
+	})
+}
+
 // mixin decorator
 export const mixin = (...sources: Function[]) => (target: Function) => {
 	for (const source of sources) {
@@ -28,8 +72,6 @@ export class ServiceMaster implements Service {
 		for (const service of this.services) service.stop()
 	}
 }
-
-export const copy = value => JSON.parse(JSON.stringify(value))
 
 export const sleep = (milliseconds: number) =>
 	new Promise((resolve, reject) => setTimeout(resolve, milliseconds))

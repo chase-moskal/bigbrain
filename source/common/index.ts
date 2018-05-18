@@ -1,11 +1,13 @@
 
 import {makeGame} from "./game"
-import Cube, {CubeEntry} from "./entities/cube"
-import Agent, {AgentEntry} from "./entities/agent"
-import Editor, {EditorEntry} from "./entities/editor"
-import Director, {DirectorEntry} from "./entities/director"
-import Spectator, {SpectatorEntry} from "./entities/spectator"
-import Environment, {EnvironmentEntry} from "./entities/environment"
+import {Cube, CubeEntry} from "./entities/cube"
+import {Agent, AgentEntry} from "./entities/agent"
+import {Editor, EditorEntry} from "./entities/editor"
+import {Director, DirectorEntry} from "./entities/director"
+import {Spectator, SpectatorEntry} from "./entities/spectator"
+import {Environment, EnvironmentEntry} from "./entities/environment"
+
+import {Entity} from "../entity"
 
 const {monarch} = makeGame({
 	canvas: document.querySelector("canvas"),
