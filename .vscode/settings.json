@@ -7,7 +7,7 @@
 	"files.insertFinalNewline": true,
 
 	"files.exclude": {
-		// "dist": true,
+		"dist": true,
 		".nyc*": true,
 		"coverage": true,
 		"node_modules": true,
