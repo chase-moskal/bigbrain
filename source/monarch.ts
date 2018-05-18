@@ -20,24 +20,29 @@ export interface Update {
 	someEntries?: { [id: string]: StateEntry }
 }
 
-export interface EntityOptions<gContext = Partial<StandardContext>> {
+export interface EntityOptions<gContext = Partial<StandardContext>, gAssets = any> {
 	id: string
 	context: gContext
 	state: State
+	assets: gAssets
 }
 
-export abstract class Entity<gContext = Partial<StandardContext>, gStateEntry extends StateEntry = StateEntry> {
+export abstract class Entity<gContext = Partial<StandardContext>, gStateEntry extends StateEntry = StateEntry, gAssets = any> {
+	static async loadAssets(context: Partial<StandardContext>) {}
+
 	protected readonly context: gContext
+	protected readonly assets: gAssets
 	private readonly state: State
 
 	readonly id: string
 	get entry(): gStateEntry { return deepFreeze(copy(this.state.entries.get(this.id))) }
 	@observable inbox: Message[] = []
 
-	constructor({id, context, state}: EntityOptions<gContext>) {
+	constructor({id, context, state, assets}: EntityOptions<gContext>) {
 		this.id = id
 		this.context = context
 		this.state = state
+		this.assets = assets
 	}
 
 	abstract destructor(): void
@@ -86,14 +91,30 @@ export const getEntityClass = (type: string, entityClasses: EntityClasses): type
 	return Class
 }
 
-export function replicate(state: State, entities: Map<string, Entity>, context: StandardContext, entityClasses: EntityClasses) {
+export class AssetsCache {
+	private cache = new Map<typeof Entity, any>()
+
+	async fetch(EntityClass: typeof Entity, context: any) {
+		const cached = this.cache.get(EntityClass)
+		if (cached) {
+			return cached
+		}
+		else {
+			const assets = await EntityClass.loadAssets(context)
+			return assets
+		}
+	}
+}
+
+export function replicate(state: State, entities: Map<string, Entity>, context: StandardContext, entityClasses: EntityClasses, assetsCache: AssetsCache) {
 
 	// add new entities
 	for (const [id, entry] of Array.from(state.entries)) {
 		if (!entities.has(id)) {
 			const entry = state.entries.get(id)
 			const Entity = getEntityClass(entry.type, entityClasses)
-			entities.set(id, new Entity({id, context, state}))
+			const assets = assetsCache.fetch(<any>Entity, context)
+			entities.set(id, new Entity({id, context, state, assets}))
 		}
 	}
 
@@ -141,6 +162,7 @@ export default class Monarch<MoreContext = StandardContext & any> {
 		const state: State = observable({entries: new Map})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager(state, entities)
+		const assetsCache = new AssetsCache()
 
 		const context = <StandardContext & MoreContext>{
 			host: true,
@@ -148,7 +170,7 @@ export default class Monarch<MoreContext = StandardContext & any> {
 			...moreContext
 		}
 
-		autorun(() => replicate(state, entities, context, entityClasses))
+		autorun(() => replicate(state, entities, context, entityClasses, assetsCache))
 
 		const network = new LoopbackNetwork(state, context, messages => {
 			for (const message of messages) {
