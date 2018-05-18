@@ -20,7 +20,7 @@ export interface Update {
 	someEntries?: { [id: string]: StateEntry }
 }
 
-export interface EntityOptions<gContext = Partial<StandardContext>, gAssets = any> {
+export interface EntityOptions<gContext = Partial<StandardContext>, gAssets = Promise<any>> {
 	id: string
 	context: gContext
 	state: State
@@ -28,10 +28,11 @@ export interface EntityOptions<gContext = Partial<StandardContext>, gAssets = an
 }
 
 export abstract class Entity<gContext = Partial<StandardContext>, gStateEntry extends StateEntry = StateEntry, gAssets = any> {
-	static async loadAssets(context: Partial<StandardContext>) {}
+	static async loadAssets(context: Partial<StandardContext>) {
+		return {}
+	}
 
 	protected readonly context: gContext
-	protected readonly assets: gAssets
 	private readonly state: State
 
 	readonly id: string
@@ -42,8 +43,10 @@ export abstract class Entity<gContext = Partial<StandardContext>, gStateEntry ex
 		this.id = id
 		this.context = context
 		this.state = state
-		this.assets = assets
+		assets.then(a => this.init(a))
 	}
+
+	init(assets: gAssets): void {}
 
 	abstract destructor(): void
 }
@@ -94,14 +97,17 @@ export const getEntityClass = (type: string, entityClasses: EntityClasses): type
 export class AssetsCache {
 	private cache = new Map<typeof Entity, any>()
 
-	async fetch(EntityClass: typeof Entity, context: any) {
-		const cached = this.cache.get(EntityClass)
-		if (cached) {
-			return cached
+	async fetch(EntityClass: typeof Entity, loadAssets: () => any) {
+		const {cache} = this
+		const cachedAssets = cache.get(EntityClass)
+
+		if (cachedAssets) {
+			return cachedAssets
 		}
 		else {
-			const assets = await EntityClass.loadAssets(context)
-			return assets
+			const freshAssets = await loadAssets()
+			cache.set(EntityClass, freshAssets)
+			return freshAssets
 		}
 	}
 }
@@ -113,8 +119,9 @@ export function replicate(state: State, entities: Map<string, Entity>, context: 
 		if (!entities.has(id)) {
 			const entry = state.entries.get(id)
 			const Entity = getEntityClass(entry.type, entityClasses)
-			const assets = assetsCache.fetch(<any>Entity, context)
-			entities.set(id, new Entity({id, context, state, assets}))
+			const assets = assetsCache.fetch(<any>Entity, () => Entity.loadAssets(context))
+			const entity = new Entity({id, context, state, assets})
+			entities.set(id, entity)
 		}
 	}
 

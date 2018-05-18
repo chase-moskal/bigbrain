@@ -8,7 +8,7 @@ import {Entity} from "../../monarch"
 import Watcher, {Input} from "../../watcher"
 import {Vector, Physique, Bearings, Quaternion} from "../../data"
 
-import {CubeEntry, createCubeMesh, IdentifiableMesh} from "./cube"
+import {CubeEntry, createCubeMesh, createCubeProposalMesh, IdentifiableMesh} from "./cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
 
 export interface EditorEntry {
@@ -80,7 +80,9 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 						position,
 						rotation: [0, 0, 0, 0]
 					}
-					const mesh = createCubeMesh({proposal: true, scene, physique, bearings})
+					const mesh = createCubeProposalMesh(scene)
+					mesh.scaling = Vector3.FromArray(physique.size)
+					mesh.position = Vector3.FromArray(bearings.position)
 					mesh.position.y += proposalHeight
 					this.proposalMesh = mesh
 					this.propsalTicker.start()
@@ -107,8 +109,8 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 						size: [1, 1, 1]
 					},
 					bearings: {
-						position: <Vector> proposalMesh.position.asArray(),
-						rotation: <Quaternion> proposalMesh.rotation.asArray()
+						position: <Vector>proposalMesh.position.asArray(),
+						rotation: <Quaternion>proposalMesh.rotation.asArray()
 					}
 				})
 			}

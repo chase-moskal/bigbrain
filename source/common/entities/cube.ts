@@ -1,5 +1,5 @@
 
-import {Scene, Mesh, Vector3, StandardMaterial, Color3, PhysicsImpostor} from "babylonjs"
+import {Scene, Mesh, Vector3, StandardMaterial, Color3, PhysicsImpostor, InstancedMesh} from "babylonjs"
 
 import {GameContext} from "../game"
 import {Entity} from "../../monarch"
@@ -15,44 +15,59 @@ export interface IdentifiableMesh extends Mesh {
 	entryId: string
 }
 
-export const createCubeMesh = ({proposal, scene, physique, bearings, entryId}: {
-	proposal: boolean
-	scene: Scene
-	physique: Physique
-	bearings: Bearings
-	entryId?: string
-}): Mesh => {
+export const createCubeMesh = (scene: Scene): Mesh => {
 	const material = new StandardMaterial("Cube", scene)
 	material.emissiveColor = new Color3(0.1, 0.6, 0.9)
 
 	const mesh = <IdentifiableMesh>Mesh.CreateBox("Cube", 1, scene)
-	mesh.scaling = Vector3.FromArray(physique.size)
-	mesh.position = Vector3.FromArray(bearings.position)
 	mesh.material = material
 
-	if (proposal) {
-		mesh.material.wireframe = true
-		mesh.isPickable = false
-	}
-	else {
-		const {mass, restitution} = physique
-		mesh.physicsImpostor = new PhysicsImpostor(mesh, PhysicsImpostor.BoxImpostor, {mass, restitution}, scene)
-	}
-
-	if (entryId) mesh.entryId = entryId
 	return mesh
 }
 
-export default class Cube extends Entity<GameContext, CubeEntry> {
+export const createCubeProposalMesh = (scene: Scene) => {
+	const material = new StandardMaterial("Cube", scene)
+	material.emissiveColor = new Color3(0.1, 0.6, 0.9)
+	material.wireframe = true
 
-	// babylon mesh with physics
-	private readonly mesh: Mesh = createCubeMesh({
-		proposal: false,
-		scene: this.context.scene,
-		physique: this.entry.physique,
-		bearings: this.entry.bearings,
-		entryId: this.id
-	})
+	const mesh = <IdentifiableMesh>Mesh.CreateBox("Cube", 1, scene)
+	mesh.material = material
+	mesh.isPickable = false
+
+	return mesh
+}
+
+export interface CubeAssets {
+	cubeMesh: Mesh
+	cubeProposalMesh: Mesh
+}
+
+export default class Cube extends Entity<GameContext, CubeEntry, CubeAssets> {
+
+	static async loadAssets(context: GameContext) {
+		console.log("LOAD ASSETS", Date.now())
+		const {scene} = context
+		const cubeMesh = createCubeMesh(scene)
+		cubeMesh.isVisible = false
+		return {cubeMesh}
+	}
+
+	private mesh: InstancedMesh
+
+	init(assets: CubeAssets) {
+		const {entry, context, id} = this
+		const {scene} = context
+		const {cubeMesh, cubeProposalMesh} = assets
+		const {size, mass, restitution} = entry.physique
+		const {position} = entry.bearings
+
+		const mesh = cubeMesh.createInstance(`cube-instance`)
+		mesh.scaling = Vector3.FromArray(size)
+		mesh.position = Vector3.FromArray(position)
+		mesh.physicsImpostor = new PhysicsImpostor(mesh, PhysicsImpostor.BoxImpostor, {mass, restitution}, scene)
+		mesh["entryId"] = id
+		this.mesh = mesh
+	}
 
 	destructor() {
 		this.mesh.dispose()
