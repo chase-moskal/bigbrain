@@ -44,7 +44,7 @@ export interface CubeAssets {
 
 export class Cube extends Entity<GameContext, CubeEntry, CubeAssets> {
 
-	static async load(context: GameContext) {
+	static load(context: GameContext) {
 		console.log("LOAD CUBE ASSETS", Date.now())
 		const {scene} = context
 		const cubeMesh = createCubeMesh(scene)
