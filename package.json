@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.6",
+	"version": "0.4.0-dev.7",
 	"description": "concept game engine",
 	"main": "dist/monarch",
 	"types": "dist/monarch.d.ts",
@@ -41,13 +41,16 @@
 		"rimraf": "2.6.2",
 		"tsify": "4.0.0",
 		"tslint": "5.10.0",
-		"typescript": "2.7.2"
+		"typescript": "2.8.3"
 	},
 	"dependencies": {
 		"ammo.js": "file:assets/ammo.js-0.0.2.tgz",
-		"babylonjs": "3.2.0-beta.1",
+		"babylonjs": "3.2.0",
+		"cannon": "0.6.2",
 		"deep-freeze": "0.0.1",
+		"earcut": "2.1.3",
 		"mobx": "4.2.1",
+		"oimo": "1.0.9",
 		"uuid": "3.2.1"
 	}
 }
