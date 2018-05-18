@@ -48,7 +48,7 @@ export const applyLogicalMovement = ({tick, camera, watcher}: {tick: Tick, camer
 	camera.cameraDirection.addInPlace(camera._transformedDirection)
 }
 
-export const bindings: Bindings = deepFreeze({
+export const bindings = {
 	forward: [Input.W, Input.ArrowUp],
 	backward: [Input.S, Input.ArrowDown],
 	left: [Input.A, Input.ArrowLeft],
@@ -56,7 +56,7 @@ export const bindings: Bindings = deepFreeze({
 	raise: [Input.Space],
 	lower: [Input.Z, Input.C],
 	sprint: [Input.Shift]
-})
+}
 
 export default class Spectator extends Entity<GameContext, SpectatorEntry> {
 	protected readonly context: GameContext
@@ -65,7 +65,7 @@ export default class Spectator extends Entity<GameContext, SpectatorEntry> {
 		bearings: this.entry.bearings,
 		speed: 0.1
 	})
-	private readonly watcher = new Watcher({eventTarget: this.context.window, bindings})
+	private readonly watcher = new Watcher<typeof bindings>({eventTarget: this.context.window, bindings})
 	private readonly ticker: Ticker = (() => {
 		const {camera, watcher} = this
 		const ticker = new Ticker({action: tick => applyLogicalMovement({tick, camera, watcher})})

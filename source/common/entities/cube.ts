@@ -15,11 +15,11 @@ export interface IdentifiableMesh extends Mesh {
 	entryId: string
 }
 
-export const createCubeMesh = ({scene, physique, bearings, physical, entryId}: {
+export const createCubeMesh = ({proposal, scene, physique, bearings, entryId}: {
+	proposal: boolean
 	scene: Scene
 	physique: Physique
 	bearings: Bearings
-	physical: boolean
 	entryId?: string
 }): Mesh => {
 	const material = new StandardMaterial("Cube", scene)
@@ -30,7 +30,11 @@ export const createCubeMesh = ({scene, physique, bearings, physical, entryId}: {
 	mesh.position = Vector3.FromArray(bearings.position)
 	mesh.material = material
 
-	if (physical) {
+	if (proposal) {
+		mesh.material.wireframe = true
+		mesh.isPickable = false
+	}
+	else {
 		const {mass, restitution} = physique
 		mesh.physicsImpostor = new PhysicsImpostor(mesh, PhysicsImpostor.BoxImpostor, {mass, restitution}, scene)
 	}
@@ -43,21 +47,14 @@ export default class Cube extends Entity<GameContext, CubeEntry> {
 
 	// babylon mesh with physics
 	private readonly mesh: Mesh = createCubeMesh({
+		proposal: false,
 		scene: this.context.scene,
-		entryId: this.id,
 		physique: this.entry.physique,
 		bearings: this.entry.bearings,
-		physical: true
+		entryId: this.id
 	})
-
-	// // box to simulate the cube physically
-	// private readonly box: Box = this.context.physics.addBox({
-	// 	physique: this.entry.physique,
-	// 	bearings: this.entry.bearings
-	// })
 
 	destructor() {
 		this.mesh.dispose()
-		// this.box.destructor()
 	}
 }

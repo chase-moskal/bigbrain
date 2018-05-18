@@ -18,10 +18,12 @@ export interface EditorEntry {
 
 export const bindings = {
 	...spectatorBindings,
-	ghost: [Input.E],
+	propose: [Input.E],
 	place: [Input.MouseLeft],
 	remove: [Input.X, Input.Backspace, Input.Delete]
 }
+
+const proposalHeight = 0.6
 
 export default class Editor extends Entity<GameContext, EditorEntry> {
 	protected readonly context: GameContext
@@ -52,21 +54,21 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 		return scene.pick(canvas.width / 2, canvas.height / 2)
 	}
 
-	private ghostMesh: Mesh = null
-	private readonly ghostTicker = new Ticker({
+	private proposalMesh: Mesh = null
+	private readonly propsalTicker = new Ticker({
 		action: tick => {
-			const {aimpoint, ghostMesh} = this
-			if (aimpoint) aimpoint.y += 0.5
-			this.ghostMesh.position = aimpoint || Vector3.Zero()
+			const {aimpoint, proposalMesh} = this
+			if (aimpoint) aimpoint.y += proposalHeight
+			this.proposalMesh.position = aimpoint || Vector3.Zero()
 		}
 	})
 
 	private reactions = [
 
-		// ghost mode
-		reaction(() => this.watcher.status.ghost, ghost => {
-			if (ghost) {
-				if (!this.ghostMesh) {
+		// react to propose button (editor proposing prop placement)
+		reaction(() => this.watcher.status.propose, propose => {
+			if (propose) {
+				if (!this.proposalMesh) {
 					const {scene} = this.context
 					const {aimpoint} = this
 					const position = <Vector>(aimpoint ? aimpoint.asArray() : [0, 0, 0])
@@ -78,28 +80,26 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 						position,
 						rotation: [0, 0, 0, 0]
 					}
-					const mesh = createCubeMesh({scene, physique, bearings, physical: false})
-					mesh.material.wireframe = true
-					mesh.isPickable = false
-					mesh.position.y += 0.6
-					this.ghostMesh = mesh
-					this.ghostTicker.start()
+					const mesh = createCubeMesh({proposal: true, scene, physique, bearings})
+					mesh.position.y += proposalHeight
+					this.proposalMesh = mesh
+					this.propsalTicker.start()
 				}
 			}
 			else {
-				this.ghostTicker.stop()
-				if (this.ghostMesh) {
-					this.ghostMesh.dispose()
-					this.ghostMesh = null
+				this.propsalTicker.stop()
+				if (this.proposalMesh) {
+					this.proposalMesh.dispose()
+					this.proposalMesh = null
 				}
 			}
 		}),
 
-		// placement action
+		// react to placement button
 		reaction(() => this.watcher.status.place, place => {
 			const {scene, canvas, manager} = this.context
-			const {ghostMesh} = this
-			if (place && ghostMesh) {
+			const {proposalMesh} = this
+			if (place && proposalMesh) {
 				manager.addEntry(<CubeEntry>{
 					type: "Cube",
 					physique: {
@@ -107,14 +107,14 @@ export default class Editor extends Entity<GameContext, EditorEntry> {
 						size: [1, 1, 1]
 					},
 					bearings: {
-						position: <Vector> ghostMesh.position.asArray(),
-						rotation: <Quaternion> ghostMesh.rotation.asArray()
+						position: <Vector> proposalMesh.position.asArray(),
+						rotation: <Quaternion> proposalMesh.rotation.asArray()
 					}
 				})
 			}
 		}),
 
-		// removal action
+		// react to removal button
 		reaction(() => this.watcher.status.remove, remove => {
 			const {scene, canvas, manager} = this.context
 			if (remove) {
