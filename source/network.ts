@@ -1,29 +1,28 @@
 
 import {action} from "mobx"
-import {State, StandardContext, Message, Update} from "./interfaces"
 import {assignPropsOntoMap, copy} from "./toolbox"
+import {State, Message, Update} from "./interfaces"
 
 export abstract class Network {
+	protected readonly host: boolean
 	protected readonly state: State
-	protected readonly context: StandardContext
 	protected readonly handleMessages: (messages: Message[]) => void
 
-	constructor({state, context, handleMessages}: {
+	constructor({state, host, handleMessages}: {
+		host: boolean
 		state: State
-		context: StandardContext
 		handleMessages: (messages: Message[]) => void
 	}) {
-		Object.assign(this, {state, context, handleMessages})
+		Object.assign(this, {state, host, handleMessages})
 	}
 
-	@action
-	applyUpdate(update: Update) {
-		if (update.allEntries) {
-			this.state.entries.clear()
-		}
-		if (update.allEntries || update.someEntries) {
-			assignPropsOntoMap(copy(update.allEntries), this.state.entries)
-		}
+	@action applyUpdate(update: Update) {
+		const {state} = this
+		const {allEntries, someEntries} = update
+		if (allEntries)
+			state.entries.clear()
+		const entries = allEntries || someEntries
+		assignPropsOntoMap(copy(entries), state.entries)
 		this.handleMessages(update.messages)
 	}
 

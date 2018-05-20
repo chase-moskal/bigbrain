@@ -17,28 +17,23 @@ import {State, StandardContext} from "./interfaces"
  *  - there is no main loop, each entity may run its own logic loops
  */
 export class Monarch<gContext extends StandardContext = StandardContext> {
-	private readonly context: gContext
 	private readonly state: State
-	private readonly entities: Map<string, Entity>
 	private readonly network: Network
+	private readonly context: gContext
 	private readonly entityClasses: EntityClasses
-
+	private readonly entities: Map<string, Entity>
 	readonly manager: Manager
 
-	constructor({window, entityClasses, context: moreContext = {}}: MonarchOptions<Partial<gContext & any>>) {
+	constructor({window, entityClasses, context: moreContext = {}}: MonarchOptions<Partial<gContext> & any>) {
 		const state: State = observable({entries: new Map})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager({state, entities})
 
-		const context = <StandardContext & gContext>{
-			host: true,
-			manager,
-			...moreContext
-		}
+		const host = true
 
 		const network = new LoopbackNetwork({
+			host,
 			state,
-			context,
 			handleMessages: messages => {
 				for (const message of messages) {
 					const entity = entities.get(message.to)
@@ -47,6 +42,15 @@ export class Monarch<gContext extends StandardContext = StandardContext> {
 				}
 			}
 		})
+
+		const context: gContext = {
+			...moreContext,
+			...<StandardContext>{
+				host,
+				manager,
+				network
+			}
+		}
 
 		Object.assign(this, {context, state, entities, manager, network, entityClasses})
 

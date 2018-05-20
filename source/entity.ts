@@ -10,17 +10,20 @@ export abstract class Entity<
 	gStateEntry extends StateEntry = StateEntry
 > {
 	readonly id: string
-	protected readonly context: gContext
-	private readonly state: State
 	@observable inbox: Message[] = []
+	private readonly state: State
+	protected readonly context: gContext
+
+	constructor(options: EntityOptions<gContext>) {
+		Object.assign(this, options)
+		this.init()
+	}
 
 	get entry(): gStateEntry {
 		return deepFreeze(copy(this.state.entries.get(this.id)))
 	}
 
-	constructor(options: EntityOptions<gContext>) {
-		Object.assign(this, options)
-	}
+	protected async init() {}
 
 	abstract async destructor(): Promise<void>
 }
@@ -35,4 +38,4 @@ export interface EntityOptions<gContext = any> {
 	state: State
 }
 
-export type EntityClasses = {[name: string]: typeof GenericEntity}
+export type EntityClasses = { [name: string]: typeof GenericEntity }

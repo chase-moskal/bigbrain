@@ -8,7 +8,7 @@ import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
 
-import {CubeEntry, createCubeMesh, createCubeProposalMesh, IdentifiableMesh} from "./cube"
+import {CubeEntry, createCubeMesh, createCubeProposalMesh} from "./cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
 
 export interface EditorEntry {
@@ -122,8 +122,8 @@ export class Editor extends Entity<GameContext, EditorEntry> {
 			if (remove) {
 				const pick = this.middlePick()
 				if (pick && pick.pickedMesh) {
-					const mesh = <IdentifiableMesh>pick.pickedMesh
-					if (mesh.entryId) manager.removeEntry(mesh.entryId)
+					const mesh = pick.pickedMesh
+					if (mesh["entryId"]) manager.removeEntry(mesh["entryId"])
 				}
 			}
 		})

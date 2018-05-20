@@ -4,6 +4,11 @@ import * as uuid from "uuid/v4"
 import {Entity} from "./entity"
 import {State, StateEntry} from "./interfaces"
 
+/**
+ * MANAGER CLASS
+ *  - public access to administrative game functions
+ *  - entities have access to this via context
+ */
 export class Manager {
 	private readonly state: State
 	private readonly entities: Map<string, Entity>

@@ -3,11 +3,13 @@ import {Scene, Engine} from "babylonjs"
 
 import {Input} from "./watcher"
 import {Manager} from "./manager"
+import {Network} from "./network"
 import {Entity, GenericEntity} from "./entity"
 
 export interface StandardContext {
 	readonly host: boolean
 	readonly manager: Manager
+	readonly network: Network
 }
 
 export interface StateEntry { readonly type: string }
