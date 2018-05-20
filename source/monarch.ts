@@ -4,7 +4,6 @@ import {observable, autorun, action} from "mobx"
 
 import {Manager} from "./manager"
 import {getEntityClass} from "./toolbox"
-import {AssetsCache} from "./assets-cache"
 import {Entity, EntityClasses} from "./entity"
 import {Network, LoopbackNetwork} from "./network"
 import {State, StandardContext} from "./interfaces"
@@ -17,12 +16,11 @@ import {State, StandardContext} from "./interfaces"
  *  - create/remove entity instances based on state (replication)
  *  - there is no main loop, each entity may run its own logic loops
  */
-export class Monarch<gContext = any> {
+export class Monarch<gContext extends StandardContext = StandardContext> {
 	private readonly context: gContext
 	private readonly state: State
 	private readonly entities: Map<string, Entity>
 	private readonly network: Network
-	private readonly assetsCache: AssetsCache
 	private readonly entityClasses: EntityClasses
 
 	readonly manager: Manager
@@ -31,7 +29,6 @@ export class Monarch<gContext = any> {
 		const state: State = observable({entries: new Map})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager({state, entities})
-		const assetsCache = new AssetsCache()
 
 		const context = <StandardContext & gContext>{
 			host: true,
@@ -51,22 +48,20 @@ export class Monarch<gContext = any> {
 			}
 		})
 
-		Object.assign(this, {context, state, entities, manager, assetsCache, network, entityClasses})
+		Object.assign(this, {context, state, entities, manager, network, entityClasses})
+
 		autorun(() => this.replicate())
 	}
 
-	private replicate(): void {
-		const {context, state, entities, manager, assetsCache, entityClasses} = this
+	private async replicate(): Promise<void> {
+		const {context, state, entities, manager, entityClasses} = this
 
 		// add new entities
 		for (const [id, entry] of Array.from(state.entries)) {
 			if (!entities.has(id)) {
 				const entry = state.entries.get(id)
 				const Entity = getEntityClass(entry.type, entityClasses)
-				const assets = Entity.load
-					? assetsCache.fetch(<any>Entity, () => Entity.load(context))
-					: {}
-				const entity = new Entity({id, context, state, assets})
+				const entity = new Entity({id, context, state})
 				entities.set(id, entity)
 			}
 		}
@@ -75,7 +70,7 @@ export class Monarch<gContext = any> {
 		for (const id of entities.keys()) {
 			if (!state.entries.has(id)) {
 				const entity = entities.get(id)
-				entity.destructor()
+				await entity.destructor()
 				entities.delete(id)
 			}
 		}

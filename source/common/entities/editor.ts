@@ -129,7 +129,7 @@ export class Editor extends Entity<GameContext, EditorEntry> {
 		})
 	]
 
-	destructor() {
+	async destructor() {
 		this.watcher.destructor()
 		this.ticker.destructor()
 		for (const dispose of this.reactions) dispose()

@@ -55,7 +55,7 @@ export class Director extends Entity<GameContext, DirectorEntry> {
 		})
 	]
 
-	destructor() {
+	async destructor() {
 		for (const dispose of this.reactions) dispose()
 	}
 }

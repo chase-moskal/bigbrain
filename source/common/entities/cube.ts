@@ -39,25 +39,23 @@ export const createCubeProposalMesh = (scene: Scene) => {
 
 export interface CubeAssets {
 	cubeMesh: Mesh
-	cubeProposalMesh: Mesh
 }
 
-export class Cube extends Entity<GameContext, CubeEntry, CubeAssets> {
+export class Cube extends Entity<GameContext, CubeEntry> {
+	private static assets: CubeAssets
 
-	static load(context: GameContext) {
-		console.log("LOAD CUBE ASSETS", Date.now())
-		const {scene} = context
+	private async loadAssets() {
+		console.log("load cube assets", Date.now())
+		const {scene} = this.context
 		const cubeMesh = createCubeMesh(scene)
 		cubeMesh.isVisible = false
 		return {cubeMesh}
 	}
 
-	private mesh: InstancedMesh
-
-	init(assets: CubeAssets) {
+	private instanceAssets() {
 		const {entry, context, id} = this
 		const {scene} = context
-		const {cubeMesh, cubeProposalMesh} = assets
+		const {cubeMesh} = Cube.assets
 		const {size, mass, restitution} = entry.physique
 		const {position} = entry.bearings
 
@@ -66,10 +64,18 @@ export class Cube extends Entity<GameContext, CubeEntry, CubeAssets> {
 		mesh.position = Vector3.FromArray(position)
 		mesh.physicsImpostor = new PhysicsImpostor(mesh, PhysicsImpostor.BoxImpostor, {mass, restitution}, scene)
 		mesh["entryId"] = id
-		this.mesh = mesh
+
+		return mesh
 	}
 
-	destructor() {
-		this.mesh.dispose()
+	private mesh = (async () => {
+		if (!Cube.assets) {
+			Cube.assets = await this.loadAssets()
+		}
+		return this.instanceAssets()
+	})()
+
+	async destructor() {
+		(await this.mesh).dispose()
 	}
 }

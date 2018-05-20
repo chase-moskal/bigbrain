@@ -51,7 +51,7 @@ export class Agent extends Entity<GameContext, AgentEntry> {
 
 	readonly player = this.entry.player
 
-	destructor() {
+	async destructor() {
 		for (const dispose of this.reactions) dispose()
 
 		const editor = <Editor>this.context.manager.getEntities().find(entity => entity instanceof Editor)

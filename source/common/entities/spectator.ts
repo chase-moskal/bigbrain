@@ -73,7 +73,7 @@ export class Spectator extends Entity<GameContext, SpectatorEntry> {
 		return ticker
 	})()
 
-	destructor() {
+	async destructor() {
 		this.ticker.destructor()
 	}
 }
