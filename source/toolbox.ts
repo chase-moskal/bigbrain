@@ -80,6 +80,8 @@ export const environment: "browser" | "node" = new Function("try{return this===w
 	? "browser"
 	: "node"
 
+declare const process: any
+
 export function now() {
 	if (environment === "browser") return performance.now()
 	else {
