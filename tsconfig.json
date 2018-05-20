@@ -13,9 +13,6 @@
 	},
 	"exclude": [
 		"dist",
-		"node_modules",
-		"source/_archive",
-		"source/physics/**/*",
-		"source/**/*worker.ts"
+		"node_modules"
 	]
 }
