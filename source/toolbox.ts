@@ -1,5 +1,5 @@
 
-import {SceneLoader} from "babylonjs"
+import {SceneLoader, Scene, SceneLoaderProgressEvent} from "babylonjs"
 
 import {GenericEntity, EntityClasses} from "./entity"
 
@@ -41,6 +41,17 @@ export async function loadBabylonFile(scene, path: string, onProgress: (event: P
 			() => reject(new Error(`Error loading babylon file: "${path}"`))
 		)
 	})
+}
+
+export async function loadBabylonMeshes(
+	scene: Scene,
+	path: string,
+	onProgress: (event: SceneLoaderProgressEvent) => void = event => {}
+) {
+	SceneLoader.ShowLoadingScreen = false
+	const meshNames = ""
+	const {dirpath, filename} = pathBreakdown(path)
+	return SceneLoader.ImportMeshAsync(meshNames, dirpath, filename, scene, onProgress)
 }
 
 // mixin decorator

@@ -4,7 +4,7 @@ import {autorun, reaction} from "mobx"
 import {Entity} from "../../entity"
 import {GameContext} from "../game"
 import {Manager} from "../../manager"
-import {StateEntry} from "../../interfaces"
+import {StateEntry, VectorZero, QuaternionZero} from "../../interfaces"
 import {Watcher, Input, Bindings} from "../../watcher"
 
 import {Agent, AgentEntry} from "./agent"
@@ -31,7 +31,10 @@ export class Director extends Entity<GameContext, DirectorEntry> {
 		manager.addEntry(<AgentEntry>{
 			type: "Agent",
 			player: true,
-			position: [0, 0, 0]
+			bearings: {
+				position: VectorZero,
+				rotation: QuaternionZero
+			}
 		})
 	}
 

@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.9",
+	"version": "0.4.0-dev.10",
 	"description": "concept game engine",
 	"main": "dist/monarch",
 	"types": "dist/monarch.d.ts",
@@ -26,6 +26,7 @@
 	},
 	"homepage": "https://github.com/monarch-games/engine#readme",
 	"devDependencies": {
+		"@types/cannon": "0.1.2",
 		"browserify": "16.2.2",
 		"http-server": "0.11.1",
 		"is-utf8": "0.2.1",

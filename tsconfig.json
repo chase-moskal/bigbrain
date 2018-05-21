@@ -3,7 +3,7 @@
 		"baseUrl": ".",
 		"rootDir": "source",
 		"outDir": "dist",
-		"lib": ["es2016", "dom"],
+		"lib": ["esnext", "dom"],
 		"module": "commonjs",
 		"target": "es6",
 		"moduleResolution": "node",
