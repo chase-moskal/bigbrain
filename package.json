@@ -10,7 +10,7 @@
 		"build-library": "tsc",
 		"build-playground": "mkdirp dist/common/ && browserify -p tsify source/common/index.ts > dist/common/index.bundle.js",
 		"build-playground-debug": "mkdirp dist/common/ && browserify --debug -p tsify source/common/index.ts > dist/common/index.bundle.js",
-		"lint": "tslint -c tslint.json -e 'source/_archive/**' 'source/**/*.ts'",
+		"lint": "tslint -c tslint.json -e 'types/**' 'source/**/*.ts'",
 		"start": "http-server",
 		"test": "jest --verbose",
 		"prepare": "npm run build -s && npm test -s"
@@ -26,7 +26,6 @@
 	},
 	"homepage": "https://github.com/monarch-games/engine#readme",
 	"devDependencies": {
-		"@types/cannon": "0.1.2",
 		"browserify": "16.2.2",
 		"http-server": "0.11.1",
 		"is-utf8": "0.2.1",

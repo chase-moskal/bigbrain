@@ -1,21 +1,21 @@
 
 import {
-	Scene,
 	Mesh,
-	Vector3,
-	StandardMaterial,
+	Scene,
 	Color3,
-	PhysicsImpostor,
+	Vector3,
 	InstancedMesh,
+	PhysicsImpostor,
+	StandardMaterial,
 	Quaternion as bQuaternion
 } from "babylonjs"
 
 import {autorun} from "mobx"
 
+import {Context} from "../game"
 import {copy} from "../../toolbox"
 import {Entity} from "../../entity"
 import {Ticker} from "../../ticker"
-import {GameContext} from "../game"
 import {Vector, Bearings, Physique, Quaternion} from "../../interfaces"
 
 export interface CubeEntry {
@@ -55,7 +55,7 @@ export const createCubeGhostMesh = (scene: Scene): Mesh => {
 	return mesh
 }
 
-export class Cube extends Entity<GameContext, CubeEntry> {
+export class Cube extends Entity<Context, CubeEntry> {
 	private static assets: {
 		meshBase: Mesh
 		ghostMeshBase: Mesh

@@ -6,7 +6,13 @@ import {Manager} from "./manager"
 import {getEntityClass} from "./toolbox"
 import {Entity, EntityClasses} from "./entity"
 import {Network, LoopbackNetwork} from "./network"
-import {State, StandardContext} from "./interfaces"
+import {State, MonarchContext} from "./interfaces"
+
+export interface MonarchOptions<MoreContext = any> {
+	window: Window
+	entityClasses: EntityClasses
+	context?: MoreContext
+}
 
 /**
  * MONARCH GAME ORCHESTRATION CLASS
@@ -16,15 +22,15 @@ import {State, StandardContext} from "./interfaces"
  *  - create/remove entity instances based on state (replication)
  *  - there is no main loop, each entity may run its own logic loops
  */
-export class Monarch<gContext extends StandardContext = StandardContext> {
+export class Monarch<MoreContext = any> {
 	private readonly state: State
 	private readonly network: Network
-	private readonly context: gContext
+	private readonly context: MonarchContext & MoreContext
 	private readonly entityClasses: EntityClasses
 	private readonly entities: Map<string, Entity>
 	readonly manager: Manager
 
-	constructor({window, entityClasses, context: moreContext = {}}: MonarchOptions<Partial<gContext> & any>) {
+	constructor({window, entityClasses, context: moreContext = {}}: MonarchOptions<MoreContext>) {
 		const state: State = observable({entries: new Map})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager({state, entities})
@@ -43,9 +49,9 @@ export class Monarch<gContext extends StandardContext = StandardContext> {
 			}
 		})
 
-		const context: gContext = {
+		const context = <MonarchContext & MoreContext>{
 			...moreContext,
-			...<StandardContext>{
+			...<MonarchContext>{
 				host,
 				manager,
 				network
@@ -79,10 +85,4 @@ export class Monarch<gContext extends StandardContext = StandardContext> {
 			}
 		}
 	}
-}
-
-export interface MonarchOptions<MoreContext = any> {
-	window: Window
-	entityClasses: EntityClasses
-	context?: MoreContext
 }

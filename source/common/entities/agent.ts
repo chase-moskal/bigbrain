@@ -1,19 +1,18 @@
 
 import {reaction} from "mobx"
 import {
-	Scene,
 	Mesh,
-	Vector3,
-	StandardMaterial,
+	Scene,
 	Color3,
+	Vector3,
 	InstancedMesh,
-	PhysicsImpostor
+	PhysicsImpostor,
+	StandardMaterial
 } from "babylonjs"
+import {Vec3, RaycastVehicle, RigidVehicle, WheelInfo, IWheelInfoOptions} from "cannon"
 
-import {Vec3, RigidVehicle} from "cannon"
-
+import {Context} from "../game"
 import {Entity} from "../../entity"
-import {GameContext} from "../game"
 import {Watcher, Input} from "../../watcher"
 import {loadBabylonMeshes} from "../../toolbox"
 import {Vector, Bearings} from "../../interfaces"
@@ -51,7 +50,7 @@ export interface TankMeshes {
 	tankWheel6: InstancedMesh
 }
 
-export class Agent extends Entity<GameContext, AgentEntry> {
+export class Agent extends Entity<Context, AgentEntry> {
 
 	private static assets: AgentAssets
 
@@ -117,12 +116,12 @@ export class Agent extends Entity<GameContext, AgentEntry> {
 			tankWheel5,
 			tankWheel6
 		} = meshes
+
+		// prepare the physics body
 		tankPhysicsBody.isVisible = false
 		tankPhysicsBody.physicsImpostor = new PhysicsImpostor(tankPhysicsBody, PhysicsImpostor.BoxImpostor, {mass: 10})
-		const vehicle = new RigidVehicle({
-			chassisBody: tankPhysicsBody.physicsImpostor.physicsBody
-		})
-		const down = new Vec3(0, -1, 0)
+
+		// parent tank parts to the physics body
 		for (const m of [
 			tankBody,
 			tankTurret,
@@ -139,6 +138,41 @@ export class Agent extends Entity<GameContext, AgentEntry> {
 			m.parent = tankPhysicsBody
 			m.setAbsolutePosition(p)
 		}
+
+		// vehicle simulation
+		const vehicle = new RaycastVehicle({
+			chassisBody: tankPhysicsBody.physicsImpostor.physicsBody
+		})
+
+		const {scene, physicsWorld} = this.context
+
+		const wheelInfo: IWheelInfoOptions = {
+			radius: 0.5,
+			directionLocal: new Vec3(0, 0, -1),
+			suspensionStiffness: 30,
+			suspensionRestLength: 1,
+			frictionSlip: 5,
+			dampingRelaxation: 2.3,
+			dampingCompression: 4.4,
+			maxSuspensionForce: 100000,
+			rollInfluence: 0.01,
+			axleLocal: new Vec3(0, 1, 0),
+			maxSuspensionTravel: 2,
+			customSlidingRotationalSpeed: -30,
+			useCustomSlidingRotationalSpeed: true,
+			chassisConnectionPointLocal: new Vec3(1, 1, 0)
+		}
+
+		// add wheels
+		vehicle.addWheel({...wheelInfo, chassisConnectionPointLocal: new Vec3(1, 1, 0)})
+		vehicle.addWheel({...wheelInfo, chassisConnectionPointLocal: new Vec3(1, -1, 0)})
+		vehicle.addWheel({...wheelInfo, chassisConnectionPointLocal: new Vec3(-1, 1, 0)})
+		vehicle.addWheel({...wheelInfo, chassisConnectionPointLocal: new Vec3(-1, -1, 0)})
+
+		// finalize vehicle
+		vehicle.addToWorld(physicsWorld)
+
+		// parent camera to the physics body
 		this.camera.parent = tankPhysicsBody
 	}
 

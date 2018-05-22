@@ -1,8 +1,8 @@
 
 import {Mesh, ShadowGenerator, SpotLight, PhysicsImpostor, Scene} from "babylonjs"
 
+import {Context} from "../game"
 import {Entity} from "../../entity"
-import {GameContext} from "../game"
 import {loadBabylonFile} from "../../toolbox"
 import {StateEntry, Message} from "../../interfaces"
 
@@ -11,7 +11,7 @@ export interface EnvironmentEntry extends StateEntry {
 	asset: string
 }
 
-export class Environment extends Entity<GameContext, EnvironmentEntry> {
+export class Environment extends Entity<Context, EnvironmentEntry> {
 
 	constructor(o) {
 		super(o)

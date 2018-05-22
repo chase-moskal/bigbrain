@@ -6,7 +6,7 @@ import {Manager} from "./manager"
 import {Network} from "./network"
 import {Entity, GenericEntity} from "./entity"
 
-export interface StandardContext {
+export interface MonarchContext {
 	readonly host: boolean
 	readonly manager: Manager
 	readonly network: Network

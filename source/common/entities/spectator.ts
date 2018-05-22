@@ -1,11 +1,11 @@
 
 import * as deepFreeze from "deep-freeze"
-import {observable, computed, reaction, autorun} from "mobx"
 import {Scene, FreeCamera, Vector3} from "babylonjs"
+import {observable, computed, reaction, autorun} from "mobx"
 
+import {Context} from "../game"
 import {Entity} from "../../entity"
 import {Ticker, Tick} from "../../ticker"
-import {GameContext} from "../game"
 import {loadBabylonFile} from "../../toolbox"
 import {Watcher, Input, Bindings, Status} from "../../watcher"
 import { Vector, Bearings, StateEntry, Message} from "../../interfaces"
@@ -58,8 +58,8 @@ export const bindings = {
 	sprint: [Input.Shift]
 }
 
-export class Spectator extends Entity<GameContext, SpectatorEntry> {
-	protected readonly context: GameContext
+export class Spectator extends Entity<Context, SpectatorEntry> {
+	protected readonly context: Context
 	private readonly camera: FreeCamera = makeCamera({
 		scene: this.context.scene,
 		bearings: this.entry.bearings,

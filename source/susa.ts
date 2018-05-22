@@ -1,5 +1,5 @@
 
-import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader, CannonJSPlugin} from "babylonjs"
+import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader, CannonJSPlugin, IPhysicsEnginePlugin} from "babylonjs"
 
 import {Vector} from "./interfaces"
 import {now, Service} from "./toolbox"
@@ -42,7 +42,7 @@ export class Susa implements Service {
 
 	constructor({engine, scene, window, canvas, physics}: SusaOptions) {
 		if (physics) {
-			scene.enablePhysics(Vector3.FromArray(physics.gravity), new CannonJSPlugin())
+			scene.enablePhysics(Vector3.FromArray(physics.gravity), physics.plugin)
 		}
 		canvas.onclick = () => canvas.requestPointerLock()
 		engine.isPointerLock = true
@@ -88,5 +88,6 @@ export interface SusaOptions {
 	canvas: HTMLCanvasElement
 	physics?: {
 		gravity: Vector
+		plugin: IPhysicsEnginePlugin
 	}
 }

@@ -2,8 +2,8 @@
 import {reaction} from "mobx"
 import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
+import {Context} from "../game"
 import {Ticker} from "../../ticker"
-import {GameContext} from "../game"
 import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
@@ -25,8 +25,8 @@ export const bindings = {
 
 const proposalHeight = 0.6
 
-export class Editor extends Entity<GameContext, EditorEntry> {
-	protected readonly context: GameContext
+export class Editor extends Entity<Context, EditorEntry> {
+	protected readonly context: Context
 
 	readonly camera: FreeCamera = makeCamera({
 		scene: this.context.scene,

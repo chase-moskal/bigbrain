@@ -1,11 +1,11 @@
 
 import {autorun, reaction} from "mobx"
 
+import {Context} from "../game"
 import {Entity} from "../../entity"
-import {GameContext} from "../game"
 import {Manager} from "../../manager"
-import {StateEntry, VectorZero, QuaternionZero} from "../../interfaces"
 import {Watcher, Input, Bindings} from "../../watcher"
+import {StateEntry, VectorZero, QuaternionZero} from "../../interfaces"
 
 import {Agent, AgentEntry} from "./agent"
 
@@ -18,7 +18,7 @@ const bindings = {
 	spawnNpc: [Input.F]
 }
 
-export class Director extends Entity<GameContext, DirectorEntry> {
+export class Director extends Entity<Context, DirectorEntry> {
 
 	private readonly watcher = new Watcher<typeof bindings>({
 		eventTarget: this.context.window,
