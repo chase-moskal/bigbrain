@@ -625,7 +625,7 @@
 		pointToWorldFrame(localPoint: Vec3, result?: Vec3): Vec3;
 		vectorToLocalFrame(worldPoint: Vec3, result?: Vec3): Vec3;
 		vectorToWorldFrame(localVector: Vec3, result?: Vec3): Vec3;
-		addShape(shape: Shape, offset?: Vec3, orientation?: Vec3): void;
+		addShape(shape: Shape, offset?: Vec3, orientation?: Quaternion): void;
 		computeAABB(): void;
 		applyForce(force: Vec3, worldPoint: Vec3): void;
 		applyImpulse(impulse: Vec3, worldPoint: Vec3): void;

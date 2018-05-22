@@ -25,8 +25,8 @@ export interface Update {
 export type Vector = [number, number, number]
 export type Quaternion = [number, number, number, number]
 
-export const VectorZero = [0, 0, 0]
-export const QuaternionZero = [0, 0, 0, 0]
+export const VectorZero: Vector = [0, 0, 0]
+export const QuaternionZero: Quaternion = [0, 0, 0, 0]
 
 /**
  * Spatial relationship with the world

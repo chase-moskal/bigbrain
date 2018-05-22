@@ -32,7 +32,7 @@ export class Director extends Entity<Context, DirectorEntry> {
 			type: "Agent",
 			player: true,
 			bearings: {
-				position: VectorZero,
+				position: [0, 10, 0],
 				rotation: QuaternionZero
 			}
 		})
