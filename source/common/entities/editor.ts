@@ -23,8 +23,6 @@ export const bindings = {
 	remove: [Input.X, Input.Backspace, Input.Delete]
 }
 
-const proposalHeight = 0.6
-
 export class Editor extends Entity<Context, EditorEntry> {
 	protected readonly context: Context
 
@@ -54,11 +52,16 @@ export class Editor extends Entity<Context, EditorEntry> {
 		return scene.pick(canvas.width / 2, canvas.height / 2)
 	}
 
+	private proposedSize: number = 1
+	private getRandomSize() {
+		return 0.1 + (Math.random() * 1.5)
+	}
+
 	private proposalMesh: Mesh = null
 	private readonly propsalTicker = new Ticker({
 		action: tick => {
 			const {aimpoint, proposalMesh} = this
-			if (aimpoint) aimpoint.y += proposalHeight
+			if (aimpoint) aimpoint.y += this.proposedSize / 2
 			this.proposalMesh.position = aimpoint || Vector3.Zero()
 		}
 	})
@@ -72,9 +75,10 @@ export class Editor extends Entity<Context, EditorEntry> {
 					const {scene} = this.context
 					const {aimpoint} = this
 					const position = <Vector>(aimpoint ? aimpoint.asArray() : [0, 0, 0])
+					const s = this.proposedSize = this.getRandomSize()
 					const physique: Physique = {
-						mass: 1,
-						size: [1, 1, 1]
+						mass: s,
+						size: [s, s, s]
 					}
 					const bearings: Bearings = {
 						position,
@@ -83,7 +87,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 					const mesh = createCubeProposalMesh(scene)
 					mesh.scaling = Vector3.FromArray(physique.size)
 					mesh.position = Vector3.FromArray(bearings.position)
-					mesh.position.y += proposalHeight
+					mesh.position.y += this.proposedSize / 2
 					this.proposalMesh = mesh
 					this.propsalTicker.start()
 				}
@@ -102,11 +106,12 @@ export class Editor extends Entity<Context, EditorEntry> {
 			const {scene, canvas, manager} = this.context
 			const {proposalMesh} = this
 			if (place && proposalMesh) {
+				const s = this.proposedSize
 				manager.addEntry(<CubeEntry>{
 					type: "Cube",
 					physique: {
-						mass: 1,
-						size: [1, 1, 1]
+						mass: s,
+						size: [s, s, s]
 					},
 					bearings: {
 						position: <Vector>proposalMesh.position.asArray(),
