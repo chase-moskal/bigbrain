@@ -9,7 +9,8 @@ export function assignPropsOntoMap(obj: Object, map: Map<string, any>) {
 	Object.keys(obj).forEach(key => map.set(key, obj[key]))
 }
 
-export const getEntityClass = (type: string, entityClasses: EntityClasses): typeof GenericEntity => {
+export const getEntityClass = (type: string, entityClasses: EntityClasses):
+typeof GenericEntity => {
 	const Class = <typeof GenericEntity><any>entityClasses[type]
 	if (!Class) throw new Error(`Unknown entity class "${type}"`)
 	return Class
@@ -28,7 +29,11 @@ export function pathBreakdown(path: string) {
 	return {dirpath, filename}
 }
 
-export async function loadBabylonFile(scene, path: string, onProgress: (event: ProgressEvent) => void = event => {}) {
+export async function loadBabylonFile(
+	scene,
+	path: string,
+	onProgress: (event: ProgressEvent) => void = event => {}
+) {
 	SceneLoader.ShowLoadingScreen = false
 	const {dirpath, filename} = pathBreakdown(path)
 	return new Promise((resolve, reject) => {
@@ -51,7 +56,13 @@ export async function loadBabylonMeshes(
 	SceneLoader.ShowLoadingScreen = false
 	const meshNames = ""
 	const {dirpath, filename} = pathBreakdown(path)
-	return SceneLoader.ImportMeshAsync(meshNames, dirpath, filename, scene, onProgress)
+	return SceneLoader.ImportMeshAsync(
+		meshNames,
+		dirpath,
+		filename,
+		scene,
+		onProgress
+	)
 }
 
 // mixin decorator
@@ -87,9 +98,10 @@ export class ServiceMaster implements Service {
 export const sleep = (milliseconds: number) =>
 	new Promise((resolve, reject) => setTimeout(resolve, milliseconds))
 
-export const environment: "browser" | "node" = new Function("try{return this===window}catch(e){return false}")()
-	? "browser"
-	: "node"
+export const environment: "browser" | "node" = new Function(
+	"try{return this===window}catch(e){return false}")()
+		? "browser"
+		: "node"
 
 declare const process: any
 

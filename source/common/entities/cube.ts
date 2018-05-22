@@ -154,10 +154,12 @@ export class Cube extends Entity<Context, CubeEntry> {
 	}
 
 	async destructor() {
-		const {mesh, ghostMesh} = await this.meshes
-		for (const disposable of [mesh, ghostMesh]) disposable.dispose()
+		for (const dispose of this.reactions) dispose()
 
 		const {ticker} = this
 		if (ticker) ticker.destructor()
+
+		const {mesh, ghostMesh} = await this.meshes
+		for (const disposable of [mesh, ghostMesh]) disposable.dispose()
 	}
 }

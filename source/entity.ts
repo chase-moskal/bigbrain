@@ -20,7 +20,10 @@ export abstract class Entity<
 	}
 
 	get entry(): gStateEntry {
-		return deepFreeze(copy(this.state.entries.get(this.id)))
+		const raw = this.state.entries.get(this.id)
+		return raw
+			? deepFreeze(copy(raw))
+			: raw
 	}
 
 	protected async init() {}

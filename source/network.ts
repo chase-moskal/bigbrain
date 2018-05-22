@@ -19,10 +19,19 @@ export abstract class Network {
 	@action applyUpdate(update: Update) {
 		const {state} = this
 		const {allEntries, someEntries} = update
-		if (allEntries)
+		if (allEntries) {
 			state.entries.clear()
-		const entries = allEntries || someEntries
-		assignPropsOntoMap(copy(entries), state.entries)
+			assignPropsOntoMap(copy(allEntries), state.entries)
+		}
+		if (someEntries) {
+			Object.keys(someEntries).forEach(key => {
+				const entry = state.entries.get(key)
+				if (entry) {
+					const fresh = copy(someEntries[key])
+					state.entries.set(key, fresh)
+				}
+			})
+		}
 		this.handleMessages(update.messages)
 	}
 
