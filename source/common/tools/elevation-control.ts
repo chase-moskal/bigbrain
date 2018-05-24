@@ -26,7 +26,7 @@ export class ElevationControl {
 
 	private prepareParticleSystem(scene: BABYLON.Scene) {
 		const particleSystem = new BABYLON.ParticleSystem("particles", 4000, scene)
-		particleSystem.particleTexture = new BABYLON.Texture("Assets/Flare.png", scene)
+		particleSystem.particleTexture = new BABYLON.Texture("assets/worldmonger/flare.png", scene)
 		particleSystem.minAngularSpeed = -4.5
 		particleSystem.maxAngularSpeed = 4.5
 		particleSystem.minSize = 0.5
@@ -119,7 +119,7 @@ export class ElevationControl {
 		this._ground.getScene().registerBeforeRender(this._onBeforeRender)
 	}
 
-	private detachControl(canvas: HTMLCanvasElement) {
+	detachControl(canvas: HTMLCanvasElement) {
 		canvas.removeEventListener("pointerdown", this._onPointerDown)
 		canvas.removeEventListener("pointerup", this._onPointerUp)
 		canvas.removeEventListener("pointerout", this._onPointerUp)
