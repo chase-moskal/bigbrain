@@ -3,6 +3,7 @@ import {makeGame} from "./game"
 import {Cube, CubeEntry} from "./entities/cube"
 import {Agent, AgentEntry} from "./entities/agent"
 import {Editor, EditorEntry} from "./entities/editor"
+import {Terrain, TerrainEntry} from "./entities/terrain"
 import {Director, DirectorEntry} from "./entities/director"
 import {Spectator, SpectatorEntry} from "./entities/spectator"
 import {Environment, EnvironmentEntry} from "./entities/environment"
@@ -12,18 +13,19 @@ import {Entity} from "../entity"
 const {monarch} = makeGame({
 	canvas: document.querySelector("canvas"),
 	entityClasses: {
-		Environment,
-		Spectator,
-		Editor,
 		Cube,
+		Agent,
+		Terrain,
+		Editor,
 		Director,
-		Agent
+		Spectator,
+		Environment
 	}
 })
 
-monarch.manager.addEntry<EnvironmentEntry>({
-	type: "Environment",
-	asset: "assets/playground.babylon"
+monarch.manager.addEntry<TerrainEntry>({
+	type: "Terrain",
+	worldmongerPath: "assets/worldmonger"
 })
 
 monarch.manager.addEntry<DirectorEntry>({
@@ -33,7 +35,7 @@ monarch.manager.addEntry<DirectorEntry>({
 monarch.manager.addEntry<EditorEntry>({
 	type: "Editor",
 	bearings: {
-		position: [0, 2, -5],
+		position: [0, 10, -5],
 		rotation: [0, 0, 0, 0]
 	}
 })
