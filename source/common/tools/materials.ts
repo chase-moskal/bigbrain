@@ -43,7 +43,7 @@ export class GroundMaterial extends BABYLON.Material {
 		this.groundTexture.uScale = 6.0
 		this.groundTexture.vScale = 6.0
 
-		this.grassTexture = new BABYLON.Texture(`${paths.ground}/grass.jpg`, scene)
+		this.grassTexture = new BABYLON.Texture(`assets/terrain/terrain-diffuse.jpg`, scene)
 		this.grassTexture.uScale = 6.0
 		this.grassTexture.vScale = 6.0
 
