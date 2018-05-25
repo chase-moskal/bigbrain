@@ -38,7 +38,9 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 		skybox.material = skyboxMaterial
 
 		// Grounds
-		const ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", `${worldmongerPath}/height-map.png`, 100, 100, 100, 0, 12, scene, true)
+		const ground = BABYLON.Mesh.CreateGroundFromHeightMap("ground", `${worldmongerPath}/height-map.png`, 100, 100, 100, 0, 12, scene, true, mesh => {
+			ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.HeightmapImpostor, {mass: 0})
+		})
 		const groundMaterial = new GroundMaterial("ground", scene, sun)
 		ground.material = groundMaterial
 		ground.position.y = -2.0
@@ -50,6 +52,7 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 		; (<any>extraGroundMaterial.diffuseTexture).vScale = 60
 		extraGround.position.y = -2.05
 		extraGround.material = extraGroundMaterial
+		extraGround.physicsImpostor = new BABYLON.PhysicsImpostor(extraGround, BABYLON.PhysicsImpostor.BoxImpostor, {mass: 0})
 
 		// Water
 		const water = BABYLON.Mesh.CreateGround("water", 1000, 1000, 1, scene, false)

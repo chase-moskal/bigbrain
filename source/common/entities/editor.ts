@@ -25,11 +25,12 @@ export const bindings = {
 
 export class Editor extends Entity<Context, EditorEntry> {
 	protected readonly context: Context
+	private readonly propSpawnHeight: number = 0.2
 
 	readonly camera: FreeCamera = makeCamera({
 		scene: this.context.scene,
 		bearings: this.entry.bearings,
-		speed: 0.1
+		speed: 0.4
 	})
 
 	private readonly watcher = new Watcher<typeof bindings>({eventTarget: this.context.window, bindings})
@@ -61,7 +62,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 	private readonly propsalTicker = new Ticker({
 		action: tick => {
 			const {aimpoint, proposalMesh} = this
-			if (aimpoint) aimpoint.y += this.proposedSize / 2
+			if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
 			this.proposalMesh.position = aimpoint || Vector3.Zero()
 		}
 	})
@@ -87,7 +88,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 					const mesh = createCubeProposalMesh(scene)
 					mesh.scaling = Vector3.FromArray(physique.size)
 					mesh.position = Vector3.FromArray(bearings.position)
-					mesh.position.y += this.proposedSize / 2
+					mesh.position.y += this.proposedSize + this.propSpawnHeight
 					this.proposalMesh = mesh
 					this.propsalTicker.start()
 				}
