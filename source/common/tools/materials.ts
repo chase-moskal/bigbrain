@@ -13,6 +13,7 @@ import * as BABYLON from "babylonjs"
 const paths = {
 	ground: "assets/worldmonger/shaders/ground",
 	water: "assets/worldmonger/shaders/water",
+	terrain: "assets/terrain"
 }
 
 export class GroundMaterial extends BABYLON.Material {
@@ -43,7 +44,7 @@ export class GroundMaterial extends BABYLON.Material {
 		this.groundTexture.uScale = 6.0
 		this.groundTexture.vScale = 6.0
 
-		this.grassTexture = new BABYLON.Texture(`assets/terrain/terrain-diffuse.jpg`, scene)
+		this.grassTexture = new BABYLON.Texture(`${paths.terrain}/dirt-01-diffuse.jpg`, scene)
 		this.grassTexture.uScale = 6.0
 		this.grassTexture.vScale = 6.0
 

@@ -35,7 +35,7 @@ monarch.manager.addEntry<DirectorEntry>({
 monarch.manager.addEntry<EditorEntry>({
 	type: "Editor",
 	bearings: {
-		position: [0, 10, -5],
+		position: [0, 25, -5],
 		rotation: [0, 0, 0, 0]
 	}
 })
