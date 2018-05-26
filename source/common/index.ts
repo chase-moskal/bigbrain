@@ -1,12 +1,9 @@
 
 import {makeGame} from "./game"
 import {Cube, CubeEntry} from "./entities/cube"
-import {Agent, AgentEntry} from "./entities/agent"
+import {Ground, GroundEntry} from "./entities/ground"
 import {Editor, EditorEntry} from "./entities/editor"
-import {Terrain, TerrainEntry} from "./entities/terrain"
 import {Director, DirectorEntry} from "./entities/director"
-import {Spectator, SpectatorEntry} from "./entities/spectator"
-import {Environment, EnvironmentEntry} from "./entities/environment"
 
 import {Entity} from "../entity"
 
@@ -15,18 +12,14 @@ const {monarch} = makeGame({
 	overlay: document.querySelector(".overlay"),
 	entityClasses: {
 		Cube,
-		Agent,
-		Terrain,
 		Editor,
 		Director,
-		Spectator,
-		Environment
+		Ground
 	}
 })
 
-monarch.manager.addEntry<TerrainEntry>({
-	type: "Terrain",
-	worldmongerPath: "assets/worldmonger"
+monarch.manager.addEntry<GroundEntry>({
+	type: "Ground"
 })
 
 monarch.manager.addEntry<DirectorEntry>({
@@ -36,7 +29,7 @@ monarch.manager.addEntry<DirectorEntry>({
 monarch.manager.addEntry<EditorEntry>({
 	type: "Editor",
 	bearings: {
-		position: [0, 25, -5],
+		position: [0, 10, -5],
 		rotation: [0, 0, 0, 0]
 	}
 })
