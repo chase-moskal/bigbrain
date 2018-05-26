@@ -1,5 +1,6 @@
 
 import {reaction} from "mobx"
+import * as nipplejs from "nipplejs"
 import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
 import {Context} from "../game"
@@ -10,6 +11,19 @@ import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
 
 import {CubeEntry, createCubeMesh, createCubeProposalMesh} from "./cube"
 import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
+
+export function establishVirtualThumbstick({zone}: {
+	zone: HTMLElement
+}) {
+	const manager = nipplejs.create({
+		zone,
+		size: 200,
+		color: "white",
+		mode: "static",
+		position: {bottom: "50%", left: "50%"}
+	})
+	return {manager}
+}
 
 export interface EditorEntry {
 	type: "Editor"
@@ -66,6 +80,21 @@ export class Editor extends Entity<Context, EditorEntry> {
 			this.proposalMesh.position = aimpoint || Vector3.Zero()
 		}
 	})
+
+	private thumbsticks = (() => {
+		const {hud} = this.context
+		const zones = {
+			left: hud.querySelector<HTMLDivElement>(".leftstick"),
+			right: hud.querySelector<HTMLDivElement>(".rightstick")
+		}
+		const leftStick = establishVirtualThumbstick({zone: zones.left})
+		const rightStick = establishVirtualThumbstick({zone: zones.right})
+		rightStick.manager.on("move", (event, nipple) => {})
+		leftStick.manager.on("move", (event, nipple) => {})
+		const thumbsticks = {leftStick, rightStick}
+		window["thumbsticks"] = thumbsticks
+		return thumbsticks
+	})()
 
 	private reactions = [
 

@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.14",
+	"version": "0.4.0-dev.15",
 	"description": "concept game engine",
 	"main": "dist/monarch",
 	"types": "dist/monarch.d.ts",
@@ -45,6 +45,7 @@
 		"jest": "22.4.4",
 		"jsondiffpatch": "0.3.10",
 		"mobx": "4.2.1",
+		"nipplejs": "0.6.8",
 		"oimo": "1.0.9",
 		"uuid": "3.2.1"
 	}

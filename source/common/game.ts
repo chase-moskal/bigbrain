@@ -1,6 +1,6 @@
 
-import {Engine, Scene, Vector3, CannonJSPlugin} from "babylonjs"
 import {World} from "cannon"
+import {Engine, Scene, Vector3, CannonJSPlugin} from "babylonjs"
 
 import {Susa} from "../susa"
 import {Monarch} from "../monarch"
@@ -10,13 +10,15 @@ import {MonarchContext} from "../interfaces"
 export interface GameContext {
 	scene: Scene
 	window: Window
-	canvas: HTMLCanvasElement
+	hud: HTMLDivElement
 	physicsWorld: World
+	canvas: HTMLCanvasElement
 }
 
 export type Context = MonarchContext & GameContext
 
 export interface MakeGameOptions {
+	hud: HTMLDivElement
 	canvas: HTMLCanvasElement
 	entityClasses: EntityClasses
 }
@@ -28,7 +30,7 @@ export interface MakeGameResults {
 	scene: Scene
 }
 
-export function makeGame({canvas, entityClasses}: MakeGameOptions): MakeGameResults {
+export function makeGame({canvas, hud, entityClasses}: MakeGameOptions): MakeGameResults {
 	const engine = new Engine(canvas, true)
 	const scene = new Scene(engine)
 	const physicsPlugin = new CannonJSPlugin()
@@ -41,6 +43,7 @@ export function makeGame({canvas, entityClasses}: MakeGameOptions): MakeGameResu
 			scene,
 			window,
 			canvas,
+			hud,
 			physicsWorld
 		}
 	})
