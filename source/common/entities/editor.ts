@@ -82,10 +82,10 @@ export class Editor extends Entity<Context, EditorEntry> {
 	})
 
 	private thumbsticks = (() => {
-		const {hud} = this.context
+		const {overlay} = this.context
 		const zones = {
-			left: hud.querySelector<HTMLDivElement>(".leftstick"),
-			right: hud.querySelector<HTMLDivElement>(".rightstick")
+			left: overlay.querySelector<HTMLDivElement>(".leftstick"),
+			right: overlay.querySelector<HTMLDivElement>(".rightstick")
 		}
 		const leftStick = establishVirtualThumbstick({zone: zones.left})
 		const rightStick = establishVirtualThumbstick({zone: zones.right})

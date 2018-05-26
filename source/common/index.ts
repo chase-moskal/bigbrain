@@ -12,7 +12,7 @@ import {Entity} from "../entity"
 
 const {monarch} = makeGame({
 	canvas: document.querySelector("canvas"),
-	hud: document.querySelector(".hud"),
+	overlay: document.querySelector(".overlay"),
 	entityClasses: {
 		Cube,
 		Agent,

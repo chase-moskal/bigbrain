@@ -10,7 +10,7 @@ import {MonarchContext} from "../interfaces"
 export interface GameContext {
 	scene: Scene
 	window: Window
-	hud: HTMLDivElement
+	overlay: HTMLDivElement
 	physicsWorld: World
 	canvas: HTMLCanvasElement
 }
@@ -18,7 +18,7 @@ export interface GameContext {
 export type Context = MonarchContext & GameContext
 
 export interface MakeGameOptions {
-	hud: HTMLDivElement
+	overlay: HTMLDivElement
 	canvas: HTMLCanvasElement
 	entityClasses: EntityClasses
 }
@@ -30,7 +30,7 @@ export interface MakeGameResults {
 	scene: Scene
 }
 
-export function makeGame({canvas, hud, entityClasses}: MakeGameOptions): MakeGameResults {
+export function makeGame({canvas, overlay, entityClasses}: MakeGameOptions): MakeGameResults {
 	const engine = new Engine(canvas, true)
 	const scene = new Scene(engine)
 	const physicsPlugin = new CannonJSPlugin()
@@ -43,7 +43,7 @@ export function makeGame({canvas, hud, entityClasses}: MakeGameOptions): MakeGam
 			scene,
 			window,
 			canvas,
-			hud,
+			overlay,
 			physicsWorld
 		}
 	})
