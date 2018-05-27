@@ -5,7 +5,9 @@
 
 ### [**🔫 nanoshooter is built on monarch**](https://github.com/monarch-games/nanoshooter)
 
-**concept game engine of chase moskal's dreams**
+### [**📦 npm package `monarch-engine`**](https://www.npmjs.com/package/monarch-engine)
+
+concept game engine of chase moskal's dreams
 - wasd and the mouse to fly around
 - hold e key and click to place cubes
 - remove them by looking at them and pressing x
