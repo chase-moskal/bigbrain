@@ -1,15 +1,15 @@
 
 import {action} from "mobx"
 import {assignPropsOntoMap, copy} from "./toolbox"
-import {State, Message, Update, OrchestrationMode} from "./interfaces"
+import {State, Message, Update, ModeOfConduct} from "./interfaces"
 
 export abstract class Network {
-	protected readonly mode: OrchestrationMode
+	protected readonly mode: ModeOfConduct
 	protected readonly state: State
 	protected readonly handleMessages: (messages: Message[]) => void
 
 	constructor({state, mode, handleMessages}: {
-		mode: OrchestrationMode
+		mode: ModeOfConduct
 		state: State
 		handleMessages: (messages: Message[]) => void
 	}) {

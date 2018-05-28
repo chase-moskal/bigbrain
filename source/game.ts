@@ -6,7 +6,9 @@ import {Susa} from "./susa"
 import {Manager} from "./manager"
 import {EntityClasses} from "./entity"
 import {Conductor, ConductorOptions} from "./conductor"
-import {StandardContext, OrchestrationMode} from "./interfaces"
+import {StandardContext, ModeOfConduct} from "./interfaces"
+
+export {ModeOfConduct} from "./interfaces"
 
 export interface GameContext {
 	scene: Scene

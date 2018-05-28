@@ -6,14 +6,14 @@ import {Manager} from "./manager"
 import {Network} from "./network"
 import {Entity, GenericEntity} from "./entity"
 
-export enum OrchestrationMode {
+export enum ModeOfConduct {
 	Alone,
 	Host,
 	Client
 }
 
 export interface StandardContext {
-	readonly mode: OrchestrationMode
+	readonly mode: ModeOfConduct
 	readonly manager: Manager
 	readonly network: Network
 }

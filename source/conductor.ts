@@ -6,10 +6,10 @@ import {Manager} from "./manager"
 import {getEntityClass} from "./toolbox"
 import {Entity, EntityClasses} from "./entity"
 import {Network, LoopbackNetwork} from "./network"
-import {State, StandardContext, StateEntries, OrchestrationMode} from "./interfaces"
+import {State, StandardContext, StateEntries, ModeOfConduct} from "./interfaces"
 
 export interface ConductorOptions<AdditionalContext = any> {
-	mode: OrchestrationMode
+	mode: ModeOfConduct
 	entityClasses: EntityClasses
 	context?: AdditionalContext
 }
@@ -21,7 +21,7 @@ export class Conductor<AdditionalContext = any> {
 		const state: State = observable({entries: new Map()})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager({state, entities})
-		const mode = OrchestrationMode.Alone
+		const mode = ModeOfConduct.Alone
 
 		const network = new LoopbackNetwork({
 			mode,
