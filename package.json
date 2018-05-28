@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.19",
+	"version": "0.4.0-dev.20",
 	"description": "concept game engine",
 	"main": "dist/monarch",
 	"types": "dist/monarch.d.ts",
@@ -15,6 +15,13 @@
 		"test": "jest --verbose",
 		"prepare": "npm run build -s && npm test -s"
 	},
+	"files": [
+		"dist",
+		"source",
+		"types",
+		"index.html",
+		"style.css"
+	],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/monarch-games/engine.git"
