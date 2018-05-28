@@ -68,7 +68,7 @@ export class Agent extends Entity<Context, AgentEntry> {
 
 	private async loadAssets() {
 		const {scene} = this.context
-		const meshes = <Mesh[]>(await loadBabylonMeshes(scene, "assets/tank.babylon")).meshes
+		const meshes = <Mesh[]>(await loadBabylonMeshes(scene, "assets/tank/tank.babylon")).meshes
 		for (const mesh of meshes) {
 			mesh.isVisible = false
 			mesh.convertToFlatShadedMesh()
