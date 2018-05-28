@@ -6,13 +6,13 @@
 	"suppressTaskName": true,
 	"tasks": [
 		{
-			"taskName": "install (production build)",
+			"taskName": "production build",
 			"args": ["install", "--silent"],
 			"problemMatcher": ["$tsc"]
 		},
 		{
 			"isBuildCommand": true,
-			"taskName": "development build",
+			"taskName": "debug build",
 			"args": ["run", "build-debug", "--silent"],
 			"problemMatcher": ["$tsc"]
 		}
