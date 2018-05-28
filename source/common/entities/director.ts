@@ -1,7 +1,7 @@
 
 import {autorun, reaction} from "mobx"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {Manager} from "../../manager"
 import {Watcher, Input, Bindings} from "../../watcher"

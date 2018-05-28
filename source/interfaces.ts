@@ -6,8 +6,14 @@ import {Manager} from "./manager"
 import {Network} from "./network"
 import {Entity, GenericEntity} from "./entity"
 
-export interface MonarchContext {
-	readonly host: boolean
+export enum OrchestrationMode {
+	Alone,
+	Host,
+	Client
+}
+
+export interface StandardContext {
+	readonly mode: OrchestrationMode
 	readonly manager: Manager
 	readonly network: Network
 }

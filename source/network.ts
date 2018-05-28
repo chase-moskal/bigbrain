@@ -1,19 +1,19 @@
 
 import {action} from "mobx"
 import {assignPropsOntoMap, copy} from "./toolbox"
-import {State, Message, Update} from "./interfaces"
+import {State, Message, Update, OrchestrationMode} from "./interfaces"
 
 export abstract class Network {
-	protected readonly host: boolean
+	protected readonly mode: OrchestrationMode
 	protected readonly state: State
 	protected readonly handleMessages: (messages: Message[]) => void
 
-	constructor({state, host, handleMessages}: {
-		host: boolean
+	constructor({state, mode, handleMessages}: {
+		mode: OrchestrationMode
 		state: State
 		handleMessages: (messages: Message[]) => void
 	}) {
-		Object.assign(this, {state, host, handleMessages})
+		Object.assign(this, {state, mode, handleMessages})
 	}
 
 	@action applyUpdate(update: Update) {

@@ -3,7 +3,7 @@
 import {MeshBuilder, Mesh, Scene, HemisphericLight, PointLight, SpotLight, PhysicsImpostor} from "babylonjs"
 import * as babylon from "babylonjs"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {loadBabylonFile} from "../../toolbox"
 import {StateEntry, Message} from "../../interfaces"

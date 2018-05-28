@@ -1,11 +1,12 @@
 
-source
+/coverage
+/dist/_archive
+/dist/**/*.test.js
+/source
 
-dist/_archive
-dist/**/*.test.js
+/.nyc*
+/*.tgz
 
-.nyc*
-travis*
-tslint*
-tsconfig*
-coverage
+/travis*
+/tslint*
+/tsconfig*

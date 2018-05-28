@@ -3,7 +3,7 @@ import * as deepFreeze from "deep-freeze"
 import {Scene, FreeCamera, Vector3} from "babylonjs"
 import {observable, computed, reaction, autorun} from "mobx"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {Ticker, Tick} from "../../ticker"
 import {loadBabylonFile} from "../../toolbox"

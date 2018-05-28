@@ -3,7 +3,7 @@ import {reaction} from "mobx"
 import * as nipplejs from "nipplejs"
 import {FreeCamera, Mesh, Vector3} from "babylonjs"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {Ticker} from "../../ticker"
 import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"

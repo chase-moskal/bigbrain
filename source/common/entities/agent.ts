@@ -14,7 +14,7 @@ import {
 import {Vec3, RaycastVehicle, WheelInfo, IWheelInfoOptions, Cylinder, Body} from "cannon"
 import * as cannon from "cannon"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {loadBabylonMeshes} from "../../toolbox"

@@ -3,10 +3,10 @@ import {observable} from "mobx"
 import * as deepFreeze from "deep-freeze"
 
 import {copy} from "./toolbox"
-import {MonarchContext, StateEntry, Message, State} from "./interfaces"
+import {StandardContext, StateEntry, Message, State} from "./interfaces"
 
 export abstract class Entity<
-	gContext extends MonarchContext = MonarchContext,
+	gContext extends StandardContext = StandardContext,
 	gStateEntry extends StateEntry = StateEntry
 > {
 	readonly id: string

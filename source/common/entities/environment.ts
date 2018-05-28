@@ -1,7 +1,7 @@
 
 import {Mesh, ShadowGenerator, SpotLight, PhysicsImpostor, Scene} from "babylonjs"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {loadBabylonFile} from "../../toolbox"
 import {StateEntry, Message} from "../../interfaces"

@@ -12,7 +12,7 @@ import {
 
 import {autorun} from "mobx"
 
-import {Context} from "../game"
+import {Context} from "../../game"
 import {copy} from "../../toolbox"
 import {Entity} from "../../entity"
 import {Ticker} from "../../ticker"
