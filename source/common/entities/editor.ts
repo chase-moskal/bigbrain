@@ -8,9 +8,8 @@ import {Ticker} from "../../ticker"
 import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
-
 import {CubeEntry, createCubeMesh, createCubeProposalMesh} from "./cube"
-import {makeCamera, applyLogicalMovement, bindings as spectatorBindings} from "./spectator"
+import {makeCamera, applyLogicalMovement, traversiveBindings} from "../tools/camtools"
 
 export function establishVirtualThumbstick({zone}: {
 	zone: HTMLElement
@@ -31,7 +30,7 @@ export interface EditorEntry {
 }
 
 export const bindings = {
-	...spectatorBindings,
+	...traversiveBindings,
 	propose: [Input.E],
 	place: [Input.MouseLeft],
 	remove: [Input.X, Input.Backspace, Input.Delete]
@@ -90,7 +89,9 @@ export class Editor extends Entity<Context, EditorEntry> {
 		const leftStick = establishVirtualThumbstick({zone: zones.left})
 		const rightStick = establishVirtualThumbstick({zone: zones.right})
 		rightStick.manager.on("move", (event, nipple) => {})
-		leftStick.manager.on("move", (event, nipple) => {})
+		leftStick.manager.on("move", (event, nipple) => {
+			console.log("left stick move", event, nipple)
+		})
 		const thumbsticks = {leftStick, rightStick}
 		window["thumbsticks"] = thumbsticks
 		return thumbsticks
