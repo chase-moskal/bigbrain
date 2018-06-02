@@ -182,11 +182,34 @@ export interface ThumbstickInfo {
 	pressure: number
 }
 
-export function calculateDesiredMove(params: {
+export function calculateDesiredMove({
+	watcher,
+	stickInfo,
+	maxSpeed = 1,
+	sprintFactor = 3
+}: {
 	watcher: Watcher<typeof traversiveBindings>
 	stickInfo: ThumbstickInfo
+	maxSpeed?: number
+	sprintFactor?: number
 }): babylon.Vector3 {
-	return babylon.Vector3.Zero()
+	const control = {...watcher.status}
+	let speed = maxSpeed
+
+	if (!control.sprint) speed /= sprintFactor
+
+	// todo: find a better way to attain normalized vector
+	//   that is equivalent to thumbstick action
+	//   also add thumbstick action
+	const move = Vector3.Zero()
+	if (control.forward) move.z += speed
+	if (control.backward) move.z -= speed
+	if (control.left) move.x -= speed
+	if (control.right) move.x += speed
+	if (control.raise) move.y += speed
+	if (control.lower) move.y -= speed
+
+	return move
 }
 
 export function calculateDesiredLook(params: {

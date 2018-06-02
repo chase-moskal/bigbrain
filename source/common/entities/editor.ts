@@ -9,10 +9,11 @@ import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
 import {CubeEntry, createCubeMesh, createCubeProposalMesh} from "./cube"
-import {makeCamera, applyLogicalMovement, traversiveBindings} from "../tools/camtools"
+import {makeCamera, applyLogicalMovement, traversiveBindings, ThumbstickInfo, calculateDesiredMove} from "../tools/camtools"
 
-export function establishVirtualThumbstick({zone}: {
+export function establishVirtualThumbstick({zone, onChange}: {
 	zone: HTMLElement
+	onChange: (event, info: ThumbstickInfo) => void
 }) {
 	const manager = nipplejs.create({
 		zone,
@@ -50,7 +51,23 @@ export class Editor extends Entity<Context, EditorEntry> {
 
 	private readonly ticker: Ticker = (() => {
 		const {camera, watcher} = this
-		const ticker = new Ticker({action: tick => applyLogicalMovement({tick, camera, watcher})})
+		const ticker = new Ticker({action: tick => {
+
+			// will remove this line
+			applyLogicalMovement({tick, camera, watcher})
+
+			if (this.thumbsticks) {
+
+				// working on this routine instead
+				const move = calculateDesiredMove({
+					watcher,
+					stickInfo: this.thumbsticks.leftStickInfo
+				})
+
+				console.log("calculateDesiredMove", move)
+			}
+
+		}})
 		ticker.start()
 		return ticker
 	})()
@@ -86,13 +103,18 @@ export class Editor extends Entity<Context, EditorEntry> {
 			left: overlay.querySelector<HTMLDivElement>(".leftstick"),
 			right: overlay.querySelector<HTMLDivElement>(".rightstick")
 		}
-		const leftStick = establishVirtualThumbstick({zone: zones.left})
-		const rightStick = establishVirtualThumbstick({zone: zones.right})
-		rightStick.manager.on("move", (event, nipple) => {})
-		leftStick.manager.on("move", (event, nipple) => {
-			console.log("left stick move", event, nipple)
-		})
-		const thumbsticks = {leftStick, rightStick}
+		const leftStick = establishVirtualThumbstick({zone: zones.left, onChange: (event, info) => {
+			thumbsticks.leftStickInfo = info
+		}})
+		const rightStick = establishVirtualThumbstick({zone: zones.right, onChange: (event, info) => {
+			thumbsticks.rightStickInfo = info
+		}})
+		const thumbsticks = {
+			leftStick,
+			rightStick,
+			leftStickInfo: undefined,
+			rightStickInfo: undefined
+		}
 		window["thumbsticks"] = thumbsticks
 		return thumbsticks
 	})()
