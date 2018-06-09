@@ -40,7 +40,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 		const {camera, watcher} = this
 		const ticker = new Ticker({action: tick => {
 			if (this.thumbsticks) {
-				const stickInfo = this.thumbsticks.leftStickInfo
+				const stickInfo = this.thumbsticks.movementStickInfo
 				const move = ascertainMovement({watcher, stickInfo})
 				enactMovement({node: <any>this.camera, move})
 			}
@@ -81,25 +81,16 @@ export class Editor extends Entity<Context, EditorEntry> {
 			right: overlay.querySelector<HTMLDivElement>(".rightstick")
 		}
 
-		const leftStick = makeThumbstick({
+		const movementStick = makeThumbstick({
 			zone: zones.left,
 			onMove: info => {
-				thumbsticks.leftStickInfo = info
+				thumbsticks.movementStickInfo = info
 			}
 		})
 
-		// const rightStick = makeThumbstick({
-		// 	zone: zones.left,
-		// 	onMove: info => {
-		// 		thumbsticks.rightStickInfo = info
-		// 	}
-		// })
-
 		const thumbsticks = {
-			leftStick,
-			// rightStick,
-			leftStickInfo: undefined,
-			// rightStickInfo: undefined
+			movementStick,
+			movementStickInfo: undefined,
 		}
 
 		window["thumbsticks"] = thumbsticks

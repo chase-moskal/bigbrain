@@ -121,6 +121,10 @@ export interface PointerMovement {
 	y: number
 }
 
+export function getVectorMagnitude(vector: babylon.Vector3): number {
+	return Math.sqrt((vector.x ** 2) + (vector.y ** 2) + (vector.z ** 2))
+}
+
 export function ascertainMovement({
 	watcher,
 	stickInfo,
@@ -160,10 +164,11 @@ export function ascertainMovement({
 		if (control.lower) move.y -= speed
 	}
 
-	move.normalize()
+	if (getVectorMagnitude(move) > 1)
+		move.normalize()
+
 	return move
 }
-
 
 export function enactMovement({node, move}: {
 	node: {
