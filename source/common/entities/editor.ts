@@ -9,21 +9,8 @@ import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
 import {CubeEntry, createCubeMesh, createCubeProposalMesh} from "./cube"
-import {makeCamera, applyLogicalMovement, traversiveBindings, ThumbstickInfo, calculateDesiredMove} from "../tools/camtools"
-
-export function establishVirtualThumbstick({zone, onChange}: {
-	zone: HTMLElement
-	onChange: (event, info: ThumbstickInfo) => void
-}) {
-	const manager = nipplejs.create({
-		zone,
-		size: 200,
-		color: "white",
-		mode: "static",
-		position: {bottom: "50%", left: "50%"}
-	})
-	return {manager}
-}
+import {makeThumbstick, ThumbstickInfo} from "../tools/thumbstick"
+import {makeCamera, applyLogicalMovement, traversiveBindings, ascertainMovement, enactMovement} from "../tools/camtools"
 
 export interface EditorEntry {
 	type: "Editor"
@@ -52,21 +39,11 @@ export class Editor extends Entity<Context, EditorEntry> {
 	private readonly ticker: Ticker = (() => {
 		const {camera, watcher} = this
 		const ticker = new Ticker({action: tick => {
-
-			// will remove this line
-			applyLogicalMovement({tick, camera, watcher})
-
 			if (this.thumbsticks) {
-
-				// working on this routine instead
-				const move = calculateDesiredMove({
-					watcher,
-					stickInfo: this.thumbsticks.leftStickInfo
-				})
-
-				console.log("calculateDesiredMove", move)
+				const stickInfo = this.thumbsticks.leftStickInfo
+				const move = ascertainMovement({watcher, stickInfo})
+				enactMovement({node: <any>this.camera, move})
 			}
-
 		}})
 		ticker.start()
 		return ticker
@@ -103,18 +80,28 @@ export class Editor extends Entity<Context, EditorEntry> {
 			left: overlay.querySelector<HTMLDivElement>(".leftstick"),
 			right: overlay.querySelector<HTMLDivElement>(".rightstick")
 		}
-		const leftStick = establishVirtualThumbstick({zone: zones.left, onChange: (event, info) => {
-			thumbsticks.leftStickInfo = info
-		}})
-		const rightStick = establishVirtualThumbstick({zone: zones.right, onChange: (event, info) => {
-			thumbsticks.rightStickInfo = info
-		}})
+
+		const leftStick = makeThumbstick({
+			zone: zones.left,
+			onMove: info => {
+				thumbsticks.leftStickInfo = info
+			}
+		})
+
+		// const rightStick = makeThumbstick({
+		// 	zone: zones.left,
+		// 	onMove: info => {
+		// 		thumbsticks.rightStickInfo = info
+		// 	}
+		// })
+
 		const thumbsticks = {
 			leftStick,
-			rightStick,
+			// rightStick,
 			leftStickInfo: undefined,
-			rightStickInfo: undefined
+			// rightStickInfo: undefined
 		}
+
 		window["thumbsticks"] = thumbsticks
 		return thumbsticks
 	})()

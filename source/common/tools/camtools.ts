@@ -6,6 +6,7 @@ import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {Ticker, Tick} from "../../ticker"
 import {loadBabylonFile} from "../../toolbox"
+import {ThumbstickInfo} from "../tools/thumbstick"
 import {Watcher, Input, Bindings, Status} from "../../watcher"
 import {Vector, Bearings, StateEntry, Message} from "../../interfaces"
 
@@ -120,69 +121,7 @@ export interface PointerMovement {
 	y: number
 }
 
-/**
- * ASCERTAIN FREE WILL PARAMS
- * - user inputs relating to movement and mouselook
- */
-export interface AscertainFreeWillParams {
-
-	// watcher for movement buttons like forward, backward, etc
-	watcher: Watcher<typeof traversiveBindings>
-
-	// pointer lock api information about cursor movement
-	pointerMovement: PointerMovement
-
-	// thumbstick data
-	stickInfo: {
-		moveStickInfo: ThumbstickInfo
-		lookStickInfo: ThumbstickInfo
-	}
-}
-
-/**
- * FREE WILL
- * - positional and rotational changes for which the player wishes
- */
-export interface FreeWill {
-	move: babylon.Vector3
-	look: babylon.Quaternion
-}
-
-export function ascertainFreeWill({watcher, pointerMovement, stickInfo}: AscertainFreeWillParams): FreeWill {
-	const {moveStickInfo, lookStickInfo} = stickInfo
-	const move = calculateDesiredMove({watcher, stickInfo: moveStickInfo})
-	const look = calculateDesiredLook({pointerMovement, stickInfo: lookStickInfo})
-	return {move, look}
-}
-
-export interface EnactFreeWillParams {
-	node: babylon.Node & {
-		position?: babylon.Vector3
-		rotation?: babylon.Quaternion
-	}
-	freeWill: FreeWill
-}
-
-export function enactFreeWill({node, freeWill}: EnactFreeWillParams): void {
-	const {move, look} = freeWill
-	if (node.position) node.position.addInPlace(move)
-	if (node.rotation) node.rotation.addInPlace(look)
-}
-
-export interface ThumbstickInfo {
-	angle: {
-		radian: number
-		degree: number
-	}
-	direction: {x?: string; y?: string; angle: string}
-	force: number
-	identifier: number
-	instance: any
-	position: {x: number; y: number}
-	pressure: number
-}
-
-export function calculateDesiredMove({
+export function ascertainMovement({
 	watcher,
 	stickInfo,
 	maxSpeed = 1,
@@ -195,21 +134,45 @@ export function calculateDesiredMove({
 }): babylon.Vector3 {
 	const control = {...watcher.status}
 	let speed = maxSpeed
-
-	if (!control.sprint) speed /= sprintFactor
-
-	// todo: find a better way to attain normalized vector
-	//   that is equivalent to thumbstick action
-	//   also add thumbstick action
 	const move = Vector3.Zero()
-	if (control.forward) move.z += speed
-	if (control.backward) move.z -= speed
-	if (control.left) move.x -= speed
-	if (control.right) move.x += speed
-	if (control.raise) move.y += speed
-	if (control.lower) move.y -= speed
 
+	// ascertain thumbstick movement
+	if (stickInfo && stickInfo.force > 0) {
+		const {radian} = stickInfo.angle
+		const x = Math.cos(radian)
+		const z = Math.sin(radian)
+		const force = stickInfo.force < 1
+			? stickInfo.force
+			: 1
+		move.x += x * speed * force
+		move.z += z * speed * force
+	}
+
+	// ascertain keyboard-based movement
+	else {
+		if (!control.sprint) speed /= sprintFactor
+
+		if (control.forward) move.z += speed
+		if (control.backward) move.z -= speed
+		if (control.left) move.x -= speed
+		if (control.right) move.x += speed
+		if (control.raise) move.y += speed
+		if (control.lower) move.y -= speed
+	}
+
+	move.normalize()
 	return move
+}
+
+
+export function enactMovement({node, move}: {
+	node: {
+		position: babylon.Vector3
+		getWorldMatrix(): babylon.Matrix
+	}
+	move: babylon.Vector3
+}): void {
+	node.position = babylon.Vector3.TransformCoordinates(move, node.getWorldMatrix())
 }
 
 export function calculateDesiredLook(params: {
@@ -217,12 +180,4 @@ export function calculateDesiredLook(params: {
 	stickInfo: ThumbstickInfo
 }): babylon.Quaternion {
 	return babylon.Quaternion.Zero()
-}
-
-export interface MovementDesires {
-	localMove: Vector3
-}
-
-export interface MouselookDesires {
-	localLook: babylon.Quaternion
 }
