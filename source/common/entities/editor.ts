@@ -49,7 +49,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 			if (thumbsticks) {
 				const move = ascertainMovement({watcher, stickInfo: thumbsticks.movementStickInfo})
 				enactMovement({node: <any>camera, move})
-				// this.ascertainThumbLook()
+				this.ascertainThumbLook()
 				this.enactLook()
 			}
 		}})
@@ -57,17 +57,18 @@ export class Editor extends Entity<Context, EditorEntry> {
 		return ticker
 	})()
 
-	// private ascertainThumbLook() {
-	// 	const {lookStickInfo} = this.thumbsticks
-	// 	const {angle, force} = lookStickInfo
-	// 	const {radian} = angle
-	// 	if (force > 0) {
-	// 		const x = Math.cos(radian)
-	// 		const y = Math.sin(radian)
-	// 		this.freelook.horizontal += x * force
-	// 		this.freelook.vertical += y * force
-	// 	}
-	// }
+	private ascertainThumbLook() {
+		const {lookStickInfo} = this.thumbsticks
+		if (lookStickInfo && lookStickInfo.force > 0) {
+			const {freelook} = this
+			const {angle, force} = lookStickInfo
+			const {radian} = angle
+			const x = Math.cos(radian)
+			const y = -Math.sin(radian)
+			const factor = force / 25
+			freelook.add(x * factor, y * factor)
+		}
+	}
 
 	get aimpoint() {
 		const {scene, canvas} = this.context
@@ -132,9 +133,13 @@ export class Editor extends Entity<Context, EditorEntry> {
 	})()
 
 	private freelook = {
-		sensitivity: 2000,
 		vertical: 0,
-		horizontal: 0
+		horizontal: 0,
+		add(horizontal: number, vertical: number) {
+			this.horizontal += horizontal
+			this.vertical += vertical
+			this.vertical = cap(this.vertical, -(Math.PI / 2), Math.PI / 2)
+		}
 	}
 
 	private enactLook() {
@@ -148,10 +153,9 @@ export class Editor extends Entity<Context, EditorEntry> {
 		mousemove: (event: MouseEvent) => {
 			const {movementX, movementY} = event
 			if (movementX && movementY) {
+				const sensitivity = 2000
 				const {camera, freelook} = this
-				freelook.horizontal += movementX / freelook.sensitivity
-				freelook.vertical += movementY / freelook.sensitivity
-				freelook.vertical = cap(freelook.vertical, -(Math.PI / 2), Math.PI / 2)
+				freelook.add(movementX / sensitivity, movementY / sensitivity)
 			}
 		}
 	}
