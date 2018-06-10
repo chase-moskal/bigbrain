@@ -1,16 +1,16 @@
 
 import {reaction} from "mobx"
-import * as nipplejs from "nipplejs"
-import {FreeCamera, Mesh, Vector3} from "babylonjs"
+import * as babylon from "babylonjs"
+import {Mesh, Vector3} from "babylonjs"
 
 import {Context} from "../../game"
 import {Ticker} from "../../ticker"
 import {Entity} from "../../entity"
 import {Watcher, Input} from "../../watcher"
-import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
-import {CubeEntry, createCubeMesh, createCubeProposalMesh} from "./cube"
 import {makeThumbstick, ThumbstickInfo} from "../tools/thumbstick"
-import {makeCamera, applyLogicalMovement, traversiveBindings, ascertainMovement, enactMovement} from "../tools/camtools"
+import {CubeEntry, createCubeProposalMesh} from "./cube"
+import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
+import {makeBasicCamera, traversiveBindings, ascertainMovement, enactMovement} from "../tools/camtools"
 
 export interface EditorEntry {
 	type: "Editor"
@@ -24,30 +24,50 @@ export const bindings = {
 	remove: [Input.X, Input.Backspace, Input.Delete]
 }
 
+function cap(value: number, min: number, max: number) {
+	return value < min
+		? min
+		: value > max
+			? max
+			: value
+}
+
 export class Editor extends Entity<Context, EditorEntry> {
 	protected readonly context: Context
 	private readonly propSpawnHeight: number = 0.2
 
-	readonly camera: FreeCamera = makeCamera({
+	readonly camera = makeBasicCamera({
 		scene: this.context.scene,
-		bearings: this.entry.bearings,
-		speed: 0.4
+		bearings: this.entry.bearings
 	})
 
 	private readonly watcher = new Watcher<typeof bindings>({eventTarget: this.context.window, bindings})
 
 	private readonly ticker: Ticker = (() => {
-		const {camera, watcher} = this
 		const ticker = new Ticker({action: tick => {
-			if (this.thumbsticks) {
-				const stickInfo = this.thumbsticks.movementStickInfo
-				const move = ascertainMovement({watcher, stickInfo})
-				enactMovement({node: <any>this.camera, move})
+			const {camera, watcher, thumbsticks} = this
+			if (thumbsticks) {
+				const move = ascertainMovement({watcher, stickInfo: thumbsticks.movementStickInfo})
+				enactMovement({node: <any>camera, move})
+				// this.ascertainThumbLook()
+				this.enactLook()
 			}
 		}})
 		ticker.start()
 		return ticker
 	})()
+
+	// private ascertainThumbLook() {
+	// 	const {lookStickInfo} = this.thumbsticks
+	// 	const {angle, force} = lookStickInfo
+	// 	const {radian} = angle
+	// 	if (force > 0) {
+	// 		const x = Math.cos(radian)
+	// 		const y = Math.sin(radian)
+	// 		this.freelook.horizontal += x * force
+	// 		this.freelook.vertical += y * force
+	// 	}
+	// }
 
 	get aimpoint() {
 		const {scene, canvas} = this.context
@@ -74,7 +94,12 @@ export class Editor extends Entity<Context, EditorEntry> {
 		}
 	})
 
-	private thumbsticks = (() => {
+	private thumbsticks: {
+		movementStick: any
+		movementStickInfo: ThumbstickInfo
+		lookStick: any
+		lookStickInfo: ThumbstickInfo
+	} = (() => {
 		const {overlay} = this.context
 		const zones = {
 			left: overlay.querySelector<HTMLDivElement>(".leftstick"),
@@ -88,14 +113,55 @@ export class Editor extends Entity<Context, EditorEntry> {
 			}
 		})
 
+		const lookStick = makeThumbstick({
+			zone: zones.right,
+			onMove: info => {
+				thumbsticks.lookStickInfo = info
+			}
+		})
+
 		const thumbsticks = {
 			movementStick,
 			movementStickInfo: undefined,
+			lookStick,
+			lookStickInfo: undefined
 		}
 
 		window["thumbsticks"] = thumbsticks
 		return thumbsticks
 	})()
+
+	private freelook = {
+		sensitivity: 2000,
+		vertical: 0,
+		horizontal: 0
+	}
+
+	private enactLook() {
+		const {freelook, camera} = this
+		const {vertical, horizontal} = freelook
+		const quaternion = babylon.Quaternion.RotationYawPitchRoll(horizontal, vertical, 0)
+		camera.rotationQuaternion = quaternion
+	}
+
+	private eventHandlers = {
+		mousemove: (event: MouseEvent) => {
+			const {movementX, movementY} = event
+			if (movementX && movementY) {
+				const {camera, freelook} = this
+				freelook.horizontal += movementX / freelook.sensitivity
+				freelook.vertical += movementY / freelook.sensitivity
+				freelook.vertical = cap(freelook.vertical, -(Math.PI / 2), Math.PI / 2)
+			}
+		}
+	}
+
+	constructor(options) {
+		super(options)
+		for (const eventName of Object.keys(this.eventHandlers)) {
+			window.addEventListener(eventName, this.eventHandlers[eventName], false)
+		}
+	}
 
 	private reactions = [
 
@@ -169,5 +235,8 @@ export class Editor extends Entity<Context, EditorEntry> {
 		this.watcher.destructor()
 		this.ticker.destructor()
 		for (const dispose of this.reactions) dispose()
+		for (const eventName of Object.keys(this.eventHandlers)) {
+			window.removeEventListener(eventName, this.eventHandlers[eventName])
+		}
 	}
 }

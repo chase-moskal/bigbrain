@@ -27,6 +27,12 @@ export const makeCamera = ({scene, bearings, speed}: {scene: Scene; bearings: Be
 	return camera
 }
 
+export function makeBasicCamera({scene, bearings}: {scene: Scene; bearings: Bearings}): babylon.TargetCamera {
+	const camera = new babylon.TargetCamera("basic-camera", babylon.Vector3.FromArray(bearings.position), scene)
+	scene.activeCamera = camera
+	return camera
+}
+
 export interface RoundCameraRigOptions {
 	scene: Scene
 	canvas: HTMLCanvasElement
@@ -116,11 +122,6 @@ export function ascertainDesiredTraversal({watcher}: {watcher: Watcher<typeof tr
 	}
 }
 
-export interface PointerMovement {
-	x: number
-	y: number
-}
-
 export function getVectorMagnitude(vector: babylon.Vector3): number {
 	return Math.sqrt((vector.x ** 2) + (vector.y ** 2) + (vector.z ** 2))
 }
@@ -180,8 +181,8 @@ export function enactMovement({node, move}: {
 	node.position = babylon.Vector3.TransformCoordinates(move, node.getWorldMatrix())
 }
 
-export function calculateDesiredLook(params: {
-	pointerMovement: PointerMovement
+export function ascertainLook(params: {
+	event: MouseEvent
 	stickInfo: ThumbstickInfo
 }): babylon.Quaternion {
 	return babylon.Quaternion.Zero()
