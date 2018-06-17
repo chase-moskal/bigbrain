@@ -1,9 +1,9 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.33",
+	"version": "0.4.0-dev.35",
 	"description": "concept game engine",
-	"main": "dist/monarch",
-	"types": "dist/monarch.d.ts",
+	"main": "dist/index",
+	"types": "dist/index.d.ts",
 	"scripts": {
 		"build": "rimraf dist && run-p build-library build-common lint && echo ✔ done production build",
 		"build-debug": "rimraf dist && run-p build-library build-common-debug lint && echo ✔ done debug build",
