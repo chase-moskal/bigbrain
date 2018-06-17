@@ -13,7 +13,7 @@ export interface EditorEntry {
 }
 
 export class Editor extends Entity<Context, EditorEntry> {
-	private readonly camera = makeBasicCamera({
+	readonly camera = makeBasicCamera({
 		scene: this.context.scene,
 		bearings: this.entry.bearings
 	})

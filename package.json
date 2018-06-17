@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.32",
+	"version": "0.4.0-dev.33",
 	"description": "concept game engine",
 	"main": "dist/monarch",
 	"types": "dist/monarch.d.ts",
