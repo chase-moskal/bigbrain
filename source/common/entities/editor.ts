@@ -160,8 +160,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 		}
 	}
 
-	constructor(options) {
-		super(options)
+	async init() {
 		for (const eventName of Object.keys(this.eventHandlers)) {
 			window.addEventListener(eventName, this.eventHandlers[eventName], false)
 		}

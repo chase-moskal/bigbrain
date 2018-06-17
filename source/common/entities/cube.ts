@@ -69,7 +69,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 	private ticker: Ticker
 	private reactions
 
-	protected async init() {
+	async init() {
 		if (!Cube.assets) Cube.assets = await this.loadAssets()
 		this.meshes = this.instanceAssets()
 		this.establishLoops()

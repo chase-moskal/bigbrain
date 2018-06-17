@@ -16,7 +16,6 @@ export abstract class Entity<
 
 	constructor(options: EntityOptions<gContext>) {
 		Object.assign(this, options)
-		this.init()
 	}
 
 	get entry(): gStateEntry {
@@ -26,7 +25,7 @@ export abstract class Entity<
 			: raw
 	}
 
-	protected async init() {}
+	async init() {}
 
 	abstract async destructor(): Promise<void>
 }
