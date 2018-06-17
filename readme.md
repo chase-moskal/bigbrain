@@ -6,10 +6,10 @@
 - open source game engine
 - multiplayer
 - collaborative map editor
-- mobile compatible
+- mobile-first
 - built on [babylonjs](https://github.com/BabylonJS/Babylon.js)
 
-### [**🎮 play now**](https://monarch-games.github.io/engine/)
+### [**🎮 play engine demo now**](https://monarch-games.github.io/engine/)
 
 - wasd and the mouse to fly around
 - hold e key and click to place cubes
@@ -39,6 +39,7 @@
 - start local dev server and launch the demo
 	- `npm start`
 	- launch [http://localhost:8080/](http://localhost:8080/)
+- install the [babylon blender exporter](https://github.com/BabylonJS/Exporters/tree/master/Blender) to create 3d assets
 
 ### command line or vs code tasks
 
