@@ -12,7 +12,6 @@ export interface GroundEntry extends StateEntry {
 }
 
 export class Ground extends Entity<Context, GroundEntry> {
-
 	constructor(o) {
 		super(o)
 		const {scene} = this.context
