@@ -1,6 +1,7 @@
 
 import * as babylon from "babylonjs"
 
+import {Tick} from "../../ticker"
 import {Watcher, Input} from "../../watcher"
 import {getVectorMagnitude} from "../../toolbox"
 import {ThumbstickInfo} from "../tools/thumbstick"
@@ -19,6 +20,7 @@ export interface MovementInputs {
 	watcher: Watcher<typeof traversiveBindings>
 	stickInfo: ThumbstickInfo
 	maxSpeed?: number
+	timeFactor?: number
 	sprintFactor?: number
 }
 
@@ -26,11 +28,11 @@ export function ascertainMovement({
 	watcher,
 	stickInfo,
 	maxSpeed = 1,
+	timeFactor = 1,
 	sprintFactor = 3
 }: MovementInputs): babylon.Vector3 {
-
+	let speed = maxSpeed * timeFactor
 	const control = {...watcher.status}
-	let speed = maxSpeed
 	const move = babylon.Vector3.Zero()
 
 	// ascertain thumbstick movement
@@ -65,6 +67,10 @@ export function ascertainMovement({
 
 export interface MovableNode extends babylon.Node {
 	position: babylon.Vector3
+}
+
+export interface RotatableNode extends babylon.Node {
+	rotationQuaternion: babylon.Quaternion
 }
 
 export function enactMovement({node, move}: {

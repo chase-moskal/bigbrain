@@ -1,17 +1,15 @@
 
-import {reaction} from "mobx"
 import * as babylon from "babylonjs"
 
 import {cap} from "../../toolbox"
 import {Context} from "../../game"
 import {Entity} from "../../entity"
 import {Ticker} from "../../ticker"
+import {Bearings} from "../../interfaces"
 import {Watcher, Input} from "../../watcher"
 import {Thumbstick} from "../tools/thumbstick"
 import {makeBasicCamera} from "../tools/camtools"
-import {CubeEntry, createCubeProposalMesh} from "./cube"
-import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
-import {traversiveBindings, ascertainMovement, enactMovement, MovableNode} from "../tools/traversal"
+import {traversiveBindings, ascertainMovement, enactMovement, MovableNode, RotatableNode} from "../tools/traversal"
 
 //
 // EDITOR ENTITY
@@ -35,6 +33,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 	})
 
 	private readonly lookSystem: LookSystem = new LookSystem({
+		node: this.camera,
 		stickZone: this.context.overlay.querySelector(".stick2")
 	})
 
@@ -59,6 +58,7 @@ export class MoveSystem {
 	private readonly watcher = new Watcher<typeof traversiveBindings>({
 		bindings: traversiveBindings
 	})
+	private readonly ticker: Ticker
 
 	constructor({node, stickZone}: MoveSystemOptions) {
 		const thumbstick = new Thumbstick({zone: stickZone})
@@ -66,10 +66,20 @@ export class MoveSystem {
 		const ticker = new Ticker({action: tick => {
 			enactMovement({
 				node,
-				move: ascertainMovement({watcher, stickInfo: thumbstick.info})
+				move: ascertainMovement({
+					watcher,
+					stickInfo: thumbstick.info,
+					timeFactor: tick.timeSinceLastTick / 10
+				})
 			})
 		}})
 		ticker.start()
+		this.ticker = ticker
+	}
+
+	destructor() {
+		this.watcher.destructor()
+		this.ticker.destructor()
 	}
 }
 
@@ -78,13 +88,78 @@ export class MoveSystem {
 //
 
 export interface LookSystemOptions {
+	node: RotatableNode
 	stickZone: HTMLElement
 }
 
 export class LookSystem {
+	private readonly node: RotatableNode
 	private readonly thumbstick: Thumbstick
-	constructor({stickZone}: LookSystemOptions) {
+	private readonly ticker: Ticker
+
+	constructor({node, stickZone}: LookSystemOptions) {
+		this.node = node
 		this.thumbstick = new Thumbstick({zone: stickZone})
+
+		for (const eventName of Object.keys(this.eventHandlers)) {
+			window.addEventListener(eventName, this.eventHandlers[eventName], false)
+		}
+
+		const ticker = new Ticker({action: tick => {
+			this.ascertainThumbLook()
+			this.enactLook()
+		}})
+
+		ticker.start()
+
+		this.ticker = ticker
+	}
+
+	private freelook = {
+		vertical: 0,
+		horizontal: 0,
+		add(horizontal: number, vertical: number) {
+			this.horizontal += horizontal
+			this.vertical += vertical
+			this.vertical = cap(this.vertical, -(Math.PI / 2), Math.PI / 2)
+		}
+	}
+
+	private eventHandlers = {
+		mousemove: (event: MouseEvent) => {
+			const {movementX, movementY} = event
+			if (movementX && movementY) {
+				const sensitivity = 2000
+				const {freelook} = this
+				freelook.add(movementX / sensitivity, movementY / sensitivity)
+			}
+		}
+	}
+
+	private ascertainThumbLook() {
+		const {thumbstick, freelook} = this
+		const {angle, force} = thumbstick.info
+		if (force > 0) {
+			const x = Math.cos(angle)
+			const y = -Math.sin(angle)
+			const factor = force / 25
+			freelook.add(x * factor, y * factor)
+		}
+	}
+
+	private enactLook() {
+		const {freelook, node} = this
+		if (!freelook) return
+		const {vertical, horizontal} = freelook
+		const quaternion = babylon.Quaternion.RotationYawPitchRoll(horizontal, vertical, 0)
+		node.rotationQuaternion = quaternion
+	}
+
+	destructor() {
+		for (const eventName of Object.keys(this.eventHandlers)) {
+			window.removeEventListener(eventName, this.eventHandlers[eventName])
+		}
+		this.ticker.destructor()
 	}
 }
 

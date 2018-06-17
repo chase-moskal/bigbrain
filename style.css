@@ -30,20 +30,13 @@ canvas {
 	height: 40%;
 }
 
-.leftstick {
+.stick1, .stick2 {
 	position: absolute;
 	pointer-events: all;
 	width: 40%;
 	height: 100%;
 	top: 0;
-	left: 0;
 }
 
-.rightstick {
-	position: absolute;
-	pointer-events: all;
-	width: 40%;
-	height: 100%;
-	top: 0;
-	right: 0;
-}
+.stick1 { left: 0; }
+.stick2 { right: 0; }
