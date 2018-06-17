@@ -1,16 +1,17 @@
 
 import {reaction} from "mobx"
 import * as babylon from "babylonjs"
-import {Mesh, Vector3} from "babylonjs"
 
+import {cap} from "../../toolbox"
 import {Context} from "../../game"
-import {Ticker} from "../../ticker"
 import {Entity} from "../../entity"
+import {Ticker} from "../../ticker"
 import {Watcher, Input} from "../../watcher"
-import {makeThumbstick, ThumbstickInfo} from "../tools/thumbstick"
+import {Thumbstick} from "../tools/thumbstick"
+import {makeBasicCamera} from "../tools/camtools"
 import {CubeEntry, createCubeProposalMesh} from "./cube"
 import {Vector, Physique, Bearings, Quaternion} from "../../interfaces"
-import {makeBasicCamera, traversiveBindings, ascertainMovement, enactMovement} from "../tools/camtools"
+import {traversiveBindings, ascertainMovement, enactMovement} from "../tools/traversal"
 
 export interface EditorEntry {
 	type: "Editor"
@@ -24,14 +25,6 @@ export const bindings = {
 	remove: [Input.X, Input.Backspace, Input.Delete]
 }
 
-function cap(value: number, min: number, max: number) {
-	return value < min
-		? min
-		: value > max
-			? max
-			: value
-}
-
 export class Editor extends Entity<Context, EditorEntry> {
 	protected readonly context: Context
 	private readonly propSpawnHeight: number = 0.2
@@ -43,11 +36,20 @@ export class Editor extends Entity<Context, EditorEntry> {
 
 	private readonly watcher = new Watcher<typeof bindings>({eventTarget: this.context.window, bindings})
 
+	private readonly thumbsticks = {
+		moveStick: new Thumbstick({
+			zone: this.context.overlay.querySelector(".leftstick")
+		}),
+		lookStick: new Thumbstick({
+			zone: this.context.overlay.querySelector(".rightstick")
+		})
+	}
+
 	private readonly ticker: Ticker = (() => {
 		const ticker = new Ticker({action: tick => {
 			const {camera, watcher, thumbsticks} = this
 			if (thumbsticks) {
-				const move = ascertainMovement({watcher, stickInfo: thumbsticks.movementStickInfo})
+				const move = ascertainMovement({watcher, stickInfo: thumbsticks.moveStick.info})
 				enactMovement({node: <any>camera, move})
 				this.ascertainThumbLook()
 				this.enactLook()
@@ -58,13 +60,14 @@ export class Editor extends Entity<Context, EditorEntry> {
 	})()
 
 	private ascertainThumbLook() {
-		const {lookStickInfo} = this.thumbsticks
-		if (lookStickInfo && lookStickInfo.force > 0) {
+		const {thumbsticks} = this
+		if (!thumbsticks) return
+		const {lookStick} = thumbsticks
+		const {angle, force} = lookStick.info
+		if (force > 0) {
 			const {freelook} = this
-			const {angle, force} = lookStickInfo
-			const {radian} = angle
-			const x = Math.cos(radian)
-			const y = -Math.sin(radian)
+			const x = Math.cos(angle)
+			const y = -Math.sin(angle)
 			const factor = force / 25
 			freelook.add(x * factor, y * factor)
 		}
@@ -86,51 +89,14 @@ export class Editor extends Entity<Context, EditorEntry> {
 		return 0.1 + (Math.random() * 1.5)
 	}
 
-	private proposalMesh: Mesh = null
+	private proposalMesh: babylon.Mesh = null
 	private readonly propsalTicker = new Ticker({
 		action: tick => {
 			const {aimpoint, proposalMesh} = this
 			if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
-			this.proposalMesh.position = aimpoint || Vector3.Zero()
+			this.proposalMesh.position = aimpoint || babylon.Vector3.Zero()
 		}
 	})
-
-	private thumbsticks: {
-		movementStick: any
-		movementStickInfo: ThumbstickInfo
-		lookStick: any
-		lookStickInfo: ThumbstickInfo
-	} = (() => {
-		const {overlay} = this.context
-		const zones = {
-			left: overlay.querySelector<HTMLDivElement>(".leftstick"),
-			right: overlay.querySelector<HTMLDivElement>(".rightstick")
-		}
-
-		const movementStick = makeThumbstick({
-			zone: zones.left,
-			onMove: info => {
-				thumbsticks.movementStickInfo = info
-			}
-		})
-
-		const lookStick = makeThumbstick({
-			zone: zones.right,
-			onMove: info => {
-				thumbsticks.lookStickInfo = info
-			}
-		})
-
-		const thumbsticks = {
-			movementStick,
-			movementStickInfo: undefined,
-			lookStick,
-			lookStickInfo: undefined
-		}
-
-		window["thumbsticks"] = thumbsticks
-		return thumbsticks
-	})()
 
 	private freelook = {
 		vertical: 0,
@@ -144,6 +110,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 
 	private enactLook() {
 		const {freelook, camera} = this
+		if (!freelook) return
 		const {vertical, horizontal} = freelook
 		const quaternion = babylon.Quaternion.RotationYawPitchRoll(horizontal, vertical, 0)
 		camera.rotationQuaternion = quaternion
@@ -185,8 +152,8 @@ export class Editor extends Entity<Context, EditorEntry> {
 						rotation: [0, 0, 0, 0]
 					}
 					const mesh = createCubeProposalMesh(scene)
-					mesh.scaling = Vector3.FromArray(physique.size)
-					mesh.position = Vector3.FromArray(bearings.position)
+					mesh.scaling = babylon.Vector3.FromArray(physique.size)
+					mesh.position = babylon.Vector3.FromArray(bearings.position)
 					mesh.position.y += this.proposedSize + this.propSpawnHeight
 					this.proposalMesh = mesh
 					this.propsalTicker.start()

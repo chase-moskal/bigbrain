@@ -1,7 +1,7 @@
 
 import * as nipplejs from "nipplejs"
 
-export interface ThumbstickInfo {
+export interface NippleData {
 	angle: {
 		radian: number
 		degree: number
@@ -14,30 +14,42 @@ export interface ThumbstickInfo {
 	pressure: number
 }
 
-export function makeThumbstick({zone, onMove}: {
+export type MoveHandler = (info: ThumbstickInfo) => void
+
+export interface ThumbstickOptions {
 	zone: HTMLElement
-	onMove: (info: ThumbstickInfo) => void
-}): {
-	manager: any
-} {
-	const manager = nipplejs.create({
-		zone,
-		size: 200,
-		color: "white",
-		mode: "static",
-		position: {bottom: "50%", left: "50%"}
-	})
-	manager.on("start end", (event, instance) => {
-		onMove({
-			angle: {radian: 0, degree: 0},
-			direction: {x: "", y: "", angle: ""},
-			force: 0,
-			identifier: 0,
-			instance,
-			position: {x: 0, y: 0},
-			pressure: 0
+	onMove?: MoveHandler
+}
+
+export interface ThumbstickInfo {
+	angle: number
+	force: number
+}
+
+const defaultThumbstickInfo: ThumbstickInfo = {angle: 0, force: 0}
+
+export class Thumbstick {
+	info: ThumbstickInfo = defaultThumbstickInfo
+
+	constructor({zone, onMove = () => {}}: ThumbstickOptions) {
+		const move = (info: ThumbstickInfo) => {
+			this.info = info
+			onMove(info)
+		}
+
+		const manager = nipplejs.create({
+			zone,
+			size: 200,
+			color: "white",
+			mode: "static",
+			position: {bottom: "50%", left: "50%"}
 		})
-	})
-	manager.on("move", (event, info: ThumbstickInfo) => onMove(info))
-	return {manager}
+
+		manager.on("start end", (event, instance) => move(defaultThumbstickInfo))
+
+		manager.on("move", (event, data: NippleData) => move({
+			angle: data.angle.radian,
+			force: data.force
+		}))
+	}
 }

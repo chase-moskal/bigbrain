@@ -1,12 +1,23 @@
 
-import {SceneLoader, Scene, SceneLoaderProgressEvent} from "babylonjs"
-
+import * as babylon from "babylonjs"
 import {GenericEntity, EntityClasses} from "./entity"
 
 export function copy<T>(o: T): T { return JSON.parse(JSON.stringify(o)) }
 
 export function assignPropsOntoMap(obj: Object, map: Map<string, any>) {
 	Object.keys(obj).forEach(key => map.set(key, obj[key]))
+}
+
+export function getVectorMagnitude(vector: babylon.Vector3): number {
+	return Math.sqrt((vector.x ** 2) + (vector.y ** 2) + (vector.z ** 2))
+}
+
+export function cap(value: number, min: number, max: number) {
+	return value < min
+		? min
+		: value > max
+			? max
+			: value
 }
 
 export const getEntityClass = (type: string, entityClasses: EntityClasses):
@@ -34,10 +45,10 @@ export async function loadBabylonFile(
 	path: string,
 	onProgress: (event: ProgressEvent) => void = event => {}
 ) {
-	SceneLoader.ShowLoadingScreen = false
+	babylon.SceneLoader.ShowLoadingScreen = false
 	const {dirpath, filename} = pathBreakdown(path)
 	return new Promise((resolve, reject) => {
-		SceneLoader.Append(
+		babylon.SceneLoader.Append(
 			dirpath,
 			filename,
 			scene,
@@ -49,14 +60,14 @@ export async function loadBabylonFile(
 }
 
 export async function loadBabylonMeshes(
-	scene: Scene,
+	scene: babylon.Scene,
 	path: string,
-	onProgress: (event: SceneLoaderProgressEvent) => void = event => {}
+	onProgress: (event: babylon.SceneLoaderProgressEvent) => void = event => {}
 ) {
-	SceneLoader.ShowLoadingScreen = false
+	babylon.SceneLoader.ShowLoadingScreen = false
 	const meshNames = ""
 	const {dirpath, filename} = pathBreakdown(path)
-	return SceneLoader.ImportMeshAsync(
+	return babylon.SceneLoader.ImportMeshAsync(
 		meshNames,
 		dirpath,
 		filename,

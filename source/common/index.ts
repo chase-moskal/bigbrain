@@ -1,11 +1,9 @@
 
 import {Game} from "../game"
+import {Cube} from "./entities/cube"
 import {ModeOfConduct} from "../interfaces"
-import {Cube, CubeEntry} from "./entities/cube"
 import {Ground, GroundEntry} from "./entities/ground"
 import {Editor, EditorEntry} from "./entities/editor"
-
-import {Entity} from "../entity"
 
 const game = new Game({
 	mode: ModeOfConduct.Alone,
