@@ -1,5 +1,5 @@
 
-import {observable, autorun, action} from "mobx"
+import {observable, autorun} from "mobx"
 
 import {Manager} from "./manager"
 import {getEntityClass} from "./toolbox"

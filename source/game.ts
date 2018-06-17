@@ -1,17 +1,14 @@
 
 import {World} from "cannon"
-import {Engine, Scene, Vector3, CannonJSPlugin} from "babylonjs"
+import * as babylon from "babylonjs"
 
 import {Susa} from "./susa"
 import {Manager} from "./manager"
-import {EntityClasses} from "./entity"
+import {StandardContext} from "./interfaces"
 import {Conductor, ConductorOptions} from "./conductor"
-import {StandardContext, ModeOfConduct} from "./interfaces"
-
-export {ModeOfConduct} from "./interfaces"
 
 export interface GameContext {
-	scene: Scene
+	scene: babylon.Scene
 	window: Window
 	physicsWorld: World
 	overlay: HTMLDivElement
@@ -32,9 +29,9 @@ export class Game extends Conductor {
 		super(options)
 		const {overlay, canvas, mode, entityClasses} = options
 
-		const engine = new Engine(canvas, undefined, undefined, true)
-		const scene = new Scene(engine)
-		const physicsPlugin = new CannonJSPlugin()
+		const engine = new babylon.Engine(canvas, undefined, undefined, true)
+		const scene = new babylon.Scene(engine)
+		const physicsPlugin = new babylon.CannonJSPlugin()
 		const physicsWorld = physicsPlugin.world
 
 		overlay.innerHTML = `

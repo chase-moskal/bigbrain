@@ -1,5 +1,5 @@
 
-import {Scene, Engine, PickingInfo, Camera, Vector3, SceneLoader, CannonJSPlugin, IPhysicsEnginePlugin} from "babylonjs"
+import {Scene, Engine, PickingInfo, Camera, Vector3, IPhysicsEnginePlugin} from "babylonjs"
 
 import {Vector} from "./interfaces"
 import {now, Service} from "./toolbox"

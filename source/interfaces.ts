@@ -1,10 +1,6 @@
 
-import {Scene, Engine} from "babylonjs"
-
-import {Input} from "./watcher"
 import {Manager} from "./manager"
 import {Network} from "./network"
-import {Entity, GenericEntity} from "./entity"
 
 export enum ModeOfConduct {
 	Alone,

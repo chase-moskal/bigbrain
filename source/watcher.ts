@@ -1,5 +1,5 @@
 
-import {observable, IObservableObject} from "mobx"
+import {observable} from "mobx"
 
 export class Watcher<gBindings extends Bindings = Bindings> {
 	private readonly eventTarget: EventTarget

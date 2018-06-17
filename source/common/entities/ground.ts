@@ -5,8 +5,7 @@ import * as babylon from "babylonjs"
 
 import {Context} from "../../game"
 import {Entity} from "../../entity"
-import {loadBabylonFile} from "../../toolbox"
-import {StateEntry, Message} from "../../interfaces"
+import {StateEntry} from "../../interfaces"
 
 export interface GroundEntry extends StateEntry {
 	type: "Ground"
