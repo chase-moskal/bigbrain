@@ -39,8 +39,8 @@ export class Thumbstick {
 
 		const manager = nipplejs.create({
 			zone,
-			size: 200,
-			color: "white",
+			size: 120,
+			color: "rgba(255,255,255, 0.5)",
 			mode: "static",
 			position: {bottom: "50%", left: "50%"}
 		})

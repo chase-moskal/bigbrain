@@ -8,7 +8,7 @@ export class Watcher<gBindings extends Bindings = Bindings> {
 	@observable
 	readonly status: Status<gBindings>
 
-	constructor({eventTarget, bindings}: WatcherOptions<gBindings>) {
+	constructor({eventTarget = window, bindings}: WatcherOptions<gBindings>) {
 		this.eventTarget = eventTarget
 		this.bindings = bindings
 
@@ -166,6 +166,6 @@ export type Bindings = { [alias: string]: Input[] }
 export type Status<gBindings extends Bindings = Bindings> = { [P in keyof gBindings]: boolean }
 
 export interface WatcherOptions<gBindings extends Bindings = Bindings> {
-	eventTarget: EventTarget
+	eventTarget?: EventTarget
 	bindings: gBindings
 }

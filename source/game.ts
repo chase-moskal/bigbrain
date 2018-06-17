@@ -36,8 +36,8 @@ export class Game extends Conductor {
 
 		overlay.innerHTML = `
 			<div class="thumbsticks">
-				<div class="leftstick"></div>
-				<div class="rightstick"></div>
+				<div class="stick1"></div>
+				<div class="stick2"></div>
 			</div>
 		`
 

@@ -27,3 +27,5 @@ game.manager.addEntry<EditorEntry>({
 		rotation: [0, 0, 0, 0]
 	}
 })
+
+window.scrollTo(0, 1)

@@ -63,11 +63,12 @@ export function ascertainMovement({
 	return move
 }
 
+export interface MovableNode extends babylon.Node {
+	position: babylon.Vector3
+}
+
 export function enactMovement({node, move}: {
-	node: {
-		position: babylon.Vector3
-		getWorldMatrix(): babylon.Matrix
-	}
+	node: MovableNode
 	move: babylon.Vector3
 }): void {
 	node.position = babylon.Vector3.TransformCoordinates(move, node.getWorldMatrix())
