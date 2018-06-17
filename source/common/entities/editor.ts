@@ -33,6 +33,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 	})
 
 	private readonly lookSystem: LookSystem = new LookSystem({
+		engine: this.context.engine,
 		node: this.camera,
 		stickZone: this.context.overlay.querySelector(".stick2")
 	})
@@ -88,16 +89,30 @@ export class MoveSystem {
 //
 
 export interface LookSystemOptions {
+	engine: babylon.Engine
 	node: RotatableNode
 	stickZone: HTMLElement
 }
 
+class Freelook {
+	horizontal: number = 0
+	vertical: number = 0
+
+	add(horizontal: number, vertical: number) {
+		this.horizontal += horizontal
+		this.vertical += vertical
+		this.vertical = cap(this.vertical, -(Math.PI / 2), Math.PI / 2)
+	}
+}
+
 export class LookSystem {
+	private readonly engine: babylon.Engine
 	private readonly node: RotatableNode
 	private readonly thumbstick: Thumbstick
 	private readonly ticker: Ticker
 
-	constructor({node, stickZone}: LookSystemOptions) {
+	constructor({engine, node, stickZone}: LookSystemOptions) {
+		this.engine = engine
 		this.node = node
 		this.thumbstick = new Thumbstick({zone: stickZone})
 
@@ -115,20 +130,12 @@ export class LookSystem {
 		this.ticker = ticker
 	}
 
-	private freelook = {
-		vertical: 0,
-		horizontal: 0,
-		add(horizontal: number, vertical: number) {
-			this.horizontal += horizontal
-			this.vertical += vertical
-			this.vertical = cap(this.vertical, -(Math.PI / 2), Math.PI / 2)
-		}
-	}
+	private freelook = new Freelook()
 
 	private eventHandlers = {
 		mousemove: (event: MouseEvent) => {
 			const {movementX, movementY} = event
-			if (movementX && movementY) {
+			if (this.engine.isPointerLock && !isNaN(movementX) && !isNaN(movementY)) {
 				const sensitivity = 2000
 				const {freelook} = this
 				freelook.add(movementX / sensitivity, movementY / sensitivity)
@@ -150,7 +157,7 @@ export class LookSystem {
 	private enactLook() {
 		const {freelook, node} = this
 		if (!freelook) return
-		const {vertical, horizontal} = freelook
+		const {horizontal, vertical} = freelook
 		const quaternion = babylon.Quaternion.RotationYawPitchRoll(horizontal, vertical, 0)
 		node.rotationQuaternion = quaternion
 	}

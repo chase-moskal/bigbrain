@@ -1,5 +1,5 @@
 
-import {World} from "cannon"
+import * as cannon from "cannon"
 import * as babylon from "babylonjs"
 
 import {Susa} from "./susa"
@@ -8,31 +8,33 @@ import {StandardContext} from "./interfaces"
 import {Conductor, ConductorOptions} from "./conductor"
 
 export interface GameContext {
-	scene: babylon.Scene
 	window: Window
-	physicsWorld: World
-	overlay: HTMLDivElement
 	canvas: HTMLCanvasElement
+	overlay: HTMLDivElement
+	scene: babylon.Scene
+	engine: babylon.Engine
+	physicsWorld: cannon.World
 }
 
 export type Context = StandardContext & GameContext
 
 export interface GameOptions extends ConductorOptions {
-	overlay: HTMLDivElement
 	canvas: HTMLCanvasElement
+	overlay: HTMLDivElement
+	gravity: number
 }
 
-export class Game extends Conductor {
+export class Game {
 	readonly manager: Manager
 
 	constructor(options: GameOptions) {
-		super(options)
-		const {overlay, canvas, mode, entityClasses} = options
+		const {overlay, canvas, mode, entityClasses, gravity} = options
 
-		const engine = new babylon.Engine(canvas, undefined, undefined, true)
+		const engine = new babylon.Engine(canvas, true, undefined, true)
 		const scene = new babylon.Scene(engine)
 		const physicsPlugin = new babylon.CannonJSPlugin()
-		const physicsWorld = physicsPlugin.world
+		const physicsWorld: cannon.World = physicsPlugin.world
+		scene.enablePhysics(babylon.Vector3.FromArray([0, -gravity, 0]), physicsPlugin)
 
 		overlay.innerHTML = `
 			<div class="thumbsticks">
@@ -41,30 +43,27 @@ export class Game extends Conductor {
 			</div>
 		`
 
+		const susa = new Susa({
+			window,
+			canvas,
+			scene,
+			engine
+		})
+
+		susa.start()
+
 		const conductor = new Conductor<GameContext>({
 			mode,
 			entityClasses,
 			context: {
-				scene,
 				window,
 				canvas,
 				overlay,
+				scene,
+				engine,
 				physicsWorld
 			}
 		})
-
-		const susa = new Susa({
-			engine,
-			scene,
-			window,
-			canvas,
-			physics: {
-				gravity: [0, -9.8, 0],
-				plugin: physicsPlugin
-			}
-		})
-
-		susa.start()
 
 		this.manager = conductor.manager
 	}

@@ -16,7 +16,7 @@ export interface ConductorOptions<AdditionalContext = any> {
 export class Conductor<AdditionalContext = any> {
 	readonly manager: Manager
 
-	constructor({entityClasses, context: moreContext = {}}: ConductorOptions) {
+	constructor({entityClasses, context: moreContext = {}}: ConductorOptions<AdditionalContext>) {
 		const state: State = observable({entries: new Map()})
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager({state, entities})
