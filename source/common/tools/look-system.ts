@@ -38,7 +38,7 @@ export class LookSystem {
 			window.addEventListener(eventName, this.eventHandlers[eventName], false)
 		}
 
-		const ticker = new Ticker({action: tick => {
+		const ticker = new Ticker({tickAction: tick => {
 			this.ascertainThumbLook()
 			this.enactLook()
 		}})

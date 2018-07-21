@@ -110,8 +110,8 @@ export class Cube extends Entity<Context, CubeEntry> {
 
 	private establishLoops() {
 		const ticker = new Ticker({
-			relax: 50,
-			action: tick => {
+			durationBetweenTicks: 50,
+			tickAction: tick => {
 				const {
 					position: babylonPosition,
 					rotationQuaternion: babylonRotation

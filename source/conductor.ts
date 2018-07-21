@@ -1,11 +1,12 @@
 
 import {observable, autorun} from "mobx"
 
+import {Ticker} from "./ticker"
 import {Manager} from "./manager"
 import {getEntityClass} from "./toolbox"
+import {LoopbackNetwork} from "./network"
 import {Entity, EntityClasses} from "./entity"
-import {Network, LoopbackNetwork} from "./network"
-import {State, StandardContext, StateEntries, ModeOfConduct} from "./interfaces"
+import {State, StandardContext, ModeOfConduct} from "./interfaces"
 
 export interface ConductorOptions<AdditionalContext = any> {
 	mode: ModeOfConduct
@@ -21,6 +22,8 @@ export class Conductor<AdditionalContext = any> {
 		const entities: Map<string, Entity> = new Map()
 		const manager = new Manager({state, entities})
 		const mode = ModeOfConduct.Alone
+
+		const ticker = new Ticker()
 
 		const network = new LoopbackNetwork({
 			mode,

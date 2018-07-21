@@ -2,7 +2,7 @@
 import {Service, now, environment} from "./toolbox"
 
 /**
- * TICKER CLASS
+ * Ticker class
  *  - create a ticking loop with start/stop controls
  *  - keep a consistent timeline (doesn't progress when paused)
  */
@@ -13,9 +13,9 @@ export class Ticker implements Service {
 	private stoppage = false
 	private lastTime = now()
 
-	constructor({action, relax = 10}: TickerOptions = {}) {
-		if (action) this.actions.push(action)
-		this.relax = relax
+	constructor({tickAction, durationBetweenTicks = 10}: TickerOptions = {}) {
+		if (tickAction) this.actions.push(tickAction)
+		this.relax = durationBetweenTicks
 	}
 
 	subscribe(action: TickAction) {
@@ -68,14 +68,18 @@ export class Ticker implements Service {
 	}
 }
 
-export interface Tick {
+export interface TickInfo {
 	timeline: number
 	timeSinceLastTick: number
 }
 
-export type TickAction = (tick: Tick) => void
+export type TickAction = (tick: TickInfo) => void
 
 export interface TickerOptions {
-	action?: TickAction
-	relax?: number
+
+	/** functon called on each tick */
+	tickAction?: TickAction
+
+	/** duration in milliseconds */
+	durationBetweenTicks?: number
 }
