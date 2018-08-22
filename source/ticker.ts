@@ -30,6 +30,9 @@ export interface TickerOptions {
 	/** Function called each tick */
 	tickAction: TickAction
 
+	/** Initialize with the ticker running */
+	start?: boolean
+
 	/** Duration in milliseconds between each tick */
 	durationBetweenTicks?: number
 }
@@ -38,6 +41,7 @@ export interface TickerOptions {
  * Default ticker option values
  */
 const defaultTickerOptions: Partial<TickerOptions> = {
+	start: true,
 	durationBetweenTicks: 10
 }
 
@@ -48,14 +52,21 @@ const defaultTickerOptions: Partial<TickerOptions> = {
  * - subscribe and unsubscribe new tick action functions
  */
 export class Ticker implements Service {
+	tickRate = 0
+
 	private timeline: number = 0
-	private tickAction: TickAction
 	private durationBetweenTicks: number
+
+	private tickAction: TickAction
 	private active = false
 	private lastTime = now()
+	private records: number[] = []
 
 	constructor(opts: TickerOptions) {
-		Object.assign(this, {...defaultTickerOptions, ...opts})
+		const options = {...defaultTickerOptions, ...opts}
+		this.tickAction = options.tickAction
+		this.durationBetweenTicks = options.durationBetweenTicks
+		if (options.start) this.start()
 	}
 
 	/**
@@ -63,6 +74,7 @@ export class Ticker implements Service {
 	 */
 	destructor() {
 		this.tickAction = null
+		this.records = []
 		this.stop()
 	}
 
@@ -86,15 +98,29 @@ export class Ticker implements Service {
 	}
 
 	/**
+	 * Calculate the tick rate
+	 */
+	private calculateTickRate(timeSinceLastTick: number): number {
+		this.records.unshift(timeSinceLastTick)
+		while (this.records.length > 10) this.records.pop()
+		const sum = this.records.reduce((a, b) => a + b, 0)
+		const averageTimePerTick = sum / this.records.length
+		return 1000 / averageTimePerTick
+	}
+
+	/**
 	 * Internal ticker loop
 	 */
 	private loop() {
 		if (!this.active) return
 
-		// gather 'start' timings
-		const startTime = now()
-		const timeSinceLastTick = startTime - this.lastTime
+		// gather time data
+		const currentTime = now()
+		const timeSinceLastTick = currentTime - this.lastTime
+
+		// record some stats
 		this.timeline += timeSinceLastTick
+		this.tickRate = this.calculateTickRate(timeSinceLastTick)
 
 		// call tick action
 		this.tickAction({
@@ -103,7 +129,7 @@ export class Ticker implements Service {
 		})
 
 		// gather 'after' timings
-		this.lastTime = now()
+		this.lastTime = currentTime
 
 		// recurse, but give the browser some time to relax
 		setTimeout(() => {

@@ -82,7 +82,6 @@ export class Game implements Service {
 		const logicTicker = new Ticker({
 			tickAction: tick => conductor.logic(tick)
 		})
-		logicTicker.start()
 
 		// expose the state manager
 		this.manager = conductor.manager

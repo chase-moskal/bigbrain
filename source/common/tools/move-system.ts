@@ -20,18 +20,18 @@ export class MoveSystem {
 		const thumbstick = new Thumbstick({zone: stickZone})
 		const {watcher} = this
 
-		const ticker = this.ticker = new Ticker({tickAction: tick => {
-			enactMovement({
-				node,
-				move: ascertainMovement({
-					watcher,
-					stickInfo: thumbstick.info,
-					timeFactor: tick.timeSinceLastTick / 50
+		const ticker = this.ticker = new Ticker({
+			tickAction: tick => {
+				enactMovement({
+					node,
+					move: ascertainMovement({
+						watcher,
+						stickInfo: thumbstick.info,
+						timeFactor: tick.timeSinceLastTick / 50
+					})
 				})
-			})
-		}})
-
-		ticker.start()
+			}
+		})
 	}
 
 	destructor() {

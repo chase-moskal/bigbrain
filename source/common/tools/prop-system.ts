@@ -56,7 +56,8 @@ export class PropSystem {
 			const {aimpoint, proposalMesh} = this
 			if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
 			proposalMesh.position = aimpoint || babylon.Vector3.Zero()
-		}
+		},
+		start: false
 	})
 
 	private reactions = [
