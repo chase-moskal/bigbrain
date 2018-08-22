@@ -1,7 +1,6 @@
 
-
-import {MeshBuilder, Mesh, Scene, HemisphericLight, PointLight, SpotLight, PhysicsImpostor} from "babylonjs"
 import * as babylon from "babylonjs"
+import {MeshBuilder, Scene, PhysicsImpostor} from "babylonjs"
 
 import {Context} from "../../game"
 import {Entity} from "../../entity"

@@ -2,7 +2,9 @@
 import * as babylon from "babylonjs"
 
 import {cap} from "../../toolbox"
-import {Ticker} from "../../ticker"
+import {TickInfo} from "../../ticker"
+import {EntityPlugin} from "../../entity"
+
 import {Thumbstick} from "../tools/thumbstick"
 import {RotatableNode} from "../tools/traversal"
 
@@ -23,11 +25,10 @@ class Freelook {
 	}
 }
 
-export class LookSystem {
+export class LookSystem implements EntityPlugin {
 	private readonly engine: babylon.Engine
 	private readonly node: RotatableNode
 	private readonly thumbstick: Thumbstick
-	private readonly ticker: Ticker
 
 	constructor({engine, node, stickZone}: LookSystemOptions) {
 		this.engine = engine
@@ -37,13 +38,11 @@ export class LookSystem {
 		for (const eventName of Object.keys(this.eventHandlers)) {
 			window.addEventListener(eventName, this.eventHandlers[eventName], false)
 		}
+	}
 
-		this.ticker = new Ticker({
-			tickAction: tick => {
-				this.ascertainThumbLook()
-				this.enactLook()
-			}
-		})
+	logic(tick: TickInfo) {
+		this.ascertainThumbLook()
+		this.enactLook()
 	}
 
 	private freelook = new Freelook()
@@ -82,6 +81,5 @@ export class LookSystem {
 		for (const eventName of Object.keys(this.eventHandlers)) {
 			window.removeEventListener(eventName, this.eventHandlers[eventName])
 		}
-		this.ticker.destructor()
 	}
 }

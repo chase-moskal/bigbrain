@@ -1,7 +1,6 @@
 
 import * as babylon from "babylonjs"
 
-import {TickInfo} from "../../ticker"
 import {Watcher, Input} from "../../watcher"
 import {getVectorMagnitude} from "../../toolbox"
 import {ThumbstickInfo} from "../tools/thumbstick"

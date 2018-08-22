@@ -42,3 +42,8 @@ export interface EntityOptions<gContext = any> {
 }
 
 export type EntityClasses = { [name: string]: typeof GenericEntity }
+
+export interface EntityPlugin {
+	logic(tick: TickInfo): void
+	destructor(): void
+}

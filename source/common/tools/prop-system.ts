@@ -2,14 +2,15 @@
 import * as mobx from "mobx"
 import * as babylon from "babylonjs"
 
-import {Ticker} from "../../ticker"
 import {Manager} from "../../manager"
+import {TickInfo} from "../../ticker"
+import {EntityPlugin} from "../../entity"
 import {Watcher, Input} from "../../watcher"
 import {Vector, Bearings, Physique, Quaternion} from "../../interfaces"
 
 import {CubeEntry, createCubeProposalMesh} from "../entities/cube"
 
-export const propBindings = {
+export const bindings = {
 	propose: [Input.E],
 	place: [Input.MouseLeft],
 	remove: [Input.X, Input.Backspace, Input.Delete]
@@ -21,8 +22,8 @@ export interface PropSystemOptions {
 	canvas: HTMLCanvasElement
 }
 
-export class PropSystem {
-	private readonly watcher = new Watcher<typeof propBindings>({bindings: propBindings})
+export class PropSystem implements EntityPlugin {
+	private readonly watcher = new Watcher<typeof bindings>({bindings: bindings})
 	private readonly manager: Manager
 	private readonly scene: babylon.Scene
 	private readonly canvas: HTMLCanvasElement
@@ -51,14 +52,12 @@ export class PropSystem {
 	}
 
 	private proposalMesh: babylon.Mesh = null
-	private readonly propsalTicker = new Ticker({
-		tickAction: tick => {
-			const {aimpoint, proposalMesh} = this
-			if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
-			proposalMesh.position = aimpoint || babylon.Vector3.Zero()
-		},
-		start: false
-	})
+
+	logic(tick: TickInfo) {
+		const {aimpoint, proposalMesh} = this
+		if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
+		if (proposalMesh) proposalMesh.position = aimpoint || babylon.Vector3.Zero()
+	}
 
 	private reactions = [
 
@@ -83,11 +82,9 @@ export class PropSystem {
 					mesh.position = babylon.Vector3.FromArray(bearings.position)
 					mesh.position.y += this.proposedSize + this.propSpawnHeight
 					this.proposalMesh = mesh
-					this.propsalTicker.start()
 				}
 			}
 			else {
-				this.propsalTicker.stop()
 				if (this.proposalMesh) {
 					this.proposalMesh.dispose()
 					this.proposalMesh = null

@@ -1,6 +1,8 @@
 
-import {Ticker} from "../../ticker"
+import {TickInfo} from "../../ticker"
 import {Watcher} from "../../watcher"
+import {EntityPlugin} from "../../entity"
+
 import {Thumbstick} from "../tools/thumbstick"
 import {traversiveBindings, ascertainMovement, enactMovement, MovableNode} from "../tools/traversal"
 
@@ -9,33 +11,31 @@ export interface MoveSystemOptions {
 	stickZone: HTMLElement
 }
 
-export class MoveSystem {
+export class MoveSystem implements EntityPlugin {
+	private readonly node: MovableNode
+	private readonly thumbstick: Thumbstick
 	private readonly watcher = new Watcher<typeof traversiveBindings>({
 		bindings: traversiveBindings
 	})
 
-	private readonly ticker: Ticker
-
 	constructor({node, stickZone}: MoveSystemOptions) {
-		const thumbstick = new Thumbstick({zone: stickZone})
-		const {watcher} = this
+		this.node = node
+		this.thumbstick = new Thumbstick({zone: stickZone})
+	}
 
-		const ticker = this.ticker = new Ticker({
-			tickAction: tick => {
-				enactMovement({
-					node,
-					move: ascertainMovement({
-						watcher,
-						stickInfo: thumbstick.info,
-						timeFactor: tick.timeSinceLastTick / 50
-					})
-				})
-			}
+	logic(tick: TickInfo) {
+		const {node, thumbstick, watcher} = this
+		enactMovement({
+			node,
+			move: ascertainMovement({
+				watcher,
+				stickInfo: thumbstick.info,
+				timeFactor: tick.timeSinceLastTick / 50
+			})
 		})
 	}
 
 	destructor() {
 		this.watcher.destructor()
-		this.ticker.destructor()
 	}
 }

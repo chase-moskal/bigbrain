@@ -9,7 +9,6 @@ import {
 	StandardMaterial,
 	Quaternion as bQuaternion
 } from "babylonjs"
-
 import {autorun, IReactionDisposer} from "mobx"
 
 import {Context} from "../../game"
