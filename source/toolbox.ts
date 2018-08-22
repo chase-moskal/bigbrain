@@ -116,7 +116,11 @@ export const environment: "browser" | "node" = new Function(
 
 declare const process: any
 
-export function now() {
+/**
+ * Current time in milliseconds
+ * - counts elapsed browser session time
+ */
+export function now(): number {
 	if (environment === "browser") return performance.now()
 	else {
 		const t = process.hrtime()
@@ -124,4 +128,7 @@ export function now() {
 	}
 }
 
+/**
+ * Compare two json constructs
+ */
 export const identical = (a, b) => JSON.stringify(a) === JSON.stringify(b)
