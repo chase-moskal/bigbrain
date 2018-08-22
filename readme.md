@@ -1,5 +1,7 @@
 
-# monarch-engine [![build status](https://travis-ci.org/monarch-games/engine.svg?branch=master)](https://travis-ci.org/monarch-games/engine)<br/><small><em>web game engine of chase moskal's dreams</em></small>
+# monarch-engine [![build status](https://travis-ci.org/monarch-games/engine.svg?branch=master)](https://travis-ci.org/monarch-games/engine)
+
+### 🔧 web game engine of chase moskal's dreams
 
 - [x] open source game engine
 - [x] mobile first
@@ -26,8 +28,8 @@
 ### [**📦 npm install monarch-engine**](https://www.npmjs.com/package/monarch-engine)
 
 - build your own games on monarch-engine
-- written in typescript (explicit interfaces)
-- umd modules
+- written in typescript
+- can work with any other engine (monarch supports [babylonjs](https://github.com/BabylonJS/Babylon.js) out of the box)
 
 ## engine development instructions
 
