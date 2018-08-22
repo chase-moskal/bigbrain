@@ -1,7 +1,7 @@
 
 import {observable, autorun} from "mobx"
 
-import {Ticker} from "./ticker"
+import {TickInfo} from "./ticker"
 import {Manager} from "./manager"
 import {getEntityClass} from "./toolbox"
 import {LoopbackNetwork} from "./network"
@@ -16,10 +16,11 @@ export interface ConductorOptions<AdditionalContext = any> {
 
 export class Conductor<AdditionalContext = any> {
 	readonly manager: Manager
+	private readonly entities: Map<string, Entity>
 
 	constructor({entityClasses, context: moreContext = {}}: ConductorOptions<AdditionalContext>) {
 		const state: State = observable({entries: new Map()})
-		const entities: Map<string, Entity> = new Map()
+		const entities: Map<string, Entity> = this.entities = new Map()
 		const manager = new Manager({state, entities})
 		const mode = ModeOfConduct.Alone
 
@@ -47,6 +48,12 @@ export class Conductor<AdditionalContext = any> {
 		autorun(() => replicate({context, state, entities, entityClasses}))
 
 		this.manager = manager
+	}
+
+	logic(tick: TickInfo) {
+		for (const [id, entity] of this.entities) {
+			entity.logic(tick)
+		}
 	}
 }
 

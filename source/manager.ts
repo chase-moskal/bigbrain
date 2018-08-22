@@ -5,7 +5,7 @@ import {Entity} from "./entity"
 import {State, StateEntry} from "./interfaces"
 
 /**
- * MANAGER CLASS
+ * State manager
  *  - public access to administrative game functions
  *  - entities have access to this via context
  */

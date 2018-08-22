@@ -10,12 +10,12 @@ import {
 	Quaternion as bQuaternion
 } from "babylonjs"
 
-import {autorun} from "mobx"
+import {autorun, IReactionDisposer} from "mobx"
 
 import {Context} from "../../game"
 import {copy} from "../../toolbox"
 import {Entity} from "../../entity"
-import {Ticker} from "../../ticker"
+import {TickInfo} from "../../ticker"
 import {Vector, Bearings, Physique, Quaternion} from "../../interfaces"
 
 export interface CubeEntry {
@@ -61,29 +61,42 @@ export class Cube extends Entity<Context, CubeEntry> {
 		ghostMeshBase: Mesh
 	}
 
+	private reactions: IReactionDisposer[]
 	private meshes: {
 		mesh: InstancedMesh
 		ghostMesh: InstancedMesh
 	}
 
-	private ticker: Ticker
-	private reactions
-
 	async init() {
 		if (!Cube.assets) Cube.assets = await this.loadAssets()
 		this.meshes = this.instanceAssets()
-		this.establishLoops()
+		this.establishReactions()
+	}
+
+	logic(tick: TickInfo) {
+		if (this.isTooSoon(tick.timeline, 50)) return
+		const {
+			position: babylonPosition,
+			rotationQuaternion: babylonRotation
+		} = this.meshes.mesh
+		const position = <Vector>babylonPosition.asArray()
+		const rotation = <Quaternion>babylonRotation.asArray()
+		this.updateState({position, rotation})
+	}
+
+	async destructor() {
+		const {mesh, ghostMesh} = await this.meshes
+		for (const dispose of this.reactions) dispose()
+		mesh.dispose()
+		ghostMesh.dispose()
 	}
 
 	private async loadAssets() {
 		const {scene} = this.context
-
 		const meshBase = createCubeMesh(scene)
 		meshBase.isVisible = false
-
 		const ghostMeshBase = createCubeGhostMesh(scene)
 		ghostMeshBase.isVisible = false
-
 		return {meshBase, ghostMeshBase}
 	}
 
@@ -108,22 +121,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 		return {mesh, ghostMesh}
 	}
 
-	private establishLoops() {
-		const ticker = new Ticker({
-			durationBetweenTicks: 50,
-			tickAction: tick => {
-				const {
-					position: babylonPosition,
-					rotationQuaternion: babylonRotation
-				} = this.meshes.mesh
-				const position = <Vector>babylonPosition.asArray()
-				const rotation = <Quaternion>babylonRotation.asArray()
-				this.updateState({position, rotation})
-			}
-		})
-		ticker.start()
-		this.ticker = ticker
-
+	private establishReactions() {
 		this.reactions = [
 			autorun(() => {
 				const {position, rotation} = this.entry.bearings
@@ -132,6 +130,18 @@ export class Cube extends Entity<Context, CubeEntry> {
 				ghostMesh.rotationQuaternion = bQuaternion.FromArray(rotation)
 			})
 		]
+	}
+
+	private last = 0
+	private isTooSoon(timeline: number, threshold: number): boolean {
+		const since = timeline - this.last
+		if (since < threshold) {
+			return true
+		}
+		else {
+			this.last = timeline
+			return false
+		}
 	}
 
 	private updateState({position, rotation}: {
@@ -151,15 +161,5 @@ export class Cube extends Entity<Context, CubeEntry> {
 				someEntries: {[id]: entry}
 			})
 		}, delay)
-	}
-
-	async destructor() {
-		for (const dispose of this.reactions) dispose()
-
-		const {ticker} = this
-		if (ticker) ticker.destructor()
-
-		const {mesh, ghostMesh} = await this.meshes
-		for (const disposable of [mesh, ghostMesh]) disposable.dispose()
 	}
 }

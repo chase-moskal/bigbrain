@@ -35,6 +35,13 @@ export interface TickerOptions {
 }
 
 /**
+ * Default ticker option values
+ */
+const defaultTickerOptions: Partial<TickerOptions> = {
+	durationBetweenTicks: 10
+}
+
+/**
  * Ticker looping mechanism
  * - create a ticking loop with start/stop controls
  * - keep a consistent timeline (does not increase when paused)
@@ -47,9 +54,8 @@ export class Ticker implements Service {
 	private active = false
 	private lastTime = now()
 
-	constructor({tickAction, durationBetweenTicks = 10}: TickerOptions) {
-		this.tickAction = tickAction
-		this.durationBetweenTicks = durationBetweenTicks
+	constructor(opts: TickerOptions) {
+		Object.assign(this, {...defaultTickerOptions, ...opts})
 	}
 
 	/**

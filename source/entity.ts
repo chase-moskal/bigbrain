@@ -3,6 +3,7 @@ import {observable} from "mobx"
 import * as deepFreeze from "deep-freeze"
 
 import {copy} from "./toolbox"
+import {TickInfo} from "./ticker"
 import {StandardContext, StateEntry, Message, State} from "./interfaces"
 
 export abstract class Entity<
@@ -26,7 +27,7 @@ export abstract class Entity<
 	}
 
 	async init() {}
-
+	logic(tick: TickInfo) {}
 	abstract async destructor(): Promise<void>
 }
 
