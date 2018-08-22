@@ -52,7 +52,7 @@ export class PropSystem {
 
 	private proposalMesh: babylon.Mesh = null
 	private readonly propsalTicker = new Ticker({
-		action: tick => {
+		tickAction: tick => {
 			const {aimpoint, proposalMesh} = this
 			if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
 			proposalMesh.position = aimpoint || babylon.Vector3.Zero()

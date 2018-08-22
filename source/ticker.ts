@@ -2,54 +2,99 @@
 import {Service, now, environment} from "./toolbox"
 
 /**
- * Ticker class
- *  - create a ticking loop with start/stop controls
- *  - keep a consistent timeline (doesn't progress when paused)
+ * Information about each tick
+ */
+export interface TickInfo {
+
+	/**
+	 * Elapsed milliseconds of ticker activity (not counting stopped time)
+	 */
+	timeline: number
+
+	/**
+	 * How many milliseconds occurred since the previous tick (not counting stopped time)
+	 */
+	timeSinceLastTick: number
+}
+
+/**
+ * Function called each tick
+ */
+export type TickAction = (tick: TickInfo) => void
+
+/**
+ * Options to create a ticker
+ */
+export interface TickerOptions {
+
+	/** Function called each tick */
+	tickAction: TickAction
+
+	/** Duration in milliseconds between each tick */
+	durationBetweenTicks?: number
+}
+
+/**
+ * Ticker looping mechanism
+ * - create a ticking loop with start/stop controls
+ * - keep a consistent timeline (does not increase when paused)
+ * - subscribe and unsubscribe new tick action functions
  */
 export class Ticker implements Service {
 	private timeline: number = 0
-	private actions: TickAction[] = []
-	private relax: number
-	private stoppage = false
+	private tickAction: TickAction
+	private durationBetweenTicks: number
+	private active = false
 	private lastTime = now()
 
-	constructor({tickAction, durationBetweenTicks = 10}: TickerOptions = {}) {
-		if (tickAction) this.actions.push(tickAction)
-		this.relax = durationBetweenTicks
+	constructor({tickAction, durationBetweenTicks = 10}: TickerOptions) {
+		this.tickAction = tickAction
+		this.durationBetweenTicks = durationBetweenTicks
 	}
 
-	subscribe(action: TickAction) {
-		this.actions.push(action)
-	}
-
-	clear() {
-		this.actions = []
-	}
-
+	/**
+	 * Destruct this ticker
+	 */
 	destructor() {
+		this.tickAction = null
 		this.stop()
-		this.clear()
 	}
 
+	/**
+	 * Start or resume ticking
+	 */
 	start() {
-
-		// handle stoppage
-		if (this.stoppage) {
-			this.stoppage = false
-			return
+		if (this.active) return
+		else {
+			this.active = true
+			this.lastTime = now()
+			this.loop()
 		}
+	}
+
+	/**
+	 * Stop the ticker
+	 */
+	stop() {
+		this.active = false
+	}
+
+	/**
+	 * Internal ticker loop
+	 */
+	private loop() {
+		if (!this.active) return
 
 		// gather 'start' timings
 		const startTime = now()
 		const timeSinceLastTick = startTime - this.lastTime
 		this.timeline += timeSinceLastTick
 
-		// call actions
-		for (const action of this.actions)
-			action({
-				timeSinceLastTick,
-				timeline: this.timeline
-			})
+		// call tick action
+		this.tickAction({
+			timeSinceLastTick,
+			timeline: this.timeline
+		})
 
 		// gather 'after' timings
 		this.lastTime = now()
@@ -57,29 +102,9 @@ export class Ticker implements Service {
 		// recurse, but give the browser some time to relax
 		setTimeout(() => {
 			if (environment === "browser")
-				window.requestAnimationFrame(() => this.start())
+				window.requestAnimationFrame(() => this.loop())
 			else
-				this.start()
-		}, this.relax)
+				this.loop()
+		}, this.durationBetweenTicks)
 	}
-
-	stop() {
-		this.stoppage = true
-	}
-}
-
-export interface TickInfo {
-	timeline: number
-	timeSinceLastTick: number
-}
-
-export type TickAction = (tick: TickInfo) => void
-
-export interface TickerOptions {
-
-	/** functon called on each tick */
-	tickAction?: TickAction
-
-	/** duration in milliseconds */
-	durationBetweenTicks?: number
 }

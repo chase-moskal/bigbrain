@@ -21,9 +21,12 @@ export type Context = StandardContext & GameContext
 export interface GameOptions extends ConductorOptions {
 	canvas: HTMLCanvasElement
 	overlay: HTMLDivElement
-	gravity: number
+	gravity: [number, number, number]
 }
 
+/**
+ * Standard monarch game
+ */
 export class Game {
 	readonly manager: Manager
 
@@ -32,16 +35,10 @@ export class Game {
 
 		const engine = new babylon.Engine(canvas, true, undefined, true)
 		const scene = new babylon.Scene(engine)
+
 		const physicsPlugin = new babylon.CannonJSPlugin()
 		const physicsWorld: cannon.World = physicsPlugin.world
-		scene.enablePhysics(babylon.Vector3.FromArray([0, -gravity, 0]), physicsPlugin)
-
-		overlay.innerHTML = `
-			<div class="thumbsticks">
-				<div class="stick1"></div>
-				<div class="stick2"></div>
-			</div>
-		`
+		scene.enablePhysics(babylon.Vector3.FromArray(gravity), physicsPlugin)
 
 		const susa = new Susa({
 			window,
@@ -49,6 +46,13 @@ export class Game {
 			scene,
 			engine
 		})
+
+		overlay.innerHTML = `
+			<div class="thumbsticks">
+				<div class="stick1"></div>
+				<div class="stick2"></div>
+			</div>
+		`
 
 		susa.start()
 

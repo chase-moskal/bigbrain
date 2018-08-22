@@ -23,8 +23,6 @@ export class Conductor<AdditionalContext = any> {
 		const manager = new Manager({state, entities})
 		const mode = ModeOfConduct.Alone
 
-		const ticker = new Ticker()
-
 		const network = new LoopbackNetwork({
 			mode,
 			state,

@@ -9,7 +9,7 @@ const game = new Game({
 	mode: ModeOfConduct.Alone,
 	canvas: document.querySelector("canvas"),
 	overlay: document.querySelector(".overlay"),
-	gravity: 9.8,
+	gravity: [0, -9.8, 0],
 	entityClasses: {
 		Cube,
 		Editor,

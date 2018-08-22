@@ -10,16 +10,17 @@ export interface MoveSystemOptions {
 }
 
 export class MoveSystem {
-	private readonly thumbstick: Thumbstick
 	private readonly watcher = new Watcher<typeof traversiveBindings>({
 		bindings: traversiveBindings
 	})
+
 	private readonly ticker: Ticker
 
 	constructor({node, stickZone}: MoveSystemOptions) {
 		const thumbstick = new Thumbstick({zone: stickZone})
 		const {watcher} = this
-		const ticker = new Ticker({action: tick => {
+
+		const ticker = this.ticker = new Ticker({tickAction: tick => {
 			enactMovement({
 				node,
 				move: ascertainMovement({
@@ -29,8 +30,8 @@ export class MoveSystem {
 				})
 			})
 		}})
+
 		ticker.start()
-		this.ticker = ticker
 	}
 
 	destructor() {

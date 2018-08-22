@@ -14,7 +14,7 @@ export interface SusaOptions {
 }
 
 /**
- * SUSA CLASS
+ * Susa rendering and input manager
  *  - manage the babylon rendering loop (start/stop methods)
  *  - html dom event handling for pointer locking
  */
