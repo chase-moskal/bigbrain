@@ -16,7 +16,10 @@ export const makeCamera = ({scene, bearings, speed}: {scene: Scene; bearings: Be
 	return camera
 }
 
-export function makeBasicCamera({scene, bearings}: {scene: Scene; bearings: Bearings}): babylon.TargetCamera {
+export function makeBasicCamera({scene, bearings}: {
+	scene: Scene
+	bearings: Bearings
+}): babylon.TargetCamera {
 	const camera = new babylon.TargetCamera("basic-camera", babylon.Vector3.FromArray(bearings.position), scene)
 	scene.activeCamera = camera
 	return camera
@@ -47,7 +50,11 @@ export const createRoundCameraRig = ({
 	return camera
 }
 
-export const makeActiveCamera = ({scene, position, speed}: {scene: Scene, position: Vector, speed: number}) => {
+export const makeActiveCamera = ({scene, position, speed}: {
+	scene: Scene
+	position: Vector
+	speed: number
+}) => {
 	const camera = new FreeCamera("camera", Vector3.FromArray(position), scene)
 	camera.position = Vector3.FromArray(position)
 	camera.setTarget(Vector3.Zero())

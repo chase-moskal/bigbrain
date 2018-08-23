@@ -28,6 +28,8 @@ export class PropSystem implements EntityPlugin {
 	private readonly scene: babylon.Scene
 	private readonly canvas: HTMLCanvasElement
 	private readonly propSpawnHeight: number = 0.2
+	private proposedSize: number = 1
+	private proposalMesh: babylon.Mesh = null
 
 	constructor(options: PropSystemOptions) {
 		this.manager = options.manager
@@ -41,22 +43,24 @@ export class PropSystem implements EntityPlugin {
 		return aimpoint
 	}
 
+	logic(tick: TickInfo) {
+		const {aimpoint, proposalMesh} = this
+		if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
+		if (proposalMesh) proposalMesh.position = aimpoint || babylon.Vector3.Zero()
+	}
+
+	destructor() {
+		this.watcher.destructor()
+		for (const dispose of this.reactions) dispose()
+	}
+
 	private middlePick() {
 		const {scene, canvas} = this
 		return scene.pick(canvas.width / 2, canvas.height / 2)
 	}
 
-	private proposedSize: number = 1
 	private getRandomSize() {
 		return 0.1 + (Math.random() * 1.5)
-	}
-
-	private proposalMesh: babylon.Mesh = null
-
-	logic(tick: TickInfo) {
-		const {aimpoint, proposalMesh} = this
-		if (aimpoint) aimpoint.y += this.proposedSize + this.propSpawnHeight
-		if (proposalMesh) proposalMesh.position = aimpoint || babylon.Vector3.Zero()
 	}
 
 	private reactions = [
@@ -123,9 +127,4 @@ export class PropSystem implements EntityPlugin {
 			}
 		})
 	]
-
-	destructor() {
-		this.watcher.destructor()
-		for (const dispose of this.reactions) dispose()
-	}
 }

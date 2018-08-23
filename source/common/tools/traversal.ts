@@ -3,7 +3,7 @@ import * as babylon from "babylonjs"
 
 import {Watcher, Input} from "../../watcher"
 import {getVectorMagnitude} from "../../toolbox"
-import {ThumbstickInfo} from "../tools/thumbstick"
+import {ThumbstickInfo} from "./thumbstick"
 
 export const traversiveBindings = {
 	forward: [Input.W, Input.ArrowUp],

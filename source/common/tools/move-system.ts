@@ -3,8 +3,8 @@ import {TickInfo} from "../../ticker"
 import {Watcher} from "../../watcher"
 import {EntityPlugin} from "../../entity"
 
-import {Thumbstick} from "../tools/thumbstick"
-import {traversiveBindings, ascertainMovement, enactMovement, MovableNode} from "../tools/traversal"
+import {Thumbstick} from "./thumbstick"
+import {traversiveBindings, ascertainMovement, enactMovement, MovableNode} from "./traversal"
 
 export interface MoveSystemOptions {
 	node: MovableNode

@@ -1,58 +1,24 @@
 
 import {
 	Mesh,
-	Scene,
-	Color3,
 	Vector3,
 	InstancedMesh,
 	PhysicsImpostor,
-	StandardMaterial,
 	Quaternion as bQuaternion
 } from "babylonjs"
 import {autorun, IReactionDisposer} from "mobx"
 
-import {Context} from "../../game"
-import {copy} from "../../toolbox"
-import {Entity} from "../../entity"
-import {TickInfo} from "../../ticker"
-import {Vector, Bearings, Physique, Quaternion} from "../../interfaces"
+import {Context} from "../../../game"
+import {copy} from "../../../toolbox"
+import {Entity} from "../../../entity"
+import {TickInfo} from "../../../ticker"
+import {Vector, Quaternion} from "../../../interfaces"
 
-export interface CubeEntry {
-	type: "Cube"
-	physique: Physique
-	bearings: Bearings
-}
-
-export const createCubeMesh = (scene: Scene): Mesh => {
-	const material = new StandardMaterial("cube-material", scene)
-	material.emissiveColor = new Color3(0.1, 0.6, 0.9)
-
-	const mesh = Mesh.CreateBox("cube-mesh", 1, scene)
-	mesh.material = material
-	return mesh
-}
-
-export const createCubeProposalMesh = (scene: Scene): Mesh => {
-	const material = new StandardMaterial("cube-proposal-material", scene)
-	material.emissiveColor = new Color3(0.1, 0.6, 0.9)
-	material.wireframe = true
-
-	const mesh = Mesh.CreateBox("cube-proposal-mesh", 1, scene)
-	mesh.material = material
-	mesh.isPickable = false
-	return mesh
-}
-
-export const createCubeGhostMesh = (scene: Scene): Mesh => {
-	const material = new StandardMaterial("cube-ghost-material", scene)
-	material.emissiveColor = new Color3(0.5, 0.5, 0.5)
-	material.wireframe = true
-
-	const mesh = Mesh.CreateBox("cube-ghost-mesh", 1, scene)
-	mesh.material = material
-	mesh.isPickable = false
-	return mesh
-}
+import {CubeEntry} from "./cube-interfaces"
+import {
+	createCubeMesh,
+	createCubeGhostMesh
+} from "./cube-tools"
 
 export class Cube extends Entity<Context, CubeEntry> {
 	private static assets: {

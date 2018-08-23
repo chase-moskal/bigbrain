@@ -5,12 +5,12 @@ import {cap} from "../../toolbox"
 import {TickInfo} from "../../ticker"
 import {EntityPlugin} from "../../entity"
 
-import {Thumbstick} from "../tools/thumbstick"
-import {RotatableNode} from "../tools/traversal"
+import {Thumbstick} from "./thumbstick"
+import {RotatableNode} from "./traversal"
 
 export interface LookSystemOptions {
-	engine: babylon.Engine
 	node: RotatableNode
+	engine: babylon.Engine
 	stickZone: HTMLElement
 }
 
@@ -26,8 +26,9 @@ class Freelook {
 }
 
 export class LookSystem implements EntityPlugin {
-	private readonly engine: babylon.Engine
+	private freelook = new Freelook()
 	private readonly node: RotatableNode
+	private readonly engine: babylon.Engine
 	private readonly thumbstick: Thumbstick
 
 	constructor({engine, node, stickZone}: LookSystemOptions) {
@@ -45,7 +46,12 @@ export class LookSystem implements EntityPlugin {
 		this.enactLook()
 	}
 
-	private freelook = new Freelook()
+	destructor() {
+		const {eventHandlers} = this
+		for (const eventName of Object.keys(eventHandlers)) {
+			window.removeEventListener(eventName, eventHandlers[eventName])
+		}
+	}
 
 	private eventHandlers = {
 		mousemove: (event: MouseEvent) => {
@@ -75,11 +81,5 @@ export class LookSystem implements EntityPlugin {
 		const {horizontal, vertical} = freelook
 		const quaternion = babylon.Quaternion.RotationYawPitchRoll(horizontal, vertical, 0)
 		node.rotationQuaternion = quaternion
-	}
-
-	destructor() {
-		for (const eventName of Object.keys(this.eventHandlers)) {
-			window.removeEventListener(eventName, this.eventHandlers[eventName])
-		}
 	}
 }

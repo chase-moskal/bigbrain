@@ -1,6 +1,6 @@
 
 import {Game} from "../game"
-import {Cube} from "./entities/cube"
+import {Cube} from "./entities/cube/cube"
 import {ModeOfConduct} from "../interfaces"
 import {Ground, GroundEntry} from "./entities/ground"
 import {Editor, EditorEntry} from "./entities/editor"
