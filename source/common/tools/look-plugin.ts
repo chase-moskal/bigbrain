@@ -8,7 +8,7 @@ import {EntityPlugin} from "../../entity"
 import {Thumbstick} from "./thumbstick"
 import {RotatableNode} from "./traversal"
 
-export interface LookSystemOptions {
+export interface LookPluginOptions {
 	node: RotatableNode
 	engine: babylon.Engine
 	stickZone: HTMLElement
@@ -25,13 +25,13 @@ class Freelook {
 	}
 }
 
-export class LookSystem implements EntityPlugin {
+export class LookPlugin implements EntityPlugin {
 	private freelook = new Freelook()
 	private readonly node: RotatableNode
 	private readonly engine: babylon.Engine
 	private readonly thumbstick: Thumbstick
 
-	constructor({engine, node, stickZone}: LookSystemOptions) {
+	constructor({engine, node, stickZone}: LookPluginOptions) {
 		this.engine = engine
 		this.node = node
 		this.thumbstick = new Thumbstick({zone: stickZone})

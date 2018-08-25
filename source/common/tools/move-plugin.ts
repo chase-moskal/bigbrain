@@ -6,19 +6,19 @@ import {EntityPlugin} from "../../entity"
 import {Thumbstick} from "./thumbstick"
 import {traversiveBindings, ascertainMovement, enactMovement, MovableNode} from "./traversal"
 
-export interface MoveSystemOptions {
+export interface MovePluginOptions {
 	node: MovableNode
 	stickZone: HTMLElement
 }
 
-export class MoveSystem implements EntityPlugin {
+export class MovePlugin implements EntityPlugin {
 	private readonly node: MovableNode
 	private readonly thumbstick: Thumbstick
 	private readonly watcher = new Watcher<typeof traversiveBindings>({
 		bindings: traversiveBindings
 	})
 
-	constructor({node, stickZone}: MoveSystemOptions) {
+	constructor({node, stickZone}: MovePluginOptions) {
 		this.node = node
 		this.thumbstick = new Thumbstick({zone: stickZone})
 	}

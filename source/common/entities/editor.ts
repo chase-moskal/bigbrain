@@ -5,9 +5,9 @@ import {TickInfo} from "../../ticker"
 import {Bearings} from "../../interfaces"
 import {EntityPlugin} from "../../entity"
 
-import {LookSystem} from "../tools/look-system"
-import {MoveSystem} from "../tools/move-system"
-import {PropSystem} from "../tools/prop-system"
+import {LookPlugin} from "../tools/look-plugin"
+import {MovePlugin} from "../tools/move-plugin"
+import {PropPlugin} from "../tools/prop-plugin"
 import {makeBasicCamera} from "../tools/camtools"
 
 export interface EditorEntry {
@@ -22,19 +22,19 @@ export class Editor extends Entity<Context, EditorEntry> {
 	})
 
 	private readonly plugins: EntityPlugin[] = [
-		new MoveSystem({
+		new MovePlugin({
 			node: this.camera,
 			stickZone: this.context.overlay.querySelector(".stick1")
 		}),
-		new LookSystem({
-			engine: this.context.engine,
+		new LookPlugin({
 			node: this.camera,
+			engine: this.context.engine,
 			stickZone: this.context.overlay.querySelector(".stick2")
 		}),
-		new PropSystem({
-			manager: this.context.manager,
+		new PropPlugin({
 			scene: this.context.scene,
-			canvas: this.context.canvas
+			canvas: this.context.canvas,
+			manager: this.context.manager
 		})
 	]
 

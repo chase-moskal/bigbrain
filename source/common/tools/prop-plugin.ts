@@ -16,13 +16,13 @@ export const bindings = {
 	remove: [Input.X, Input.Backspace, Input.Delete]
 }
 
-export interface PropSystemOptions {
+export interface PropPluginOptions {
 	manager: Manager
 	scene: babylon.Scene
 	canvas: HTMLCanvasElement
 }
 
-export class PropSystem implements EntityPlugin {
+export class PropPlugin implements EntityPlugin {
 	private readonly watcher = new Watcher<typeof bindings>({bindings: bindings})
 	private readonly manager: Manager
 	private readonly scene: babylon.Scene
@@ -31,7 +31,7 @@ export class PropSystem implements EntityPlugin {
 	private proposedSize: number = 1
 	private proposalMesh: babylon.Mesh = null
 
-	constructor(options: PropSystemOptions) {
+	constructor(options: PropPluginOptions) {
 		this.manager = options.manager
 		this.scene = options.scene
 		this.canvas = options.canvas
