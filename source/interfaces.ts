@@ -1,4 +1,6 @@
 
+import * as babylon from "babylonjs"
+
 import {Manager} from "./manager"
 import {Network} from "./network"
 import {Entity, GenericEntity} from "./entity"
@@ -13,6 +15,13 @@ export interface StandardContext {
 	readonly mode: ModeOfConduct
 	readonly manager: Manager
 	readonly network: Network
+}
+
+export interface SusaOptions {
+	scene: babylon.Scene
+	engine: babylon.Engine
+	window: Window
+	canvas: HTMLCanvasElement
 }
 
 export interface ConductorOptions<AdditionalContext = any> {

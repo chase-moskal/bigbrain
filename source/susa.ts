@@ -1,21 +1,8 @@
 
 import * as babylon from "babylonjs"
-import {
-	Scene,
-	Camera,
-	Engine,
-	Vector3,
-	PickingInfo
-} from "babylonjs"
 
+import {SusaOptions} from "./interfaces"
 import {getTime, Service} from "./toolbox"
-
-export interface SusaOptions {
-	scene: Scene
-	engine: Engine
-	window: Window
-	canvas: HTMLCanvasElement
-}
 
 /**
  * Susa rendering and input manager
@@ -29,8 +16,8 @@ export class Susa implements Service {
 	private readonly canvas: HTMLCanvasElement
 
 	private active: boolean = false
-	private readonly fallbackCamera: Camera
-	private pick: PickingInfo = new PickingInfo()
+	private readonly fallbackCamera: babylon.Camera
+	private pick: babylon.PickingInfo = new babylon.PickingInfo()
 	private lastFrameTime = getTime()
 	private locked: boolean = false
 
@@ -54,7 +41,7 @@ export class Susa implements Service {
 	constructor({engine, scene, window, canvas}: SusaOptions) {
 		canvas.onclick = () => canvas.requestPointerLock()
 
-		const fallbackCamera = new Camera("susa.fallback.camera", new Vector3(0, 1, -15), scene)
+		const fallbackCamera = new babylon.Camera("susa.fallback.camera", new babylon.Vector3(0, 1, -15), scene)
 		if (!scene.activeCamera) scene.activeCamera = fallbackCamera
 
 		Object.assign(this, {engine, scene, window, canvas, fallbackCamera})
