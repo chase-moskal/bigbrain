@@ -1,15 +1,15 @@
 
 import * as babylon from "babylonjs"
 
-import {SusaOptions} from "./interfaces"
+import {ViewportOptions} from "./interfaces"
 import {getTime, Service} from "./toolbox"
 
 /**
- * Susa rendering and input manager
+ * Scene rendering and input manager
  *  - manage the babylon rendering loop (start/stop methods)
  *  - html dom event handling for pointer locking
  */
-export class Susa implements Service {
+export class Viewport implements Service {
 	private readonly scene: babylon.Scene
 	private readonly engine: babylon.Engine
 	private readonly window: Window
@@ -38,16 +38,16 @@ export class Susa implements Service {
 		}
 	}
 
-	constructor({engine, scene, window, canvas}: SusaOptions) {
+	constructor({engine, scene, window, canvas, start = true}: ViewportOptions) {
 		canvas.onclick = () => canvas.requestPointerLock()
 
-		const fallbackCamera = new babylon.Camera("susa.fallback.camera", new babylon.Vector3(0, 1, -15), scene)
+		const fallbackCamera = new babylon.Camera("viewport.fallback.camera", new babylon.Vector3(0, 1, -15), scene)
 		if (!scene.activeCamera) scene.activeCamera = fallbackCamera
 
 		Object.assign(this, {engine, scene, window, canvas, fallbackCamera})
-	}
 
-	destructor() {}
+		if (start) this.start()
+	}
 
 	start() {
 		const {window, listeners, engine, scene} = this
@@ -75,4 +75,6 @@ export class Susa implements Service {
 
 		engine.stopRenderLoop()
 	}
+
+	destructor() {}
 }

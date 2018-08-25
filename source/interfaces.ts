@@ -17,11 +17,12 @@ export interface StandardContext {
 	readonly network: Network
 }
 
-export interface SusaOptions {
+export interface ViewportOptions {
 	scene: babylon.Scene
 	engine: babylon.Engine
 	window: Window
 	canvas: HTMLCanvasElement
+	start?: boolean
 }
 
 export interface ConductorOptions<AdditionalContext = any> {

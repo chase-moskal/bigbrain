@@ -12,7 +12,6 @@ export async function replicate({
 	// add new entities
 	for (const [id, entry] of Array.from(state.entries)) {
 		if (!entities.has(id)) {
-			const entry = state.entries.get(id)
 			const Entity = getEntityClass(entry.type, entityClasses)
 			const entity = new Entity({id, context, state})
 			entities.set(id, entity)

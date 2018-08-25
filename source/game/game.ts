@@ -4,10 +4,10 @@ import * as babylon from "babylonjs"
 
 import {GameOptions, GameContext} from "./game-interfaces"
 
-import {Susa} from "../susa"
 import {Ticker} from "../ticker"
 import {Service} from "../toolbox"
 import {Manager} from "../manager"
+import {Viewport} from "../viewport"
 import {Conductor} from "../conductor"
 
 /**
@@ -15,7 +15,7 @@ import {Conductor} from "../conductor"
  */
 export class Game implements Service {
 	readonly manager: Manager
-	private readonly susa: Susa
+	private readonly viewport: Viewport
 	private readonly logicTicker: Ticker
 
 	constructor(options: GameOptions) {
@@ -30,14 +30,13 @@ export class Game implements Service {
 		const physicsWorld: cannon.World = physicsPlugin.world
 		scene.enablePhysics(babylon.Vector3.FromArray(gravity), physicsPlugin)
 
-		// susa handles the viewport, pointer lock
-		const susa = this.susa = new Susa({
+		// viewport handles render loop and pointer lock
+		const viewport = this.viewport = new Viewport({
 			window,
 			canvas,
 			scene,
 			engine
 		})
-		susa.start()
 
 		// 2d overlay
 		overlay.innerHTML = `
@@ -72,16 +71,16 @@ export class Game implements Service {
 
 	start() {
 		this.logicTicker.start()
-		this.susa.start()
+		this.viewport.start()
 	}
 
 	stop() {
 		this.logicTicker.stop()
-		this.susa.stop()
+		this.viewport.stop()
 	}
 
 	destructor() {
 		this.logicTicker.destructor()
-		this.susa.destructor()
+		this.viewport.destructor()
 	}
 }
