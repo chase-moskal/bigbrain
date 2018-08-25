@@ -2,30 +2,13 @@
 import * as cannon from "cannon"
 import * as babylon from "babylonjs"
 
-import {Susa} from "./susa"
-import {Manager} from "./manager"
-import {StandardContext} from "./interfaces"
-import {Conductor, ConductorOptions} from "./conductor"
+import {GameOptions, GameContext} from "./game-interfaces"
 
-import {Service} from "./toolbox"
-import {Ticker, TickAction} from "./ticker"
-
-export interface GameContext {
-	window: Window
-	canvas: HTMLCanvasElement
-	overlay: HTMLDivElement
-	scene: babylon.Scene
-	engine: babylon.Engine
-	physicsWorld: cannon.World
-}
-
-export type Context = StandardContext & GameContext
-
-export interface GameOptions extends ConductorOptions {
-	canvas: HTMLCanvasElement
-	overlay: HTMLDivElement
-	gravity: [number, number, number]
-}
+import {Susa} from "../susa"
+import {Ticker} from "../ticker"
+import {Service} from "../toolbox"
+import {Manager} from "../manager"
+import {Conductor} from "../conductor"
 
 /**
  * Standard monarch game

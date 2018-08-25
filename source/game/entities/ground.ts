@@ -2,7 +2,8 @@
 import * as babylon from "babylonjs"
 import {MeshBuilder, Scene, PhysicsImpostor} from "babylonjs"
 
-import {Context} from "../../game"
+import {Context} from "../game-interfaces"
+
 import {Entity} from "../../entity"
 import {StateEntry} from "../../interfaces"
 

@@ -1,18 +1,17 @@
 
 import {observable, autorun} from "mobx"
 
-import {TickInfo} from "./ticker"
+import {Entity} from "./entity"
 import {Manager} from "./manager"
-import {getEntityClass} from "./toolbox"
+import {replicate} from "./replicate"
 import {LoopbackNetwork} from "./network"
-import {Entity, EntityClasses} from "./entity"
-import {State, StandardContext, ModeOfConduct} from "./interfaces"
-
-export interface ConductorOptions<AdditionalContext = any> {
-	mode: ModeOfConduct
-	entityClasses: EntityClasses
-	context?: AdditionalContext
-}
+import {
+	State,
+	TickInfo,
+	ModeOfConduct,
+	StandardContext,
+	ConductorOptions
+} from "./interfaces"
 
 export class Conductor<AdditionalContext = any> {
 	readonly manager: Manager
@@ -55,42 +54,4 @@ export class Conductor<AdditionalContext = any> {
 			entity.logic(tick)
 		}
 	}
-}
-
-export interface ReplicateParams {
-	state: State
-	context: StandardContext
-	entityClasses: EntityClasses
-	entities: Map<string, Entity>
-}
-
-export async function replicate({
-	context, state, entities, entityClasses
-}: ReplicateParams): Promise<void> {
-
-	const initiates: Promise<void>[] = []
-	const degenerates: Promise<void>[] = []
-
-	// add new entities
-	for (const [id, entry] of Array.from(state.entries)) {
-		if (!entities.has(id)) {
-			const entry = state.entries.get(id)
-			const Entity = getEntityClass(entry.type, entityClasses)
-			const entity = new Entity({id, context, state})
-			entities.set(id, entity)
-			initiates.push(entity.init())
-		}
-	}
-
-	// remove old entities
-	for (const id of entities.keys()) {
-		if (!state.entries.has(id)) {
-			const entity = entities.get(id)
-			degenerates.push(entity.destructor())
-			entities.delete(id)
-		}
-	}
-
-	// wait for all initiations and degenerations
-	await Promise.all([...initiates, ...degenerates])
 }

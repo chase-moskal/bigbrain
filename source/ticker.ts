@@ -1,41 +1,6 @@
 
-import {Service, now, environment} from "./toolbox"
-
-/**
- * Information about each tick
- */
-export interface TickInfo {
-
-	/**
-	 * Elapsed milliseconds of ticker activity (not counting stopped time)
-	 */
-	timeline: number
-
-	/**
-	 * How many milliseconds occurred since the previous tick (not counting stopped time)
-	 */
-	timeSinceLastTick: number
-}
-
-/**
- * Function called each tick
- */
-export type TickAction = (tick: TickInfo) => void
-
-/**
- * Options to create a ticker
- */
-export interface TickerOptions {
-
-	/** Function called each tick */
-	tickAction: TickAction
-
-	/** Initialize with the ticker running */
-	start?: boolean
-
-	/** Duration in milliseconds between each tick */
-	durationBetweenTicks?: number
-}
+import {Service, getTime, environment} from "./toolbox"
+import {TickerOptions, TickAction} from "./interfaces"
 
 /**
  * Default ticker option values
@@ -59,7 +24,7 @@ export class Ticker implements Service {
 
 	private tickAction: TickAction
 	private active = false
-	private lastTime = now()
+	private lastTime = getTime()
 	private records: number[] = []
 
 	constructor(opts: TickerOptions) {
@@ -85,7 +50,7 @@ export class Ticker implements Service {
 		if (this.active) return
 		else {
 			this.active = true
-			this.lastTime = now()
+			this.lastTime = getTime()
 			this.loop()
 		}
 	}
@@ -115,7 +80,7 @@ export class Ticker implements Service {
 		if (!this.active) return
 
 		// gather time data
-		const currentTime = now()
+		const currentTime = getTime()
 		const timeSinceLastTick = currentTime - this.lastTime
 
 		// record some stats

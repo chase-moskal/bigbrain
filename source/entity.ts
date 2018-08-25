@@ -3,8 +3,14 @@ import {observable} from "mobx"
 import * as deepFreeze from "deep-freeze"
 
 import {copy} from "./toolbox"
-import {TickInfo} from "./ticker"
-import {StandardContext, StateEntry, Message, State} from "./interfaces"
+import {
+	State,
+	Message,
+	TickInfo,
+	StateEntry,
+	EntityOptions,
+	StandardContext
+} from "./interfaces"
 
 export abstract class Entity<
 	gContext extends StandardContext = StandardContext,
@@ -33,17 +39,4 @@ export abstract class Entity<
 
 export class GenericEntity extends Entity {
 	async destructor() {}
-}
-
-export interface EntityOptions<gContext = any> {
-	id: string
-	context: gContext
-	state: State
-}
-
-export type EntityClasses = { [name: string]: typeof GenericEntity }
-
-export interface EntityPlugin {
-	logic(tick: TickInfo): void
-	destructor(): void
 }

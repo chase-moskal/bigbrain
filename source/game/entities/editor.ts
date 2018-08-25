@@ -1,13 +1,11 @@
 
-import {Context} from "../../game"
 import {Entity} from "../../entity"
-import {TickInfo} from "../../ticker"
-import {Bearings} from "../../interfaces"
-import {EntityPlugin} from "../../entity"
+import {TickInfo, Bearings, EntityPlugin} from "../../interfaces"
 
-import {LookPlugin} from "../tools/look-plugin"
-import {MovePlugin} from "../tools/move-plugin"
-import {PropPlugin} from "../tools/prop-plugin"
+import {Context} from "../game-interfaces"
+import {LookPlugin} from "../plugins/look-plugin"
+import {MovePlugin} from "../plugins/move-plugin"
+import {PropPlugin} from "../plugins/prop-plugin"
 import {makeBasicCamera} from "../tools/camtools"
 
 export interface EditorEntry {

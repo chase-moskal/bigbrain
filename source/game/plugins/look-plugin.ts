@@ -2,11 +2,10 @@
 import * as babylon from "babylonjs"
 
 import {cap} from "../../toolbox"
-import {TickInfo} from "../../ticker"
-import {EntityPlugin} from "../../entity"
+import {TickInfo, EntityPlugin} from "../../interfaces"
 
-import {Thumbstick} from "./thumbstick"
-import {RotatableNode} from "./traversal"
+import {Thumbstick} from "../tools/thumbstick"
+import {RotatableNode} from "../tools/traversal"
 
 export interface LookPluginOptions {
 	node: RotatableNode

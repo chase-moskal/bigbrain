@@ -1,10 +1,14 @@
 
-import * as cannon from "cannon"
 import * as babylon from "babylonjs"
-import {Scene, Engine, PickingInfo, Camera, Vector3, IPhysicsEnginePlugin} from "babylonjs"
+import {
+	Scene,
+	Camera,
+	Engine,
+	Vector3,
+	PickingInfo
+} from "babylonjs"
 
-import {Vector} from "./interfaces"
-import {now, Service} from "./toolbox"
+import {getTime, Service} from "./toolbox"
 
 export interface SusaOptions {
 	scene: Scene
@@ -27,7 +31,7 @@ export class Susa implements Service {
 	private active: boolean = false
 	private readonly fallbackCamera: Camera
 	private pick: PickingInfo = new PickingInfo()
-	private lastFrameTime = now()
+	private lastFrameTime = getTime()
 	private locked: boolean = false
 
 	private readonly listeners: { [eventName: string]: () => void } = {
@@ -68,9 +72,9 @@ export class Susa implements Service {
 
 		engine.runRenderLoop(() => {
 			if (!this.active) return null
-			const since = now() - this.lastFrameTime
+			const since = getTime() - this.lastFrameTime
 			scene.render()
-			this.lastFrameTime = now()
+			this.lastFrameTime = getTime()
 		})
 	}
 

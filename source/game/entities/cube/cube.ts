@@ -8,17 +8,14 @@ import {
 } from "babylonjs"
 import {autorun, IReactionDisposer} from "mobx"
 
-import {Context} from "../../../game"
 import {copy} from "../../../toolbox"
 import {Entity} from "../../../entity"
-import {TickInfo} from "../../../ticker"
-import {Vector, Quaternion} from "../../../interfaces"
+import {Context} from "../../game-interfaces"
+import {Vector, Quaternion, TickInfo} from "../../../interfaces"
 
 import {CubeEntry} from "./cube-interfaces"
-import {
-	createCubeMesh,
-	createCubeGhostMesh
-} from "./cube-tools"
+import {createCubeMesh} from "./create-cube-mesh"
+import {createCubeGhostMesh} from "./create-cube-ghost-mesh"
 
 export class Cube extends Entity<Context, CubeEntry> {
 	private static assets: {

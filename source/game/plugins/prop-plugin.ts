@@ -3,10 +3,15 @@ import * as mobx from "mobx"
 import * as babylon from "babylonjs"
 
 import {Manager} from "../../manager"
-import {TickInfo} from "../../ticker"
-import {EntityPlugin} from "../../entity"
 import {Watcher, Input} from "../../watcher"
-import {Vector, Bearings, Physique, Quaternion} from "../../interfaces"
+import {
+	TickInfo,
+	EntityPlugin,
+	Vector,
+	Bearings,
+	Physique,
+	Quaternion
+} from "../../interfaces"
 
 import {CubeEntry, createCubeProposalMesh} from "../entities/cube"
 

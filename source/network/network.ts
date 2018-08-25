@@ -1,7 +1,7 @@
 
 import {action} from "mobx"
-import {assignPropsOntoMap, copy} from "./toolbox"
-import {State, Message, Update, ModeOfConduct} from "./interfaces"
+import {assignPropsOntoMap, copy} from "../toolbox"
+import {State, Message, Update, ModeOfConduct} from "../interfaces"
 
 export abstract class Network {
 	protected readonly mode: ModeOfConduct
@@ -36,10 +36,4 @@ export abstract class Network {
 	}
 
 	abstract send(update: Update): void
-}
-
-export class LoopbackNetwork extends Network {
-	send(update: Update): void {
-		this.applyUpdate(update)
-	}
 }
