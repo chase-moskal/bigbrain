@@ -3,12 +3,14 @@ import {Watcher} from "../../watcher"
 import {TickInfo, EntityPlugin} from "../../interfaces"
 
 import {Thumbstick} from "../tools/thumbstick"
-import {traversiveBindings, ascertainMovement, enactMovement, MovableNode} from "../tools/traversal"
+import {MovableNode} from "../tools/tools-interfaces"
+import {
+	enactMovement,
+	ascertainMovement,
+	traversiveBindings
+} from "../tools/traversal"
 
-export interface MovePluginOptions {
-	node: MovableNode
-	stickZone: HTMLElement
-}
+import {MovePluginOptions} from "./plugins-interfaces"
 
 export class MovePlugin implements EntityPlugin {
 	private readonly node: MovableNode

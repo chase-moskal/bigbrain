@@ -5,13 +5,9 @@ import {cap} from "../../toolbox"
 import {TickInfo, EntityPlugin} from "../../interfaces"
 
 import {Thumbstick} from "../tools/thumbstick"
-import {RotatableNode} from "../tools/traversal"
+import {RotatableNode} from "../tools/tools-interfaces"
 
-export interface LookPluginOptions {
-	node: RotatableNode
-	engine: babylon.Engine
-	stickZone: HTMLElement
-}
+import {LookPluginOptions} from "./plugins-interfaces"
 
 class Freelook {
 	horizontal: number = 0

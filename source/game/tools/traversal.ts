@@ -1,9 +1,14 @@
 
 import * as babylon from "babylonjs"
 
-import {Watcher, Input} from "../../watcher"
+import {Input} from "../../watcher"
 import {getVectorMagnitude} from "../../toolbox"
-import {ThumbstickInfo} from "./thumbstick"
+
+import {
+	ThumbstickInfo,
+	MovementInputs,
+	MovableNode
+} from "./tools-interfaces"
 
 export const traversiveBindings = {
 	forward: [Input.W, Input.ArrowUp],
@@ -13,14 +18,6 @@ export const traversiveBindings = {
 	raise: [Input.Space],
 	lower: [Input.Z, Input.C],
 	sprint: [Input.Shift]
-}
-
-export interface MovementInputs {
-	watcher: Watcher<typeof traversiveBindings>
-	stickInfo: ThumbstickInfo
-	maxSpeed?: number
-	timeFactor?: number
-	sprintFactor?: number
 }
 
 export function ascertainMovement({
@@ -62,14 +59,6 @@ export function ascertainMovement({
 		move.normalize()
 
 	return move
-}
-
-export interface MovableNode extends babylon.Node {
-	position: babylon.Vector3
-}
-
-export interface RotatableNode extends babylon.Node {
-	rotationQuaternion: babylon.Quaternion
 }
 
 export function enactMovement({node, move}: {

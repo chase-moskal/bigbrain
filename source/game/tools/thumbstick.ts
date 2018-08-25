@@ -1,30 +1,11 @@
 
 import * as nipplejs from "nipplejs"
 
-export interface NippleData {
-	angle: {
-		radian: number
-		degree: number
-	}
-	direction: {x?: string; y?: string; angle: string}
-	force: number
-	identifier: number
-	instance: any
-	position: {x: number; y: number}
-	pressure: number
-}
-
-export type MoveHandler = (info: ThumbstickInfo) => void
-
-export interface ThumbstickOptions {
-	zone: HTMLElement
-	onMove?: MoveHandler
-}
-
-export interface ThumbstickInfo {
-	angle: number
-	force: number
-}
+import {
+	NippleData,
+	ThumbstickInfo,
+	ThumbstickOptions
+} from "./tools-interfaces"
 
 const defaultThumbstickInfo: ThumbstickInfo = {angle: 0, force: 0}
 

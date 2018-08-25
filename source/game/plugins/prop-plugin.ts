@@ -15,16 +15,12 @@ import {
 
 import {CubeEntry, createCubeProposalMesh} from "../entities/cube"
 
+import {PropPluginOptions} from "./plugins-interfaces"
+
 export const bindings = {
 	propose: [Input.E],
 	place: [Input.MouseLeft],
 	remove: [Input.X, Input.Backspace, Input.Delete]
-}
-
-export interface PropPluginOptions {
-	manager: Manager
-	scene: babylon.Scene
-	canvas: HTMLCanvasElement
 }
 
 export class PropPlugin implements EntityPlugin {
