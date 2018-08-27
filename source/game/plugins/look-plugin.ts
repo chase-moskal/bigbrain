@@ -2,10 +2,10 @@
 import * as babylon from "babylonjs"
 
 import {cap} from "../../toolbox"
-import {TickInfo, EntityPlugin} from "../../interfaces"
-
+import {StickStore} from "../../overlay"
 import {Thumbstick} from "../tools/thumbstick"
 import {RotatableNode} from "../tools/tools-interfaces"
+import {TickInfo, EntityPlugin} from "../../interfaces"
 
 import {LookPluginOptions} from "./plugins-interfaces"
 
@@ -24,12 +24,12 @@ export class LookPlugin implements EntityPlugin {
 	private freelook = new Freelook()
 	private readonly node: RotatableNode
 	private readonly engine: babylon.Engine
-	private readonly thumbstick: Thumbstick
+	private readonly stickStore: StickStore
 
-	constructor({engine, node, stickZone}: LookPluginOptions) {
-		this.engine = engine
+	constructor({engine, node, stickStore}: LookPluginOptions) {
 		this.node = node
-		this.thumbstick = new Thumbstick({zone: stickZone})
+		this.engine = engine
+		this.stickStore = stickStore
 
 		for (const eventName of Object.keys(this.eventHandlers)) {
 			window.addEventListener(eventName, this.eventHandlers[eventName], false)
@@ -37,7 +37,7 @@ export class LookPlugin implements EntityPlugin {
 	}
 
 	logic(tick: TickInfo) {
-		this.ascertainThumbLook()
+		this.ascertainThumblook()
 		this.enactLook()
 	}
 
@@ -59,9 +59,9 @@ export class LookPlugin implements EntityPlugin {
 		}
 	}
 
-	private ascertainThumbLook() {
-		const {thumbstick, freelook} = this
-		const {angle, force} = thumbstick.info
+	private ascertainThumblook() {
+		const {stickStore, freelook} = this
+		const {angle, force} = stickStore
 		if (force > 0) {
 			const x = Math.cos(angle)
 			const y = -Math.sin(angle)

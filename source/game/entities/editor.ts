@@ -22,12 +22,12 @@ export class Editor extends Entity<Context, EditorEntry> {
 	private readonly plugins: EntityPlugin[] = [
 		new MovePlugin({
 			node: this.camera,
-			stickZone: this.context.overlay.querySelector(".stick1")
+			stickStore: this.context.overlayStore.stick1
 		}),
 		new LookPlugin({
 			node: this.camera,
 			engine: this.context.engine,
-			stickZone: this.context.overlay.querySelector(".stick2")
+			stickStore: this.context.overlayStore.stick2
 		}),
 		new PropPlugin({
 			scene: this.context.scene,

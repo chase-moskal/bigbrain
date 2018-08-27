@@ -1,9 +1,8 @@
 
 import {Watcher} from "../../watcher"
-import {TickInfo, EntityPlugin} from "../../interfaces"
-
-import {Thumbstick} from "../tools/thumbstick"
+import {StickStore} from "../../overlay"
 import {MovableNode} from "../tools/tools-interfaces"
+import {TickInfo, EntityPlugin} from "../../interfaces"
 import {
 	enactMovement,
 	ascertainMovement,
@@ -14,23 +13,24 @@ import {MovePluginOptions} from "./plugins-interfaces"
 
 export class MovePlugin implements EntityPlugin {
 	private readonly node: MovableNode
-	private readonly thumbstick: Thumbstick
+	private readonly stickStore: StickStore
 	private readonly watcher = new Watcher<typeof traversiveBindings>({
 		bindings: traversiveBindings
 	})
 
-	constructor({node, stickZone}: MovePluginOptions) {
+	constructor({node, stickStore}: MovePluginOptions) {
 		this.node = node
-		this.thumbstick = new Thumbstick({zone: stickZone})
+		this.stickStore = stickStore
 	}
 
 	logic(tick: TickInfo) {
-		const {node, thumbstick, watcher} = this
+		const {node, stickStore, watcher} = this
+		const {angle, force} = stickStore
 		enactMovement({
 			node,
 			move: ascertainMovement({
 				watcher,
-				stickInfo: thumbstick.info,
+				stickInfo: {angle, force},
 				timeFactor: tick.timeSinceLastTick / 50
 			})
 		})

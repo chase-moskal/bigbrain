@@ -1,4 +1,6 @@
 
+import {h} from "preact"
+import * as preact from "preact"
 import * as cannon from "cannon"
 import * as babylon from "babylonjs"
 
@@ -9,6 +11,8 @@ import {Service} from "../toolbox"
 import {Manager} from "../manager"
 import {Viewport} from "../viewport"
 import {Conductor} from "../conductor"
+import {Overlay, StickStore} from "../overlay"
+import {OverlayStore} from "../overlay/stores/overlay-store"
 
 /**
  * Standard monarch game
@@ -39,12 +43,12 @@ export class Game implements Service {
 		})
 
 		// 2d overlay
-		overlay.innerHTML = `
-			<div class="thumbsticks">
-				<div class="stick1"></div>
-				<div class="stick2"></div>
-			</div>
-		`
+		const overlayStore = new OverlayStore()
+		preact.render(
+			<Overlay {...{overlayStore}}/>,
+			undefined,
+			overlay
+		)
 
 		// conductor keeps gamestate and entity replication
 		const conductor = new Conductor<GameContext>({
@@ -56,7 +60,8 @@ export class Game implements Service {
 				overlay,
 				scene,
 				engine,
-				physicsWorld
+				physicsWorld,
+				overlayStore
 			}
 		})
 

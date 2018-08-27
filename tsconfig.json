@@ -9,7 +9,9 @@
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
 		"sourceMap": true,
-		"declaration": true
+		"declaration": true,
+		"jsx": "react",
+		"jsxFactory": "h"
 	},
 	"exclude": [
 		"dist",

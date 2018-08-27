@@ -1,15 +1,16 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.44",
+	"version": "0.4.0-dev.45",
 	"description": "concept game engine",
 	"main": "dist",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"build": "rimraf dist && mkdir dist && run-p build-library build-global lint && echo ✔ done production build",
-		"build-debug": "rimraf dist && run-p build-library build-global-debug lint && echo ✔ done debug build",
+		"clean": "rimraf dist && mkdirp dist",
+		"build": "run-s clean build-library build-global lint && echo ✔ done production build",
+		"build-debug": "run-s clean build-library build-global-debug lint && echo ✔ done debug build",
 		"build-library": "tsc",
 		"build-global": "browserify -p [ tsify ] source/global.ts > dist/global.bundle.js",
-		"build-global-debug": "browserify --debug -p tsify source/global.ts > dist/global.bundle.js",
+		"build-global-debug": "browserify --debug -p [ tsify ] source/global.ts > dist/global.bundle.js",
 		"lint": "tslint -c tslint.json -e 'types/**' 'source/**/*.ts'",
 		"start": "http-server",
 		"test": "jest --verbose",
@@ -51,8 +52,10 @@
 		"jest": "23.5.0",
 		"jsondiffpatch": "0.3.11",
 		"mobx": "5.0.4",
+		"mobx-preact": "3.0.0",
 		"nipplejs": "0.7.1",
 		"oimo": "1.0.9",
+		"preact": "8.3.1",
 		"uuid": "3.3.2"
 	}
 }

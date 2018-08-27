@@ -10,7 +10,8 @@ import {
 const defaultThumbstickInfo: ThumbstickInfo = {angle: 0, force: 0}
 
 export class Thumbstick {
-	info: ThumbstickInfo = defaultThumbstickInfo
+	info: ThumbstickInfo = {...defaultThumbstickInfo}
+	private manager: any
 
 	constructor({zone, onMove = () => {}}: ThumbstickOptions) {
 		const move = (info: ThumbstickInfo) => {
@@ -18,7 +19,7 @@ export class Thumbstick {
 			onMove(info)
 		}
 
-		const manager = nipplejs.create({
+		const manager = this.manager = nipplejs.create({
 			zone,
 			size: 120,
 			color: "rgba(255,255,255, 0.5)",
@@ -32,5 +33,10 @@ export class Thumbstick {
 			angle: data.angle.radian,
 			force: data.force
 		}))
+	}
+
+	destructor() {
+		this.manager.destroy()
+		this.manager = null
 	}
 }

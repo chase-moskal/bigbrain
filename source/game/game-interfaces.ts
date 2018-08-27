@@ -2,6 +2,7 @@
 import * as babylon from "babylonjs"
 import * as cannon from "cannon"
 
+import {OverlayStore} from "../overlay/stores/overlay-store"
 import {StandardContext, ConductorOptions} from "../interfaces"
 
 export interface GameContext {
@@ -11,6 +12,7 @@ export interface GameContext {
 	scene: babylon.Scene
 	engine: babylon.Engine
 	physicsWorld: cannon.World
+	overlayStore: OverlayStore
 }
 
 export type Context = StandardContext & GameContext
