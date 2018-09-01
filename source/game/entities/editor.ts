@@ -8,6 +8,8 @@ import {MovePlugin} from "../plugins/move-plugin"
 import {PropPlugin} from "../plugins/prop-plugin"
 import {makeBasicCamera} from "../tools/camtools"
 
+import {ContextMenuStore} from "../../overlay/stores/context-menu-store"
+
 export interface EditorEntry {
 	type: "Editor"
 	bearings: Bearings
@@ -36,11 +38,20 @@ export class Editor extends Entity<Context, EditorEntry> {
 		})
 	]
 
+	private readonly menu = new ContextMenuStore()
+
+	async init() {
+		const {menuBar} = this.context.overlayStore
+		menuBar.addMenu(this.menu)
+	}
+
 	logic(tick: TickInfo) {
 		for (const system of this.plugins) system.logic(tick)
 	}
 
 	async destructor() {
+		const {menuBar} = this.context.overlayStore
+		menuBar.removeMenu(this.menu)
 		this.camera.dispose()
 		for (const system of this.plugins) system.destructor()
 	}

@@ -9,9 +9,9 @@ import {GameOptions, GameContext} from "./game-interfaces"
 import {Ticker} from "../ticker"
 import {Service} from "../toolbox"
 import {Manager} from "../manager"
+import {Overlay} from "../overlay"
 import {Viewport} from "../viewport"
 import {Conductor} from "../conductor"
-import {Overlay, StickStore} from "../overlay"
 import {OverlayStore} from "../overlay/stores/overlay-store"
 
 /**
@@ -23,7 +23,7 @@ export class Game implements Service {
 	private readonly logicTicker: Ticker
 
 	constructor(options: GameOptions) {
-		const {overlay, canvas, mode, entityClasses, gravity} = options
+		const {overlayElement, canvas, mode, entityClasses, gravity} = options
 
 		// babylon engine as the foundation
 		const engine = new babylon.Engine(canvas, true, undefined, true)
@@ -47,7 +47,7 @@ export class Game implements Service {
 		preact.render(
 			<Overlay {...{overlayStore}}/>,
 			undefined,
-			overlay
+			overlayElement
 		)
 
 		// conductor keeps gamestate and entity replication
@@ -55,13 +55,13 @@ export class Game implements Service {
 			mode,
 			entityClasses,
 			context: {
+				scene,
 				window,
 				canvas,
-				overlay,
-				scene,
 				engine,
 				physicsWorld,
-				overlayStore
+				overlayStore,
+				overlayElement,
 			}
 		})
 

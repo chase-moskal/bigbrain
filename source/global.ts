@@ -16,7 +16,7 @@ import {
 	const game = new Game({
 		mode: ModeOfConduct.Alone,
 		canvas: document.querySelector("canvas"),
-		overlay: document.querySelector(".overlay"),
+		overlayElement: document.querySelector(".overlay"),
 		gravity: [0, -9.8, 0],
 		entityClasses: {
 			Cube,

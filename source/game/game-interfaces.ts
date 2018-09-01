@@ -7,18 +7,18 @@ import {StandardContext, ConductorOptions} from "../interfaces"
 
 export interface GameContext {
 	window: Window
-	canvas: HTMLCanvasElement
-	overlay: HTMLDivElement
 	scene: babylon.Scene
 	engine: babylon.Engine
+	canvas: HTMLCanvasElement
 	physicsWorld: cannon.World
 	overlayStore: OverlayStore
+	overlayElement: HTMLDivElement
 }
 
 export type Context = StandardContext & GameContext
 
 export interface GameOptions extends ConductorOptions {
 	canvas: HTMLCanvasElement
-	overlay: HTMLDivElement
+	overlayElement: HTMLDivElement
 	gravity: [number, number, number]
 }
