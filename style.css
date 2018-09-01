@@ -30,12 +30,6 @@ canvas {
 	padding: 0 20%;
 }
 
-@media (max-width: 800px) {
-	.menu-bar {
-		padding: 0;
-	}
-}
-
 .menu {
 	flex: 0 1 auto;
 	position: relative;
@@ -69,6 +63,22 @@ canvas {
 .menu { color: white; }
 .menu-button { background: black; }
 .menu-panel { background: rgba(0,0,0, 0.6); }
+
+@media (max-width: 1000px) {
+	.menu-bar {
+		padding: 0;
+	}
+
+	.menu {
+		position: static;
+	}
+
+	.menu-panel {
+		top: 2.5em;
+		left: 0;
+		max-width: 100%;
+	}
+}
 
 .thumbsticks {
 	position: absolute;
