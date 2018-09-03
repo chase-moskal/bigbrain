@@ -1,19 +1,16 @@
 
-import {Entity} from "../../entity"
-import {TickInfo, Bearings, EntityPlugin} from "../../interfaces"
+import {Entity} from "../../../entity"
+import {TickInfo, EntityPlugin} from "../../../interfaces"
 
-import {Context} from "../game-interfaces"
-import {LookPlugin} from "../plugins/look-plugin"
-import {MovePlugin} from "../plugins/move-plugin"
-import {PropPlugin} from "../plugins/prop-plugin"
-import {makeBasicCamera} from "../tools/camtools"
+import {Context} from "../../game-interfaces"
+import {LookPlugin} from "../../plugins/look-plugin"
+import {MovePlugin} from "../../plugins/move-plugin"
+import {PropPlugin} from "../../plugins/prop-plugin"
+import {makeBasicCamera} from "../../tools/camtools"
 
-import {ContextMenuStore} from "../../overlay/stores/context-menu-store"
-
-export interface EditorEntry {
-	type: "Editor"
-	bearings: Bearings
-}
+import {EditorMenu} from "./editor-menu"
+import {EditorEntry} from "./editor-interfaces"
+import {EditorMenuStore} from "./editor-menu-store"
 
 export class Editor extends Entity<Context, EditorEntry> {
 	readonly camera = makeBasicCamera({
@@ -38,21 +35,21 @@ export class Editor extends Entity<Context, EditorEntry> {
 		})
 	]
 
-	private readonly menu = new ContextMenuStore()
+	private readonly menu = new EditorMenuStore()
 
 	async init() {
 		const {menuBar} = this.context.overlayStore
-		menuBar.addMenu(this.menu)
+		menuBar.addMenu(this.menu, EditorMenu)
 	}
 
 	logic(tick: TickInfo) {
-		for (const system of this.plugins) system.logic(tick)
+		for (const plugin of this.plugins) plugin.logic(tick)
 	}
 
 	async destructor() {
 		const {menuBar} = this.context.overlayStore
 		menuBar.removeMenu(this.menu)
 		this.camera.dispose()
-		for (const system of this.plugins) system.destructor()
+		for (const plugin of this.plugins) plugin.destructor()
 	}
 }

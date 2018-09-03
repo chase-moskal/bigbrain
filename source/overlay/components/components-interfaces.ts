@@ -24,5 +24,4 @@ export interface MenuComponentStoreRelation {
 
 export interface MenuBarProps {
 	store: MenuBarStore
-	relations?: MenuComponentStoreRelation[]
 }

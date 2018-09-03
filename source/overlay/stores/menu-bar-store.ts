@@ -1,19 +1,17 @@
 
 import {observable, action} from "mobx"
 
+import {Menu} from "../components"
 import {MenuStore} from "./menu-store"
-import {MenuBarStoreOptions, MenuBarItem} from "./stores-interfaces"
+import {MenuBarItem} from "./stores-interfaces"
 
 export class MenuBarStore {
 	@observable menus: MenuBarItem[] = []
 
-	constructor({menuStores}: MenuBarStoreOptions) {
-		for (const store of menuStores) this.addMenu(store)
-	}
-
-	@action addMenu(store: MenuStore): void {
+	@action addMenu(store: MenuStore, Component: typeof Menu): void {
 		this.menus.push({
 			store,
+			Component,
 			open: false,
 			setOpen: (open: boolean) => this.setOpen(store, open)
 		})
