@@ -49,13 +49,17 @@ export class LookPlugin implements EntityPlugin {
 		}
 	}
 
+	private getSensitivity() {
+		return this.mainMenuStore.lookSensitivity / 10000
+	}
+
 	private eventHandlers = {
 		mousemove: (event: MouseEvent) => {
 			const {movementX, movementY} = event
 			if (this.engine.isPointerLock && !isNaN(movementX) && !isNaN(movementY)) {
-				const {freelook, mainMenuStore} = this
-				const lookSens = mainMenuStore.lookSensitivity / 10000
-				freelook.add(movementX * lookSens, movementY * lookSens)
+				const {freelook} = this
+				const sensitivity = this.getSensitivity()
+				freelook.add(movementX * sensitivity, movementY * sensitivity)
 			}
 		}
 	}
@@ -66,7 +70,7 @@ export class LookPlugin implements EntityPlugin {
 		if (force > 0) {
 			const x = Math.cos(angle)
 			const y = -Math.sin(angle)
-			const factor = force / 25
+			const factor = force * (this.getSensitivity() * 10)
 			freelook.add(x * factor, y * factor)
 		}
 	}
