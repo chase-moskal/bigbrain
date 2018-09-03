@@ -28,7 +28,8 @@ export class Editor extends Entity<Context, EditorEntry> {
 		new LookPlugin({
 			node: this.camera,
 			engine: this.context.engine,
-			stickStore: this.context.overlayStore.stick2
+			mainMenuStore: this.context.mainMenuStore,
+			stickStore: this.context.overlayStore.stick2,
 		}),
 		new PropPlugin({
 			scene: this.context.scene,

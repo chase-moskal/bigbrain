@@ -97,9 +97,10 @@ canvas {
 .menu-panel .setting {
 	display: flex;
 	justify-content: space-between;
-	color: rgba(255,255,255, 0.5);
-	background: rgba(255,255,255, 0.1);
 	margin: 0.5em auto;
+	border-radius: 3px;
+	color: rgba(255,255,255, 0.8);
+	background: rgba(255,255,255, 0.2);
 }
 
 .menu-panel .setting > * {
@@ -107,8 +108,12 @@ canvas {
 	margin: 0.5em;
 }
 
-.menu-panel .setting label {
-	text-transform: lowercase;
+.menu-panel input[type="number"] {
+	background: rgba(0,0,0, 0.5);
+	color: white;
+	border: none;
+	padding: 0 0.4em;
+	border-radius: 3px;
 }
 
 .main-menu .look-sensitivity > label {

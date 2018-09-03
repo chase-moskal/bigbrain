@@ -1,13 +1,14 @@
 
 import * as babylon from "babylonjs"
 import {Manager} from "../../manager"
-import {StickStore} from "../../overlay/stores"
+import {StickStore, MainMenuStore} from "../../overlay/stores"
 import {RotatableNode, MovableNode} from "../tools/tools-interfaces"
 
 export interface LookPluginOptions {
 	node: RotatableNode
 	engine: babylon.Engine
 	stickStore: StickStore
+	mainMenuStore: MainMenuStore
 }
 
 export interface MovePluginOptions {

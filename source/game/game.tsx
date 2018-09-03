@@ -44,6 +44,7 @@ export class Game implements Service {
 
 		// 2d overlay
 		const overlayStore = new OverlayStore()
+		const {mainMenuStore} = overlayStore
 		preact.render(
 			<Overlay {...{overlayStore}}/>,
 			undefined,
@@ -62,6 +63,7 @@ export class Game implements Service {
 				physicsWorld,
 				overlayStore,
 				overlayElement,
+				mainMenuStore
 			}
 		})
 

@@ -2,10 +2,9 @@
 import * as babylon from "babylonjs"
 
 import {cap} from "../../toolbox"
-import {StickStore} from "../../overlay"
-import {Thumbstick} from "../tools/thumbstick"
 import {RotatableNode} from "../tools/tools-interfaces"
 import {TickInfo, EntityPlugin} from "../../interfaces"
+import {StickStore, MainMenuStore} from "../../overlay"
 
 import {LookPluginOptions} from "./plugins-interfaces"
 
@@ -21,15 +20,17 @@ class Freelook {
 }
 
 export class LookPlugin implements EntityPlugin {
-	private freelook = new Freelook()
+	private readonly freelook = new Freelook()
 	private readonly node: RotatableNode
 	private readonly engine: babylon.Engine
 	private readonly stickStore: StickStore
+	private readonly mainMenuStore: MainMenuStore
 
-	constructor({engine, node, stickStore}: LookPluginOptions) {
+	constructor({engine, node, stickStore, mainMenuStore}: LookPluginOptions) {
 		this.node = node
 		this.engine = engine
 		this.stickStore = stickStore
+		this.mainMenuStore = mainMenuStore
 
 		for (const eventName of Object.keys(this.eventHandlers)) {
 			window.addEventListener(eventName, this.eventHandlers[eventName], false)
@@ -52,9 +53,9 @@ export class LookPlugin implements EntityPlugin {
 		mousemove: (event: MouseEvent) => {
 			const {movementX, movementY} = event
 			if (this.engine.isPointerLock && !isNaN(movementX) && !isNaN(movementY)) {
-				const sensitivity = 2000
-				const {freelook} = this
-				freelook.add(movementX / sensitivity, movementY / sensitivity)
+				const {freelook, mainMenuStore} = this
+				const lookSens = mainMenuStore.lookSensitivity / 100000
+				freelook.add(movementX * lookSens, movementY * lookSens)
 			}
 		}
 	}
