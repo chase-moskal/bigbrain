@@ -1,14 +1,14 @@
 
+import * as preact from "preact"
 import {observable, action} from "mobx"
 
-import {Menu} from "../components"
 import {MenuStore} from "./menu-store"
 import {MenuBarItem} from "./stores-interfaces"
 
 export class MenuBarStore {
 	@observable menus: MenuBarItem[] = []
 
-	@action addMenu(store: MenuStore, Component: typeof Menu): void {
+	@action addMenu(store: MenuStore, Component: typeof preact.Component): void {
 		this.menus.push({
 			store,
 			Component,

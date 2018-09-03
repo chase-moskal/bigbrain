@@ -1,10 +1,10 @@
 
-import {Menu} from "../components"
+import * as preact from "preact"
 import {MenuStore} from "./menu-store"
 
 export interface MenuBarItem {
 	store: MenuStore
-	Component: typeof Menu
+	Component: typeof preact.Component
 	open: boolean
 	setOpen: (open?: boolean) => void
 }

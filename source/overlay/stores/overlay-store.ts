@@ -1,10 +1,11 @@
 
+import * as preact from "preact"
 import {observable} from "mobx"
+import {MainMenu} from "../components"
 
 import {StickStore} from "./stick-store"
 import {MenuBarStore} from "./menu-bar-store"
 import {MainMenuStore} from "./main-menu-store"
-import {MainMenu} from "../components"
 
 export class OverlayStore {
 	@observable stick1 = new StickStore()
@@ -12,7 +13,11 @@ export class OverlayStore {
 	@observable menuBar: MenuBarStore
 
 	constructor() {
+		const mainMenuStore = new MainMenuStore()
 		this.menuBar = new MenuBarStore()
-		this.menuBar.addMenu(new MainMenuStore(), MainMenu)
+		this.menuBar.addMenu(mainMenuStore, <typeof preact.Component>MainMenu)
+
+		// start with main menu open
+		this.menuBar.setOpen(mainMenuStore, true)
 	}
 }

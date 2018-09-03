@@ -1,4 +1,6 @@
 
+import * as preact from "preact"
+
 import {Entity} from "../../../entity"
 import {TickInfo, EntityPlugin} from "../../../interfaces"
 
@@ -39,7 +41,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 
 	async init() {
 		const {menuBar} = this.context.overlayStore
-		menuBar.addMenu(this.menu, EditorMenu)
+		menuBar.addMenu(this.menu, <typeof preact.Component>EditorMenu)
 	}
 
 	logic(tick: TickInfo) {

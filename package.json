@@ -6,8 +6,8 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"clean": "rimraf dist && mkdirp dist",
-		"build": "run-s clean build-library build-global lint && echo ✔ done production build",
-		"build-debug": "run-s clean build-library build-global-debug lint && echo ✔ done debug build",
+		"build": "run-s clean && run-p build-library build-global && run-s lint && echo ✔ done production build",
+		"build-debug": "run-s clean build-global-debug lint && echo ✔ done debug build",
 		"build-library": "tsc",
 		"build-global": "browserify -p [ tsify ] source/global.ts > dist/global.bundle.js",
 		"build-global-debug": "browserify --debug -p [ tsify ] source/global.ts > dist/global.bundle.js",

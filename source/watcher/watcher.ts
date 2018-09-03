@@ -39,28 +39,20 @@ export class Watcher<gBindings extends Bindings = Bindings> {
 			if (struckInput === null) return
 			for (const struckAlias of this.getAliasesForInput(struckInput))
 				this.status[struckAlias] = true
-			event.preventDefault()
-			event.stopPropagation()
 		},
 		keyup: (event: KeyboardEvent) => {
 			const releasedInput = this.getInputByKeycode(event.keyCode)
 			if (releasedInput === null) return
 			for (const releasedAlias of this.getAliasesForInput(releasedInput))
 				this.status[releasedAlias] = false
-			event.preventDefault()
-			event.stopPropagation()
 		},
 		mousedown: (event: MouseEvent) => {
 			for (const struckAlias of this.getAliasesForInput(Input.MouseLeft))
 				this.status[struckAlias] = true
-			event.preventDefault()
-			event.stopPropagation()
 		},
 		mouseup: (event: MouseEvent) => {
 			for (const releasedAlias of this.getAliasesForInput(Input.MouseLeft))
 				this.status[releasedAlias] = false
-			event.preventDefault()
-			event.stopPropagation()
 		}
 	}
 

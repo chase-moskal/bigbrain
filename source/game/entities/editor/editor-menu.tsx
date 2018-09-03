@@ -1,8 +1,8 @@
 
-import {h} from "preact"
-import {Menu} from "../../../overlay/components/menu"
+import {h, Component} from "preact"
+import {EditorMenuProps} from "./editor-interfaces"
 
-export class EditorMenu extends Menu {
+export class EditorMenu extends Component<EditorMenuProps> {
 
 	render() {
 		return (
