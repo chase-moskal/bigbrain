@@ -23,20 +23,24 @@ export class MainMenu extends Component<MainMenuProps> {
 		return (
 			<div class="setting look-sensitivity">
 				<label>Look sensitivity</label>
-				<input
-					className="look-sensitivity-range"
-					type="range"
-					{...std}
-					onChange={this.handleLookSensitivityChange}
-					onMouseMove={this.handleLookSensitivityChange}
-					/>
-				<input
-					className="look-sensitivity-number"
-					type="number"
-					{...std}
-					onChange={this.handleLookSensitivityChange}
-					onKeyDown={this.handleLookSensitivityChange}
-					/>
+				<div class="input-wrapper">
+					<input
+						className="look-sensitivity-range"
+						type="range"
+						{...std}
+						onChange={this.handleLookSensitivityChange}
+						onMouseMove={this.handleLookSensitivityChange}
+						/>
+				</div>
+				<div class="input-wrapper">
+					<input
+						className="look-sensitivity-number"
+						type="number"
+						{...std}
+						onChange={this.handleLookSensitivityChange}
+						onKeyDown={this.handleLookSensitivityChange}
+						/>
+				</div>
 			</div>
 		)
 	}
@@ -44,7 +48,6 @@ export class MainMenu extends Component<MainMenuProps> {
 	render() {
 		return (
 			<div className="main-menu">
-				{/* <h2>Settings</h2> */}
 				{this.renderLookSensitivitySetting()}
 			</div>
 		)

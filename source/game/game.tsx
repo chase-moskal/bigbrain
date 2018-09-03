@@ -51,6 +51,9 @@ export class Game implements Service {
 			overlayElement
 		)
 
+		// start with main menu open
+		overlayStore.menuBar.setOpen(mainMenuStore, true)
+
 		// conductor keeps gamestate and entity replication
 		const conductor = new Conductor<GameContext>({
 			mode,
@@ -62,7 +65,6 @@ export class Game implements Service {
 				engine,
 				physicsWorld,
 				overlayStore,
-				overlayElement,
 				mainMenuStore
 			}
 		})

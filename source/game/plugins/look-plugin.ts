@@ -54,7 +54,7 @@ export class LookPlugin implements EntityPlugin {
 			const {movementX, movementY} = event
 			if (this.engine.isPointerLock && !isNaN(movementX) && !isNaN(movementY)) {
 				const {freelook, mainMenuStore} = this
-				const lookSens = mainMenuStore.lookSensitivity / 100000
+				const lookSens = mainMenuStore.lookSensitivity / 10000
 				freelook.add(movementX * lookSens, movementY * lookSens)
 			}
 		}

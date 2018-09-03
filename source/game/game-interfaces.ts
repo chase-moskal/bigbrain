@@ -14,7 +14,6 @@ export interface GameContext {
 	physicsWorld: cannon.World
 	overlayStore: OverlayStore
 	mainMenuStore: MainMenuStore
-	overlayElement: HTMLDivElement
 }
 
 export type Context = StandardContext & GameContext
