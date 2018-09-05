@@ -1,5 +1,13 @@
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+*:focus {
+	outline: none;
+}
 
 html, body {
 	width: 100%;
@@ -130,18 +138,20 @@ canvas {
 	padding: 0.4em 0.8em;
 	border-radius: 3px;
 }
-/* 
+
+/*
 .main-menu .look-sensitivity > label {
 	flex: 1;
 }
 
 .main-menu .look-sensitivity > input {
 	flex: 0;
-} */
+}
 
-/* .main-menu .look-sensitivity > input.look-sensitivity-range {
+.main-menu .look-sensitivity > input.look-sensitivity-range {
 	width: 6em;
-} */
+}
+*/
 
 .thumbsticks {
 	position: absolute;
@@ -160,3 +170,35 @@ canvas {
 
 .stick:first-of-type { left: 0; }
 .stick:last-of-type { right: 0; }
+
+.editor-menu .tools {
+	margin: 0.2em auto;
+}
+
+.editor-menu .tools > p {
+	display: inline-block;
+	margin-right: 0.5em;
+}
+
+.editor-menu .tool {
+	display: inline-block;
+	padding: 0.5em 1em;
+	margin: 0 0.2em;
+	text-decoration: none;
+	color: inherit;
+	border-radius: 5px;
+	border: none;
+	background: rgba(255,255,255, 0.2);
+}
+
+.editor-menu .tool:hover {
+	background: rgba(255,255,255, 0.3);
+}
+
+.editor-menu .tool:active {
+	background: rgba(255,255,255, 0.4);
+}
+
+.editor-menu .tools .tool[data-active="true"] {
+	background: rgba(255,255,255, 0.5);
+}

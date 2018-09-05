@@ -10,3 +10,8 @@ export interface EditorEntry {
 export interface EditorMenuProps {
 	store: EditorMenuStore
 }
+
+export interface EditorTool {
+	label: string
+	tooltip: string
+}
