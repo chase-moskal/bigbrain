@@ -4,6 +4,7 @@ import * as babylon from "babylonjs"
 import {Manager} from "./manager"
 import {Network} from "./network"
 import {Entity, GenericEntity} from "./entity"
+import {StatisticsStore} from "./overlay/stores/statistics-store"
 
 export enum ModeOfConduct {
 	Alone,
@@ -114,6 +115,9 @@ export interface TickerOptions {
 
 	/** Function called each tick */
 	tickAction: TickAction
+
+	/** Store to record statistics onto */
+	tickerStatStore?: StatisticsStore
 
 	/** Initialize with the ticker running */
 	start?: boolean

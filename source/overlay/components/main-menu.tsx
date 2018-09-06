@@ -2,10 +2,20 @@
 import {h, Component} from "preact"
 import {observer} from "mobx-preact"
 import {MainMenuProps} from "./components-interfaces"
-import {MainMenuStore} from "../stores/main-menu-store"
+import {StatisticsStore} from "../stores/statistics-store"
 
 @observer
 export class MainMenu extends Component<MainMenuProps> {
+
+	render() {
+		const {statisticsStore} = this.props.store
+		return (
+			<div className="main-menu">
+				{this.renderLookSensitivitySetting()}
+				<Statistics {...{statisticsStore}}/>
+			</div>
+		)
+	}
 
 	private handleLookSensitivityChange = (
 		event: {target: {value: number} & EventTarget} & Event & MouseEvent & KeyboardEvent
@@ -44,11 +54,23 @@ export class MainMenu extends Component<MainMenuProps> {
 			</div>
 		)
 	}
+}
 
+@observer
+class Statistics extends Component<{statisticsStore: StatisticsStore}> {
 	render() {
+		const {statisticsStore} = this.props
 		return (
-			<div className="main-menu">
-				{this.renderLookSensitivitySetting()}
+			<div className="stats">
+				<div data-stat="logic">
+					<label>Logic</label> <output>{statisticsStore.tickRate.toFixed(0)}</output>
+				</div>
+				<div data-stat="render">
+					<label>Render</label> <output>{statisticsStore.renderRate.toFixed(0)}</output>
+				</div>
+				<div data-stat="timeline">
+					<label>Time</label> <output>{(statisticsStore.timeline / 1000).toFixed(2)}</output>
+				</div>
 			</div>
 		)
 	}

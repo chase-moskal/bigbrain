@@ -21,6 +21,8 @@ canvas {
 	height: 100%;
 }
 
+/* overlay */
+
 .overlay {
 	position: absolute;
 	pointer-events: none;
@@ -34,6 +36,26 @@ canvas {
 .overlay > * {
 	pointer-events: all;
 }
+
+.thumbsticks {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 40%;
+}
+
+.stick {
+	position: absolute;
+	width: 40%;
+	height: 100%;
+	top: 0;
+}
+
+.stick:first-of-type { left: 0; }
+.stick:last-of-type { right: 0; }
+
+/* menu basics */
 
 .menu-bar {
 	display: flex;
@@ -66,7 +88,7 @@ canvas {
 
 .menu-panel {
 	position: absolute;
-	padding: 0.5em 1em;
+	padding: 0.5em;
 	top: 100%;
 	width: 20em;
 	border-radius: 0 5px 5px 5px;
@@ -80,11 +102,11 @@ canvas {
 	.menu-bar {
 		padding: 0;
 	}
-	
+
 	.menu {
 		position: static;
 	}
-	
+
 	.menu-panel {
 		top: 2.5em;
 		left: 0;
@@ -102,36 +124,41 @@ canvas {
 	color: rgba(255,255,255, 0.9);
 }
 
-.menu-panel .setting {
+/* main menu */
+
+.main-menu > div + div {
+	margin-top: 0.5em;
+}
+
+.main-menu .setting {
 	display: flex;
 	justify-content: space-between;
-	margin: 0.5em auto;
 	border-radius: 3px;
 	color: rgba(255,255,255, 0.8);
 	background: rgba(255,255,255, 0.2);
 }
 
-.menu-panel .setting > * {
+.main-menu .setting > * {
 	flex: 0;
 	margin: 0.5em;
 }
 
-.menu-panel .setting label {
+.main-menu .setting label {
 	user-select: none;
 	flex: 1;
 }
 
-.menu-panel .input-wrapper {
+.main-menu .input-wrapper {
 	position: relative;
 	flex: 0 0 4em;
 }
 
-.menu-panel .input-wrapper > input {
+.main-menu .input-wrapper > input {
 	position: absolute;
 	width: 100%;
 }
 
-.menu-panel input[type="number"] {
+.main-menu input[type="number"] {
 	background: rgba(0,0,0, 0.5);
 	color: white;
 	border: none;
@@ -139,37 +166,37 @@ canvas {
 	border-radius: 3px;
 }
 
-/*
-.main-menu .look-sensitivity > label {
-	flex: 1;
+.main-menu .stats {
+	display: flex;
+	flex-direction: row;
+	user-select: none;
 }
 
-.main-menu .look-sensitivity > input {
-	flex: 0;
+.main-menu .stats > div {
+	flex: 1 1 auto;
+	display: flex;
+	flex-direction: column;
+	background: rgba(255,255,255, 0.1);
+	border-radius: 3px;
+	text-align: center;
+	padding: 0.5em;
 }
 
-.main-menu .look-sensitivity > input.look-sensitivity-range {
-	width: 6em;
-}
-*/
-
-.thumbsticks {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	height: 40%;
+.main-menu .stats > div + div {
+	margin-left: 0.4em;
 }
 
-.stick {
-	position: absolute;
-	width: 40%;
-	height: 100%;
-	top: 0;
+.main-menu .stats > div > label {
+	font-size: 0.8em;
+	color: rgba(255,255,255, 0.5);
+	order: 1;
 }
 
-.stick:first-of-type { left: 0; }
-.stick:last-of-type { right: 0; }
+.main-menu .stats > div > output {
+	font-family: "Courier New", monospace;
+}
+
+/* editor menu */
 
 .editor-menu .tools {
 	margin: 0.2em auto;

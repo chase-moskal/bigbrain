@@ -1,6 +1,6 @@
 
-import {Service, getTime, environment} from "./toolbox"
 import {TickerOptions, TickAction} from "./interfaces"
+import {Service, getTime, environment} from "./toolbox"
 
 /**
  * Default ticker option values
@@ -15,15 +15,17 @@ const defaultTickerOptions: Partial<TickerOptions> = {
  * - create a ticking loop with start/stop controls
  * - keep a consistent timeline (does not increase when paused)
  * - subscribe and unsubscribe new tick action functions
+ * - record stats to the stat store
  */
 export class Ticker implements Service {
-	tickRate = 0
-
-	private timeline: number = 0
-	private durationBetweenTicks: number
+	tickRate: number = 0
+	timeline: number = 0
 
 	private tickAction: TickAction
+	private durationBetweenTicks: number
+
 	private active = false
+	private interval: number
 	private lastTime = getTime()
 	private records: number[] = []
 
@@ -51,7 +53,10 @@ export class Ticker implements Service {
 		else {
 			this.active = true
 			this.lastTime = getTime()
-			this.loop()
+			this.interval = setInterval(
+				() => this.loop(),
+				this.durationBetweenTicks
+			)
 		}
 	}
 
@@ -59,18 +64,9 @@ export class Ticker implements Service {
 	 * Stop the ticker
 	 */
 	stop() {
+		clearInterval(this.interval)
+		this.interval = undefined
 		this.active = false
-	}
-
-	/**
-	 * Calculate the tick rate
-	 */
-	private calculateTickRate(timeSinceLastTick: number): number {
-		this.records.unshift(timeSinceLastTick)
-		while (this.records.length > 10) this.records.pop()
-		const sum = this.records.reduce((a, b) => a + b, 0)
-		const averageTimePerTick = sum / this.records.length
-		return 1000 / averageTimePerTick
 	}
 
 	/**
@@ -83,7 +79,7 @@ export class Ticker implements Service {
 		const currentTime = getTime()
 		const timeSinceLastTick = currentTime - this.lastTime
 
-		// record some stats
+		// record stats
 		this.timeline += timeSinceLastTick
 		this.tickRate = this.calculateTickRate(timeSinceLastTick)
 
@@ -96,12 +92,23 @@ export class Ticker implements Service {
 		// gather 'after' timings
 		this.lastTime = currentTime
 
-		// recurse, but give the browser some time to relax
-		setTimeout(() => {
-			if (environment === "browser")
-				window.requestAnimationFrame(() => this.loop())
-			else
-				this.loop()
-		}, this.durationBetweenTicks)
+		// // recurse, but give the browser some time to relax
+		// setTimeout(() => {
+		// 	if (environment === "browser")
+		// 		window.requestAnimationFrame(() => this.loop())
+		// 	else
+		// 		this.loop()
+		// }, this.durationBetweenTicks)
+	}
+
+	/**
+	 * Calculate the tick rate
+	 */
+	private calculateTickRate(timeSinceLastTick: number): number {
+		this.records.unshift(timeSinceLastTick)
+		while (this.records.length > 10) this.records.pop()
+		const sum = this.records.reduce((a, b) => a + b, 0)
+		const averageTimePerTick = sum / this.records.length
+		return 1000 / averageTimePerTick
 	}
 }

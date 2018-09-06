@@ -13,6 +13,7 @@ import {Overlay} from "../overlay"
 import {Viewport} from "../viewport"
 import {Conductor} from "../conductor"
 import {OverlayStore} from "../overlay/stores/overlay-store"
+import {StatisticsStore} from "../overlay/stores/statistics-store"
 
 /**
  * Standard monarch game
@@ -43,7 +44,8 @@ export class Game implements Service {
 		})
 
 		// 2d overlay
-		const overlayStore = new OverlayStore()
+		const statisticsStore = new StatisticsStore()
+		const overlayStore = new OverlayStore({statisticsStore})
 		const {mainMenuStore} = overlayStore
 		preact.render(
 			<Overlay {...{overlayStore}}/>,
@@ -66,9 +68,13 @@ export class Game implements Service {
 			}
 		})
 
-		// create a logic loop ticker which runs the conductor's logic routine
-		const logicTicker = new Ticker({
-			tickAction: tick => conductor.logic(tick)
+		// make the logic ticker
+		this.logicTicker = this.makeLogicTicker({
+			viewport,
+			conductor,
+			statisticsStore,
+			durationBetweenTicks: 0,
+			timeBetweenStatRecordings: 0
 		})
 
 		// expose the state manager
@@ -88,5 +94,33 @@ export class Game implements Service {
 	destructor() {
 		this.logicTicker.destructor()
 		this.viewport.destructor()
+	}
+
+	private makeLogicTicker({
+		viewport,
+		conductor,
+		statisticsStore,
+		durationBetweenTicks,
+		timeBetweenStatRecordings
+	}: {
+		viewport: Viewport
+		conductor: Conductor
+		statisticsStore: StatisticsStore
+		durationBetweenTicks?: number
+		timeBetweenStatRecordings?: number
+	}) {
+		let statmark = 0
+		let ticker
+		return ticker = new Ticker({
+			tickAction: tick => {
+				conductor.logic(tick)
+				if (ticker && tick.timeline - statmark > timeBetweenStatRecordings) {
+					statisticsStore.recordTickerStats(ticker)
+					statisticsStore.recordViewportStats(viewport)
+					statmark = tick.timeline
+				}
+			},
+			durationBetweenTicks
+		})
 	}
 }
