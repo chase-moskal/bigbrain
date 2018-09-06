@@ -1,5 +1,7 @@
 
 import * as preact from "preact"
+import * as babylon from "babylonjs"
+import {autorun, reaction} from "mobx"
 
 import {Entity} from "../../../entity"
 import {TickInfo, EntityPlugin} from "../../../interfaces"
@@ -12,9 +14,11 @@ import {makeBasicCamera} from "../../tools/camtools"
 
 import {EditorMenu} from "./editor-menu"
 import {EditorEntry} from "./editor-interfaces"
-import {EditorMenuStore} from "./editor-menu-store"
+import {createLaserDot} from "./create-laser-dot"
+import {EditorMenuStore, SelectionTool, AdditionTool} from "./editor-menu-store"
 
 export class Editor extends Entity<Context, EditorEntry> {
+
 	readonly camera = makeBasicCamera({
 		scene: this.context.scene,
 		bearings: this.entry.bearings
@@ -29,7 +33,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 			node: this.camera,
 			engine: this.context.engine,
 			mainMenuStore: this.context.mainMenuStore,
-			stickStore: this.context.overlayStore.stick2,
+			stickStore: this.context.overlayStore.stick2
 		}),
 		new PropPlugin({
 			scene: this.context.scene,
@@ -39,14 +43,56 @@ export class Editor extends Entity<Context, EditorEntry> {
 	]
 
 	private readonly menu = new EditorMenuStore()
+	private laserDot: babylon.Mesh
+
+	private reactions = [
+		autorun(() => {
+			const {scene} = this.context
+			const {activeTool} = this.menu
+
+			const toolRequiresLaserDot = (activeTool instanceof SelectionTool
+				|| activeTool instanceof AdditionTool)
+
+			if (toolRequiresLaserDot) {
+				if (!this.laserDot) this.laserDot = createLaserDot({scene})
+			}
+			else if (this.laserDot) {
+				this.laserDot.material.dispose()
+				this.laserDot.dispose()
+				this.laserDot = null
+			}
+		})
+	]
 
 	async init() {
 		const {menuBar} = this.context.overlayStore
 		menuBar.addMenu(this.menu, <typeof preact.Component>EditorMenu)
 	}
 
+	private middlePick() {
+		const {scene, canvas} = this.context
+		const {width, height} = canvas
+		return scene.pick(width / 2, height / 2)
+	}
+
 	logic(tick: TickInfo) {
-		for (const plugin of this.plugins) plugin.logic(tick)
+		const {laserDot} = this
+
+		for (const plugin of this.plugins) {
+			plugin.logic(tick)
+		}
+
+		if (laserDot) {
+			const pick = this.middlePick()
+			if (pick && pick.hit) {
+				laserDot.position = pick.pickedPoint.clone()
+				laserDot.setEnabled(true)
+			}
+			else {
+				laserDot.position.set(0, 0, 0)
+				laserDot.setEnabled(false)
+			}
+		}
 	}
 
 	async destructor() {
@@ -54,5 +100,6 @@ export class Editor extends Entity<Context, EditorEntry> {
 		menuBar.removeMenu(this.menu)
 		this.camera.dispose()
 		for (const plugin of this.plugins) plugin.destructor()
+		for (const dispose of this.reactions) dispose()
 	}
 }
