@@ -198,10 +198,6 @@ canvas {
 
 /* editor menu */
 
-.editor-menu .tools > p {
-	display: none;
-}
-
 .editor-menu .tools {
 	display: flex;
 }

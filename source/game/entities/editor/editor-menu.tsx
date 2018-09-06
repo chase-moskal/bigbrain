@@ -10,7 +10,6 @@ export class EditorMenu extends Component<EditorMenuProps> {
 		const {store} = this.props
 		return (
 			<div class="tools">
-				<p>Tools</p>
 				{store.tools.map(tool =>
 					<button
 						className="tool"
