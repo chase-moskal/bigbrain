@@ -4,9 +4,20 @@ import {observable, action} from "mobx"
 import {MenuStore} from "./menu-store"
 import {StatisticsStore} from "./statistics-store"
 
+const storageKeyLookSensitivity = "monarch-look-sensitivity"
+
+const getStorageLookSensitivity = (): number => {
+	const value = localStorage.getItem(storageKeyLookSensitivity)
+	return value ? JSON.parse(value) : 50
+}
+
+const saveStorageLookSensitivity = (value: number): void => {
+	localStorage.setItem(storageKeyLookSensitivity, JSON.stringify(value))
+}
+
 export class MainMenuStore extends MenuStore {
 	@observable label = "Menu"
-	@observable lookSensitivity: number = 50
+	@observable lookSensitivity: number = getStorageLookSensitivity()
 	@observable statisticsStore: StatisticsStore
 
 	constructor({statisticsStore}: {statisticsStore: StatisticsStore}) {
@@ -16,5 +27,6 @@ export class MainMenuStore extends MenuStore {
 
 	@action setLookSensitivity(value: number) {
 		this.lookSensitivity = value
+		saveStorageLookSensitivity(value)
 	}
 }
