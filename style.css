@@ -224,14 +224,6 @@ canvas {
 	background: rgba(255,255,255, 0.2);
 }
 
-.editor-menu .tool:hover {
-	background: rgba(255,255,255, 0.3);
-}
-
-.editor-menu .tool:active {
-	background: rgba(255,255,255, 0.4);
-}
-
 .editor-menu .tools .tool[data-active="true"] {
 	background: rgba(255,255,255, 0.5);
 }
