@@ -30,7 +30,7 @@ export class EditorMenu extends Component<EditorMenuProps> {
 		const tool = store.tools.find(
 			t => t.label.toLowerCase() === label.toLowerCase()
 		)
-		store.setActiveTool(tool)
+		store.setActiveTool(store.activeTool === tool ? null : tool)
 		event.preventDefault()
 		return false
 	}
