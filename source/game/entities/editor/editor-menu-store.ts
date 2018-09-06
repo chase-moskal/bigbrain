@@ -3,14 +3,14 @@ import {observable, action} from "mobx"
 import {MenuStore} from "../../../overlay/stores/menu-store"
 import {EditorTool} from "./editor-interfaces"
 
-export class AddTool implements EditorTool {
+export class AdditionTool implements EditorTool {
 	label = "Add"
-	tooltip = "Add tool, insert props into the world"
+	tooltip = "Addition tool, insert props into the world"
 }
 
-export class RemoveTool implements EditorTool {
-	label = "Remove"
-	tooltip = "Remove tool, extricate props from the world"
+export class SelectionTool implements EditorTool {
+	label = "Select"
+	tooltip = "Selection tool, edit or remove props"
 }
 
 export class EditorMenuStore extends MenuStore {
@@ -18,8 +18,8 @@ export class EditorMenuStore extends MenuStore {
 	@observable activeTool: EditorTool = null
 
 	@observable tools: EditorTool[] = [
-		new AddTool(),
-		new RemoveTool()
+		new AdditionTool(),
+		new SelectionTool()
 	]
 
 	@action setActiveTool(tool: EditorTool) {

@@ -198,19 +198,25 @@ canvas {
 
 /* editor menu */
 
-.editor-menu .tools {
-	margin: 0.2em auto;
+.editor-menu .tools > p {
+	display: none;
 }
 
-.editor-menu .tools > p {
-	display: inline-block;
-	margin-right: 0.5em;
+.editor-menu .tools {
+	display: flex;
+}
+
+.editor-menu .tool {
+	flex: 1 1 auto;
+}
+
+.editor-menu .tool + .tool {
+	margin-left: 0.2em;
 }
 
 .editor-menu .tool {
 	display: inline-block;
 	padding: 0.5em 1em;
-	margin: 0 0.2em;
 	text-decoration: none;
 	color: inherit;
 	border-radius: 5px;
