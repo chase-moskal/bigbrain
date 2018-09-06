@@ -86,6 +86,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 	private establishReactions() {
 		this.reactions = [
 			autorun(() => {
+				if (!this.entry) return
 				const {position, rotation} = this.entry.bearings
 				const {ghostMesh} = this.meshes
 				ghostMesh.position = Vector3.FromArray(position)
