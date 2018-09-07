@@ -36,7 +36,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 	}
 
 	logic(tick: TickInfo) {
-		if (this.isTooSoon(tick.timeline, 50)) return
+		if (this.isTooSoon(tick.timeline, 200)) return
 		const {
 			position: babylonPosition,
 			rotationQuaternion: babylonRotation
@@ -72,7 +72,13 @@ export class Cube extends Entity<Context, CubeEntry> {
 		const mesh = meshBase.createInstance("cube-instance")
 		mesh.scaling = Vector3.FromArray(size)
 		mesh.position = Vector3.FromArray(position)
-		mesh.physicsImpostor = new PhysicsImpostor(mesh, PhysicsImpostor.BoxImpostor, {mass, restitution}, scene)
+		mesh.physicsImpostor = new PhysicsImpostor(
+			mesh,
+			PhysicsImpostor.BoxImpostor,
+			{mass, restitution},
+			scene
+		)
+		mesh.physicsImpostor.physicsBody.allowSleep = true
 		mesh["entryId"] = id
 
 		const ghostMesh = ghostMeshBase.createInstance("cube-ghost-instance")

@@ -1,7 +1,7 @@
 
+import {autorun} from "mobx"
 import * as preact from "preact"
 import * as babylon from "babylonjs"
-import {autorun, reaction} from "mobx"
 
 import {Entity} from "../../../entity"
 import {TickInfo, EntityPlugin} from "../../../interfaces"
@@ -69,19 +69,15 @@ export class Editor extends Entity<Context, EditorEntry> {
 		menuBar.addMenu(this.menu, <typeof preact.Component>EditorMenu)
 	}
 
-	private middlePick() {
-		const {scene, canvas} = this.context
-		const {width, height} = canvas
-		return scene.pick(width / 2, height / 2)
-	}
-
 	logic(tick: TickInfo) {
 		const {laserDot} = this
 
+		// run plugins
 		for (const plugin of this.plugins) {
 			plugin.logic(tick)
 		}
 
+		// position the laser dot
 		if (laserDot) {
 			const pick = this.middlePick()
 			if (pick && pick.hit) {
@@ -101,5 +97,11 @@ export class Editor extends Entity<Context, EditorEntry> {
 		this.camera.dispose()
 		for (const plugin of this.plugins) plugin.destructor()
 		for (const dispose of this.reactions) dispose()
+	}
+
+	private middlePick() {
+		const {scene, canvas} = this.context
+		const {width, height} = canvas
+		return scene.pick(width / 2, height / 2)
 	}
 }

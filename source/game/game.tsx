@@ -33,6 +33,8 @@ export class Game implements Service {
 		// cannon physics enabled
 		const physicsPlugin = new babylon.CannonJSPlugin()
 		const physicsWorld: cannon.World = physicsPlugin.world
+		physicsWorld.allowSleep = true
+		physicsWorld.broadphase = new cannon.SAPBroadphase(physicsWorld)
 		scene.enablePhysics(babylon.Vector3.FromArray(gravity), physicsPlugin)
 
 		// viewport handles render loop and pointer lock
