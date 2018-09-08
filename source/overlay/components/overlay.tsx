@@ -13,10 +13,14 @@ export class Overlay extends Component<OverlayProps> {
 		return (
 			<div className="overlay">
 				<MenuBar store={overlayStore.menuBar}/>
-				<div className="thumbsticks">
-					<Stick stickStore={overlayStore.stick1}/>
-					<Stick stickStore={overlayStore.stick2}/>
-				</div>
+				{overlayStore.sticksEngaged
+					? (
+						<div className="thumbsticks">
+							<Stick stickStore={overlayStore.stick1}/>
+							<Stick stickStore={overlayStore.stick2}/>
+						</div>
+					)
+					: null}
 			</div>
 		)
 	}

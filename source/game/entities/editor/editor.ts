@@ -65,8 +65,10 @@ export class Editor extends Entity<Context, EditorEntry> {
 	]
 
 	async init() {
-		const {menuBar} = this.context.overlayStore
+		const {overlayStore} = this.context
+		const {menuBar} = overlayStore
 		menuBar.addMenu(this.menu, <typeof preact.Component>EditorMenu)
+		overlayStore.addStickSubscriber()
 	}
 
 	logic(tick: TickInfo) {
@@ -92,8 +94,10 @@ export class Editor extends Entity<Context, EditorEntry> {
 	}
 
 	async destructor() {
-		const {menuBar} = this.context.overlayStore
+		const {overlayStore} = this.context
+		const {menuBar} = overlayStore
 		menuBar.removeMenu(this.menu)
+		overlayStore.subtractStickSubscriber()
 		this.camera.dispose()
 		for (const plugin of this.plugins) plugin.destructor()
 		for (const dispose of this.reactions) dispose()
