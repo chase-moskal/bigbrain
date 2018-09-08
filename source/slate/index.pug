@@ -2,10 +2,14 @@ include ../layout
 doctype html
 html.monarch-engine.monarch-slate
 
-+heady("slate - monarch engine")
+head
+	+headstuff("slate - monarch engine")
+	link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Oswald')
 	link(rel="stylesheet" href="../monarch-style.css")
 
 body
 	canvas.monarch-canvas
 	.overlay
-	script(src="slate-script.bundle.js")
+	script(src="../monarch-global.bundle.js")
+	script.
+		initializeSlate()

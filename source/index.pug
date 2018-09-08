@@ -2,7 +2,8 @@ include layout
 doctype html
 html.monarch-engine.monarch-site
 
-+heady("monarch engine")
+head
+	+headstuff("monarch engine")
 	link(rel="stylesheet" href="monarch-style.css")
 
 body
@@ -12,3 +13,5 @@ body
 			a(target="_blank" href="slate") launch slate
 		p
 			a(target="_blank" href="propshop") launch propshop
+		p
+			a(href="https://github.com/monarch-games/engine") github project

@@ -1,3 +1,9 @@
 
 import * as monarch from "."
-; (<any>window).monarch = monarch
+import {initializeSlate} from "./slate/initialize-slate"
+import {initializePropshop} from "./propshop/initialize-propshop"
+
+const globals = {monarch, initializeSlate, initializePropshop}
+
+for (const key of Object.keys(globals))
+	window[key] = globals[key]

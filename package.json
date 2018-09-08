@@ -1,34 +1,43 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.57",
+	"version": "0.4.0-dev.59",
 	"description": "concept game engine",
 	"main": "dist",
 	"types": "dist/index.d.ts",
 	"scripts": {
-		"prepare": "run-s build",
+		"prepare": "run-p build",
 		"start": "http-server dist",
-		"build": "run-s build-clean build-index build-library && run-p build-styles build-pages build-bundle-global build-bundle-slate build-bundle-propshop && run-p build-lint test && echo ✔ done production build",
-		"build:debug": "run-s build-clean build-index build-library && run-p build-styles build-pages build-bundle-global:debug build-bundle-slate:debug build-bundle-propshop:debug && run-p build-lint && echo ✔ done debug build",
-		"build-clean": "rimraf dist && mkdirp dist dist/slate dist/propshop",
-		"build-index": "barrelsby --exclude \".+\\.(test|bundle).*\" --delete --directory source && replace \";\" \"\" source/index.ts --silent",
+		"build": "run-p build-clean && run-p build-scripts build-styles build-pages && echo ✔ done production build",
+		"build:debug": "run-p build-clean && run-p build-scripts:debug build-styles build-pages && echo ✔ done debug build",
+		"build-clean": "rimraf dist && mkdirp dist dist/slate dist/propshop && run-p build-clean-index",
+		"build-clean-index": "barrelsby --exclude \".+\\.(test|bundle).*\" --delete --directory source && replace \";\" \"\" source/index.ts --silent",
+		"build-scripts": "run-p build-library build-bundle-global && run-p build-lint test",
+		"build-scripts:debug": "run-p build-library build-bundle-global:debug",
 		"build-library": "tsc",
-		"build-lint": "tslint -c tslint.json -e 'types/**' 'source/**/*.ts'",
 		"build-bundle-global": "browserify -p [ tsify ] source/monarch-global.bundle.ts > dist/monarch-global.bundle.js",
 		"build-bundle-global:debug": "browserify --debug -p [ tsify ] source/monarch-global.bundle.ts > dist/monarch-global.bundle.js",
-		"build-bundle-slate": "browserify -p [ tsify ] source/slate/slate-script.bundle.ts > dist/slate/slate-script.bundle.js",
-		"build-bundle-slate:debug": "browserify --debug -p [ tsify ] source/slate/slate-script.bundle.ts > dist/slate/slate-script.bundle.js",
-		"build-bundle-propshop": "browserify -p [ tsify ] source/propshop/propshop-script.bundle.ts > dist/propshop/propshop-script.bundle.js",
-		"build-bundle-propshop:debug": "browserify --debug -p [ tsify ] source/propshop/propshop-script.bundle.ts > dist/propshop/propshop-script.bundle.js",
+		"build-lint": "tslint -c tslint.json -e 'types/**' 'source/**/*.ts'",
 		"build-styles": "sass --source-map source/monarch-style.scss dist/monarch-style.css",
 		"build-pages": "pug source -o dist",
+		"watch": "run-p watch-styles watch-pages watch-ts",
+		"watch-styles": "npm run build-styles -s -- --watch",
+		"watch-pages": "npm run build-pages -s --watch",
+		"watch-ts": "npm-watch",
 		"test": "jest --verbose"
+	},
+	"watch": {
+		"build-scripts:debug": {
+			"patterns": [
+				"source"
+			],
+			"extensions": "ts,tsx",
+			"ignore": "source/index.ts"
+		}
 	},
 	"files": [
 		"dist",
 		"source",
-		"types",
-		"index.html",
-		"style.css"
+		"types"
 	],
 	"repository": {
 		"type": "git",
@@ -47,6 +56,7 @@
 		"http-server": "0.11.1",
 		"mkdirp": "0.5.1",
 		"npm-run-all": "4.1.3",
+		"npm-watch": "0.3.0",
 		"pug-cli": "1.0.0-alpha6",
 		"replace": "1.0.0",
 		"rexreplace": "4.0.1",

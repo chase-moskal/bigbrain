@@ -13,8 +13,6 @@
 	&, body {
 		width: 100%;
 		height: 100%;
-		overflow: hidden;
-		font-family: Oswald, sans-serif;
 	}
 
 	.monarch-canvas {
@@ -227,7 +225,19 @@
 }
 
 .monarch-site {
+	font-family: sans-serif;
 	text-align: center;
+	background: #333;
+	background: linear-gradient(170deg, #444, #222);
+	color: white;
+	text-shadow: 1px 1px 5px black;
+
+	a {
+		color: skyblue;
+		&:visited { color: mix(purple, skyblue); }
+		&:hover { color: lighten(skyblue, 5%); }
+		&:active { color: lighten(skyblue, 10%); }
+	}
 
 	body {
 		padding: 10%;
@@ -236,4 +246,10 @@
 			margin-top: 1em;
 		}
 	}
+}
+
+.monarch-slate, .monarch-propshop {
+	font-family: Oswald, sans-serif;
+	background: linear-gradient(170deg #444, #333);
+	overflow: hidden;
 }

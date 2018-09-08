@@ -2,10 +2,14 @@ include ../layout
 doctype html
 html.monarch-engine.monarch-propshop
 
-+heady("propshop - monarch engine")
+head
+	+headstuff("propshop - monarch engine")
+	link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Oswald')
 	link(rel="stylesheet" href="../monarch-style.css")
 
 body
 	canvas.monarch-canvas
 	.overlay
-	script(src="propshop-script.bundle.js")
+	script(src="../monarch-global.bundle.js")
+	script.
+		initializePropshop()
