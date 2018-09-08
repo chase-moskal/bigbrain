@@ -1,10 +1,11 @@
 
 import * as babylon from "babylonjs"
 
-import {cap} from "../../toolbox"
+import {cap} from "../../toolbox/cap"
 import {RotatableNode} from "../tools/tools-interfaces"
 import {TickInfo, EntityPlugin} from "../../interfaces"
-import {StickStore, MainMenuStore} from "../../overlay"
+import {StickStore} from "../../overlay/stores/stick-store"
+import {MainMenuStore} from "../../overlay/stores/main-menu-store"
 
 import {LookPluginOptions} from "./plugins-interfaces"
 

@@ -8,8 +8,8 @@ import {
 } from "babylonjs"
 import {autorun, IReactionDisposer} from "mobx"
 
-import {copy} from "../../../toolbox"
 import {Entity} from "../../../entity"
+import {copy} from "../../../toolbox/copy"
 import {Context} from "../../game-interfaces"
 import {Vector, Quaternion, TickInfo} from "../../../interfaces"
 

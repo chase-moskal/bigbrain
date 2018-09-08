@@ -1,6 +1,7 @@
 
 import {action} from "mobx"
-import {assignPropsOntoMap, copy} from "../toolbox"
+import {copy} from "../toolbox/copy"
+import {assignPropsOntoMap} from "../toolbox/assign-props-onto-map"
 import {State, Message, Update, ModeOfConduct} from "../interfaces"
 
 export abstract class Network {

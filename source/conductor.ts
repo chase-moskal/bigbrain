@@ -4,7 +4,7 @@ import {observable, autorun} from "mobx"
 import {Entity} from "./entity"
 import {Manager} from "./manager"
 import {replicate} from "./replicate"
-import {LoopbackNetwork} from "./network"
+import {LoopbackNetwork} from "./network/loopback-network"
 import {
 	State,
 	TickInfo,

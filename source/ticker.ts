@@ -1,6 +1,7 @@
 
+import {getTime} from "./toolbox/get-time"
+import {Service} from "./toolbox/toolbox-interfaces"
 import {TickerOptions, TickAction} from "./interfaces"
-import {Service, getTime, environment} from "./toolbox"
 
 /**
  * Default ticker option values

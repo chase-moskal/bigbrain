@@ -1,8 +1,8 @@
 
 import * as babylon from "babylonjs"
 
-import {Watcher} from "../../watcher"
 import {Vector} from "../../interfaces"
+import {Watcher} from "../../watcher/watcher"
 
 import {traversiveBindings} from "./traversal"
 

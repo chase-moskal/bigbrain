@@ -1,6 +1,6 @@
 
 import {Game} from "../game/game"
-import {Service} from "../toolbox"
+import {Service} from "../toolbox/toolbox-interfaces"
 
 import {PropEditorOptions} from "./propshop-interfaces"
 

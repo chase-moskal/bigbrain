@@ -2,7 +2,7 @@
 import {observable} from "mobx"
 import * as deepFreeze from "deep-freeze"
 
-import {copy} from "./toolbox"
+import {copy} from "./toolbox/copy"
 import {
 	State,
 	Message,

@@ -7,11 +7,11 @@ import * as babylon from "babylonjs"
 import {GameOptions, GameContext} from "./game-interfaces"
 
 import {Ticker} from "../ticker"
-import {Service} from "../toolbox"
 import {Manager} from "../manager"
-import {Overlay} from "../overlay"
 import {Viewport} from "../viewport"
 import {Conductor} from "../conductor"
+import {Overlay} from "../overlay/components/overlay"
+import {Service} from "../toolbox/toolbox-interfaces"
 import {OverlayStore} from "../overlay/stores/overlay-store"
 import {StatisticsStore} from "../overlay/stores/statistics-store"
 

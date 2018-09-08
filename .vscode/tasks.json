@@ -13,7 +13,7 @@
 		{
 			"isBuildCommand": true,
 			"taskName": "debug build",
-			"args": ["run", "build-debug", "--silent"],
+			"args": ["run", "build:debug", "--silent"],
 			"problemMatcher": ["$tsc"]
 		}
 	]

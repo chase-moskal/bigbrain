@@ -1,7 +1,7 @@
 
 import {observable} from "mobx"
 import * as preact from "preact"
-import {MainMenu} from "../components"
+import {MainMenu} from "../components/main-menu"
 
 import {StickStore} from "./stick-store"
 import {MenuBarStore} from "./menu-bar-store"

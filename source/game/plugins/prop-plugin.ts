@@ -3,7 +3,8 @@ import * as mobx from "mobx"
 import * as babylon from "babylonjs"
 
 import {Manager} from "../../manager"
-import {Watcher, Input} from "../../watcher"
+import {Input} from "../../watcher/input"
+import {Watcher} from "../../watcher/watcher"
 import {
 	TickInfo,
 	EntityPlugin,
@@ -13,7 +14,8 @@ import {
 	Quaternion
 } from "../../interfaces"
 
-import {CubeEntry, createCubeProposalMesh} from "../entities/cube"
+import {CubeEntry} from "../entities/cube/cube-interfaces"
+import {createCubeProposalMesh} from "../entities/cube/create-cube-proposal-mesh"
 
 import {PropPluginOptions} from "./plugins-interfaces"
 

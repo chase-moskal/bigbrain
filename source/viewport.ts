@@ -1,8 +1,9 @@
 
 import * as babylon from "babylonjs"
 
+import {getTime} from "./toolbox/get-time"
 import {ViewportOptions} from "./interfaces"
-import {getTime, Service} from "./toolbox"
+import {Service} from "./toolbox/toolbox-interfaces"
 
 /**
  * Scene rendering and input manager

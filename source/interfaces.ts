@@ -2,7 +2,7 @@
 import * as babylon from "babylonjs"
 
 import {Manager} from "./manager"
-import {Network} from "./network"
+import {Network} from "./network/network"
 import {Entity, GenericEntity} from "./entity"
 import {StatisticsStore} from "./overlay/stores/statistics-store"
 

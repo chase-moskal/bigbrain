@@ -1,7 +1,7 @@
 
 import {h, Component} from "preact"
-import {Thumbstick} from "../../game"
 import {StickProps} from "./components-interfaces"
+import {Thumbstick} from "../../game/tools/thumbstick"
 
 export class Stick extends Component<StickProps> {
 	thumbstick: Thumbstick
