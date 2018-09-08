@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.60",
+	"version": "0.4.0-dev.61",
 	"description": "concept game engine",
 	"main": "dist",
 	"types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
 		"build-scripts": "run-p build-library build-bundle-global && run-p build-lint test",
 		"build-scripts:debug": "run-p build-library build-bundle-global:debug",
 		"build-library": "tsc",
-		"build-bundle-global": "browserify -p [ tsify ] source/monarch-global.bundle.ts > dist/monarch-global.bundle.js",
+		"build-bundle-global": "browserify -p [ tsify ] -g [ envify --NODE_ENV production ] -t uglifyify source/monarch-global.bundle.ts | uglifyjs -cm > dist/monarch-global.bundle.js",
 		"build-bundle-global:debug": "browserify --debug -p [ tsify ] source/monarch-global.bundle.ts > dist/monarch-global.bundle.js",
 		"build-lint": "tslint -c tslint.json -e 'types/**' 'source/**/*.ts'",
 		"build-styles": "sass --source-map source/monarch-style.scss dist/monarch-style.css",
@@ -54,6 +54,7 @@
 		"browserify": "16.2.2",
 		"cpx": "1.5.0",
 		"create-index": "2.3.0",
+		"envify": "4.1.0",
 		"http-server": "0.11.1",
 		"mkdirp": "0.5.1",
 		"npm-run-all": "4.1.3",
@@ -65,7 +66,9 @@
 		"sass": "1.13.2",
 		"tsify": "4.0.0",
 		"tslint": "5.11.0",
-		"typescript": "2.9.2"
+		"typescript": "2.9.2",
+		"uglify-es": "3.3.9",
+		"uglifyify": "5.0.1"
 	},
 	"dependencies": {
 		"@types/jest": "23.3.1",
