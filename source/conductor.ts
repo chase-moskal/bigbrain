@@ -13,11 +13,11 @@ import {
 	ConductorOptions
 } from "./interfaces"
 
-export class Conductor<AdditionalContext = any> {
+export class Conductor<AdditionalContext extends Object = Object> {
 	readonly manager: Manager
 	private readonly entities: Map<string, Entity>
 
-	constructor({entityClasses, context: moreContext = {}}: ConductorOptions<AdditionalContext>) {
+	constructor({entityClasses, context: moreContext = <AdditionalContext>{}}: ConductorOptions<AdditionalContext>) {
 		const state: State = observable({entries: new Map()})
 		const entities: Map<string, Entity> = this.entities = new Map()
 		const manager = new Manager({state, entities})
@@ -36,7 +36,7 @@ export class Conductor<AdditionalContext = any> {
 		})
 
 		const context = <StandardContext & AdditionalContext>{
-			...moreContext,
+			...<any>moreContext,
 			...<StandardContext>{
 				mode,
 				manager,
