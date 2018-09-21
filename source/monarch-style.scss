@@ -5,8 +5,9 @@
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
+
 		&:focus {
-			outline: none;
+			outline: solid 1px orange;
 		}
 	}
 
@@ -221,6 +222,66 @@
 
 	.editor-menu .tools .tool[data-active="true"] {
 		background: rgba(255,255,255, 0.5);
+	}
+
+	/* mechanic menu */
+
+	.mechanic-menu {
+
+		.loader {
+			display: flex;
+
+			& > * {
+				padding: 0.5em;
+				flex: 1 1 auto;
+			}
+
+			input {
+				flex: 2 1 auto;
+			}
+		}
+
+		.scene-object-list {
+			margin: 0.5em auto;
+			max-height: 320px;
+			overflow: auto;
+
+			li {
+				display: flex;
+				font-size: 0.8em;
+				margin: 0.2em auto;
+				background: rgba(255,255,255, 0.2);
+
+				&[data-is-selected="true"] {
+					background: rgba(255,255,255, 0.3);
+				}
+
+				& > * {
+					padding: 0.1em 0.5em;
+					flex: 1 1 auto;
+				}
+
+				p {
+					background: rgba(255,255,255, 0.0);
+
+					&:hover {
+						background: rgba(255,255,255, 0.1);
+					}
+				}
+
+				button {
+					flex: 0 0 0;
+				}
+			}
+		}
+
+		.danger-zone {
+			display: flex;
+			justify-content: center;
+			button {
+				padding: 0.5em;
+			}
+		}
 	}
 }
 
