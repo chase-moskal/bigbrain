@@ -1,8 +1,10 @@
 
 import {h, Component} from "preact"
+import {observer} from "mobx-preact"
 import {StickProps} from "./components-interfaces"
 import {Thumbstick} from "../../game/tools/thumbstick"
 
+@observer
 export class Stick extends Component<StickProps> {
 	thumbstick: Thumbstick
 

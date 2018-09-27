@@ -1,5 +1,4 @@
 
-import {MenuStore} from "../stores/menu-store"
 import {StickStore} from "../stores/stick-store"
 import {OverlayStore} from "../stores/overlay-store"
 import {MenuBarStore} from "../stores/menu-bar-store"

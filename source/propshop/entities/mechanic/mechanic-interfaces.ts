@@ -1,4 +1,5 @@
 
+import * as babylon from "babylonjs"
 import {StateEntry} from "../../../interfaces"
 import {MechanicMenuStore} from "./mechanic-menu-store"
 
@@ -12,5 +13,11 @@ export interface MechanicMenuProps {
 
 export interface WorldObject {
 	label: string
-	babylonObject: any
+	babylonMesh: babylon.AbstractMesh
+}
+
+export interface ErrorReport {
+	id?: string
+	label: string
+	message: string
 }

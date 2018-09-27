@@ -9,11 +9,11 @@ export async function loadBabylonMeshes(
 ) {
 	babylon.SceneLoader.ShowLoadingScreen = false
 	const meshNames = ""
-	const {dirpath, filename} = pathBreakdown(path)
+	// const {dirpath, filename} = pathBreakdown(path)
 	return babylon.SceneLoader.ImportMeshAsync(
 		meshNames,
-		dirpath,
-		filename,
+		path,
+		null,
 		scene,
 		onProgress
 	)

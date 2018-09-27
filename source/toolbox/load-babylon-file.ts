@@ -16,7 +16,9 @@ export async function loadBabylonFile(
 			scene,
 			() => resolve(),
 			onProgress,
-			() => reject(new Error(`Error loading babylon file: "${path}"`))
+			(scene, message) => reject(
+				new Error(`Error loading babylon file: "${path}" ${message}`)
+			)
 		)
 	})
 }

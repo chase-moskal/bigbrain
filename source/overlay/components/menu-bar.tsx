@@ -1,6 +1,6 @@
 
-import {observer} from "mobx-preact"
 import {h, Component} from "preact"
+import {observer} from "mobx-preact"
 
 import {MenuBarProps} from "./components-interfaces"
 
