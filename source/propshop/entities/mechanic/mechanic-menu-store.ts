@@ -4,7 +4,8 @@ import {observable, action} from "mobx"
 
 import {generateId} from "../../../toolbox/generate-id"
 import {MenuStore} from "../../../overlay/stores/menu-store"
-import {loadBabylonMeshes} from "../../../toolbox/load-babylon-meshes"
+// import {loadBabylonMeshes} from "../../../toolbox/load-babylon-meshes"
+import {loadBabylonAssets} from "../../../toolbox/load-babylon-assets"
 
 import {WorldObject, ErrorReport} from "./mechanic-interfaces"
 
@@ -48,15 +49,20 @@ export class MechanicMenuStore extends MenuStore {
 		this.loading = true
 		try {
 			if (!loaderInput) throw new Error(`empty path is not valid`)
-			const {meshes} = await loadBabylonMeshes(scene, loaderInput, event => {
-				const value = event.lengthComputable
-					? (event.loaded / event.total) * 100
-					: null
-				this.setLoaderProgress(value)
+			const assetContainer = await loadBabylonAssets({
+				scene,
+				path: loaderInput,
+				onProgress: event => {
+					const value = event.lengthComputable
+						? (event.loaded / event.total) * 100
+						: null
+					this.setLoaderProgress(value)
+				}
 			})
+			assetContainer.addAllToScene()
 			this.sceneObjects = [
 				...this.sceneObjects,
-				...meshes.map((mesh): WorldObject => ({
+				...assetContainer.meshes.map((mesh): WorldObject => ({
 					label: mesh.id,
 					babylonMesh: mesh
 				}))
