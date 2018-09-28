@@ -15,6 +15,8 @@ export class MechanicMenuStore extends MenuStore {
 	@observable errors: ErrorReport[] = []
 	@observable sceneObjects: WorldObject[] = []
 	@observable selectedObject: WorldObject = null
+	@observable loading: boolean = false
+	@observable loaderProgress: number = null
 
 	constructor({scene}: {scene: babylon.Scene}) {
 		super()
@@ -37,10 +39,21 @@ export class MechanicMenuStore extends MenuStore {
 		}, 5000)
 	}
 
+	@action setLoaderProgress(value: number) {
+		this.loaderProgress = value
+	}
+
 	@action async loadBabylonObjects(): Promise<boolean> {
 		const {scene, loaderInput} = this
+		this.loading = true
 		try {
-			const {meshes} = await loadBabylonMeshes(scene, loaderInput)
+			if (!loaderInput) throw new Error(`empty path is not valid`)
+			const {meshes} = await loadBabylonMeshes(scene, loaderInput, event => {
+				const value = event.lengthComputable
+					? (event.loaded / event.total) * 100
+					: null
+				this.setLoaderProgress(value)
+			})
 			this.sceneObjects = [
 				...this.sceneObjects,
 				...meshes.map((mesh): WorldObject => ({
@@ -48,15 +61,19 @@ export class MechanicMenuStore extends MenuStore {
 					babylonMesh: mesh
 				}))
 			]
+			this.loading = false
+			this.loaderProgress = null
 			return true
 		}
 		catch (error) {
-			error.message = `error loading babylon file: "${loaderInput}" ${error.message}`
+			error.message = `error loading "${loaderInput}": ${error.message}`
 			this.reportError({
 				label: "load error",
 				message: error.message
 			})
 			console.error(error)
+			this.loading = false
+			this.loaderProgress = null
 			return false
 		}
 	}

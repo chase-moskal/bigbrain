@@ -21,9 +21,18 @@ export class MechanicMenu extends Component<MechanicMenuProps> {
 		this.props.store.clearAllSceneObjects()
 	}
 
+	private handleLoaderInputKeyPress = (event: KeyboardEvent) => {
+		if (event.keyCode === 13) {
+			this.handleLoaderButtonClick()
+		}
+		this.handleLoaderInputChange(event)
+	}
+
 	private resetLoaderInput() {
+		const value = ""
 		const input = this.base.querySelector<HTMLInputElement>(".loader > input")
-		input.value = ""
+		input.value = value
+		this.props.store.setLoaderInput(value)
 	}
 
 	render() {
@@ -34,11 +43,23 @@ export class MechanicMenu extends Component<MechanicMenuProps> {
 					<input
 						type="text"
 						placeholder=".babylon url"
-						onChange={this.handleLoaderInputChange}/>
-					<button onClick={this.handleLoaderButtonClick}>
+						onChange={this.handleLoaderInputChange}
+						onKeyPress={this.handleLoaderInputKeyPress}
+						disabled={store.loading ? true : undefined}
+						/>
+					<button
+						onClick={this.handleLoaderButtonClick}
+						disabled={store.loading ? true : undefined}>
 						load
 					</button>
 				</div>
+				{
+					store.loading
+						? store.loaderProgress !== null
+							? <progress min={0} max={100} value={store.loaderProgress}/>
+							: <progress/>
+						: null
+				}
 				<ul className="error-report-list">
 					{[...store.errors].reverse().map(errorReport => (
 						<li key={errorReport.id}>
