@@ -27,8 +27,8 @@ export class Mechanic extends Entity<Context, MechanicEntry> {
 		const scene = this.context.scene
 		const light1 = new babylon.HemisphericLight("light1", new babylon.Vector3(5, 5, 0), scene)
 		const light2 = new babylon.PointLight("light2", new babylon.Vector3(0, 5, -5), scene)
-		light1.intensity = 0.4
-		light2.intensity = 0.4
+		light1.intensity = 11
+		light2.intensity = 11
 		return [light1, light2]
 	})()
 
