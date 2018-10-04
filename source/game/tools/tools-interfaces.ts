@@ -6,14 +6,6 @@ import {Watcher} from "../../watcher/watcher"
 
 import {traversiveBindings} from "./traversal"
 
-export interface RoundCameraRigOptions {
-	scene: babylon.Scene
-	canvas: HTMLCanvasElement
-	targetPosition: Vector
-	radius: number
-	active: boolean
-}
-
 export interface NippleData {
 	angle: {
 		radian: number

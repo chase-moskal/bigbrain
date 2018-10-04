@@ -28,20 +28,6 @@ export class Ground extends Entity<Context, GroundEntry> {
 
 		light1.intensity = 0.4
 		light2.intensity = 0.4
-
-		// const plane = <Mesh>scene.getMeshByName("Plane")
-		// const torus = <Mesh>scene.getMeshByName("Torus")
-		// const icosphere = <Mesh>scene.getMeshByName("Icosphere")
-		// const light = <SpotLight>scene.getLightByName("Spot")
-
-		// plane.physicsImpostor = new PhysicsImpostor(plane, PhysicsImpostor.BoxImpostor, {mass: 0, restitution: 0.1}, scene)
-
-		// const shadowGenerator = new ShadowGenerator(1024, light)
-		// const shadowCasters = [torus, icosphere]
-		// const shadowReceivers = [plane, torus, icosphere]
-		// shadowGenerator.getShadowMap().renderList.push(...shadowCasters)
-		// plane.receiveShadows = true
-		// shadowGenerator.usePoissonSampling = true
 	}
 
 	async destructor() {}

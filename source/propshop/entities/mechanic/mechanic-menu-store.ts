@@ -4,7 +4,6 @@ import {observable, action} from "mobx"
 
 import {generateId} from "../../../toolbox/generate-id"
 import {MenuStore} from "../../../overlay/stores/menu-store"
-// import {loadBabylonMeshes} from "../../../toolbox/load-babylon-meshes"
 import {loadBabylonAssets} from "../../../toolbox/load-babylon-assets"
 
 import {WorldObject, ErrorReport} from "./mechanic-interfaces"
