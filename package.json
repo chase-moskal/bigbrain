@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.70",
+	"version": "0.4.0-dev.71",
 	"description": "concept game engine",
 	"main": "dist",
 	"types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
 		"build": "run-p build-clean && run-p build-copy build-index && run-p build-scripts build-styles build-pages && echo ✔ done production build",
 		"build:debug": "run-p build-clean && run-p build-copy build-index && run-p build-scripts:debug build-styles build-pages && echo ✔ done debug build",
 		"build-clean": "rimraf dist && mkdirp dist dist/slate dist/propshop",
-		"build-copy": "ncp .nojekyll dist && ncp CNAME dist && ncp assets dist/assets",
+		"build-copy": "ncp .nojekyll dist/.nojekyll && ncp CNAME dist/CNAME && ncp assets dist/assets",
 		"build-index": "barrelsby --exclude \".+\\.(test|bundle).*\" --delete --directory source && replace \";\" \"\" source/index.ts --silent",
 		"build-scripts": "run-p build-library build-bundle-global && run-p build-lint test",
 		"build-scripts:debug": "run-p build-library build-bundle-global:debug",
