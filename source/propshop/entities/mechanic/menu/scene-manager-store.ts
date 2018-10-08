@@ -2,15 +2,13 @@
 import * as babylon from "babylonjs"
 import {observable, action} from "mobx"
 
-import {generateId} from "../../../toolbox/generate-id"
-import {MenuStore} from "../../../overlay/stores/menu-store"
-import {loadBabylonAssets} from "../../../toolbox/load-babylon-assets"
+import {generateId} from "../../../../toolbox/generate-id"
+import {loadBabylonAssets} from "../../../../toolbox/load-babylon-assets"
 
-import {WorldObject, ErrorReport} from "./mechanic-interfaces"
+import {WorldObject, ErrorReport} from "../mechanic-interfaces"
 
-export class MechanicMenuStore extends MenuStore {
+export class SceneManagerStore {
 	readonly scene: babylon.Scene
-	@observable label = "Mechanic"
 	@observable loaderInput: string = ""
 	@observable errors: ErrorReport[] = []
 	@observable sceneObjects: WorldObject[] = []
@@ -19,7 +17,6 @@ export class MechanicMenuStore extends MenuStore {
 	@observable loaderProgress: number = null
 
 	constructor({scene}: {scene: babylon.Scene}) {
-		super()
 		this.scene = scene
 	}
 

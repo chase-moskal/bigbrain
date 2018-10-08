@@ -4,9 +4,9 @@ import * as preact from "preact"
 import {Entity} from "../../../entity"
 import {Context} from "../../../game/game-interfaces"
 
-import {MechanicMenu} from "./mechanic-menu"
+import {MechanicMenu} from "./menu/mechanic-menu"
 import {MechanicEntry} from "./mechanic-interfaces"
-import {MechanicMenuStore} from "./mechanic-menu-store"
+import {MechanicMenuStore} from "./menu/mechanic-menu-store"
 
 import {createRoundCameraRig} from "../../../toolbox/create-round-camera-rig"
 import * as babylon from "babylonjs"

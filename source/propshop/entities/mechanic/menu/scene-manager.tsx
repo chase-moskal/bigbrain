@@ -2,10 +2,21 @@
 import {h, Component} from "preact"
 import {observer} from "mobx-preact"
 
-import {MechanicMenuProps} from "./mechanic-interfaces"
+import {SceneManagerStore} from "./scene-manager-store"
+
+interface SceneManagerProps {
+	store: SceneManagerStore
+}
 
 @observer
-export class MechanicMenu extends Component<MechanicMenuProps> {
+export class SceneManager extends Component<SceneManagerProps> {
+
+	private resetLoaderInput() {
+		const value = ""
+		const input = this.base.querySelector<HTMLInputElement>(".loader > input")
+		input.value = value
+		this.props.store.setLoaderInput(value)
+	}
 
 	private handleLoaderInputChange = event => {
 		const {value} = event.target
@@ -28,17 +39,10 @@ export class MechanicMenu extends Component<MechanicMenuProps> {
 		this.handleLoaderInputChange(event)
 	}
 
-	private resetLoaderInput() {
-		const value = ""
-		const input = this.base.querySelector<HTMLInputElement>(".loader > input")
-		input.value = value
-		this.props.store.setLoaderInput(value)
-	}
-
 	render() {
 		const {store} = this.props
 		return (
-			<div className="mechanic-menu">
+			<div class="scene-manager">
 				<div className="loader">
 					<input
 						type="text"
