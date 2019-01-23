@@ -1,7 +1,6 @@
 
 import {h} from "preact"
 import * as preact from "preact"
-import * as cannon from "cannon"
 import * as babylon from "babylonjs"
 
 import {GameOptions, GameContext} from "./game-interfaces"
@@ -30,12 +29,10 @@ export class Game implements Service {
 		const engine = new babylon.Engine(canvas, true, undefined, true)
 		const scene = new babylon.Scene(engine)
 
-		// cannon physics enabled
-		const physicsPlugin = new babylon.CannonJSPlugin()
-		const physicsWorld: cannon.World = physicsPlugin.world
-		physicsWorld.allowSleep = true
-		physicsWorld.broadphase = new cannon.SAPBroadphase(physicsWorld)
-		scene.enablePhysics(babylon.Vector3.FromArray(gravity), physicsPlugin)
+		const gravityVector = new babylon.Vector3(0, -9.81, 0)
+		const physicsPlugin = new babylon.AmmoJSPlugin()
+		const physicsWorld = physicsPlugin.world
+		scene.enablePhysics(gravityVector, physicsPlugin)
 
 		// viewport handles render loop and pointer lock
 		const viewport = this.viewport = new Viewport({
