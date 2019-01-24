@@ -3,8 +3,10 @@ import {
 	Game,
 	Cube,
 	ModeOfConduct,
-	Ground,
-	GroundEntry,
+
+	Terrain,
+	TerrainEntry,
+
 	Editor,
 	EditorEntry
 } from "."
@@ -20,12 +22,12 @@ export function monarchDemo() {
 		entityClasses: {
 			Cube,
 			Editor,
-			Ground
+			Terrain
 		}
 	})
 
-	game.manager.addEntry<GroundEntry>({
-		type: "Ground"
+	game.manager.addEntry<TerrainEntry>({
+		type: "Terrain"
 	})
 
 	game.manager.addEntry<EditorEntry>({

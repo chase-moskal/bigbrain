@@ -1,6 +1,6 @@
 {
 	"name": "monarch-engine",
-	"version": "0.4.0-dev.74",
+	"version": "0.4.0-dev.75",
 	"description": "concept game engine",
 	"main": "dist",
 	"types": "dist/index.d.ts",
@@ -89,6 +89,7 @@
 		"oimo": "1.0.9",
 		"preact": "8.4.2",
 		"shortid": "2.2.14",
+		"simplex-noise": "2.4.0",
 		"uuid": "3.3.2"
 	}
 }
