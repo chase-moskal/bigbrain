@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../../babylon"
 
 import {cap} from "../../toolbox/cap"
 import {RotatableNode} from "../tools/tools-interfaces"

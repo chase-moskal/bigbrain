@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../../babylon"
 
 import {Vector} from "../../interfaces"
 import {Watcher} from "../../watcher/watcher"

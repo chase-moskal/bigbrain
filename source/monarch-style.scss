@@ -1,5 +1,8 @@
 
 .monarch-engine {
+	font-family: Oswald, sans-serif;
+	background: linear-gradient(170deg #444, #333);
+	overflow: hidden;
 
 	&, * {
 		margin: 0;
@@ -307,10 +310,4 @@
 			margin-top: 1em;
 		}
 	}
-}
-
-.monarch-slate, .monarch-propshop {
-	font-family: Oswald, sans-serif;
-	background: linear-gradient(170deg #444, #333);
-	overflow: hidden;
 }

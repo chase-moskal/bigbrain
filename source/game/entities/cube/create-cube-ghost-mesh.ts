@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../../../babylon"
 
 export const createCubeGhostMesh = (scene: babylon.Scene): babylon.Mesh => {
 	const material = new babylon.StandardMaterial("cube-ghost-material", scene)

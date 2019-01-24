@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../babylon"
 import * as cannon from "cannon"
 
 import {MainMenuStore} from "../overlay/stores/main-menu-store"

@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../../../babylon"
 
 export function createLaserDot({scene}: {scene: babylon.Scene}) {
 

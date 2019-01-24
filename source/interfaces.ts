@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "./babylon"
 
 import {Manager} from "./manager"
 import {Network} from "./network/network"

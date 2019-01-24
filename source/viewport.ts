@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "./babylon"
 
 import {getTime} from "./toolbox/get-time"
 import {ViewportOptions} from "./interfaces"

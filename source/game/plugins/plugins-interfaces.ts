@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../../babylon"
 import {Manager} from "../../manager"
 import {StickStore} from "../../overlay/stores/stick-store"
 import {MainMenuStore} from "../../overlay/stores/main-menu-store"

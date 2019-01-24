@@ -1,12 +1,7 @@
 
-import {
-	Mesh,
-	Vector3,
-	InstancedMesh,
-	PhysicsImpostor,
-	Quaternion as bQuaternion
-} from "babylonjs"
 import {autorun, IReactionDisposer} from "mobx"
+
+import babylon from "../../../babylon"
 
 import {Entity} from "../../../entity"
 import {copy} from "../../../toolbox/copy"
@@ -19,14 +14,14 @@ import {createCubeGhostMesh} from "./create-cube-ghost-mesh"
 
 export class Cube extends Entity<Context, CubeEntry> {
 	private static assets: {
-		meshBase: Mesh
-		ghostMeshBase: Mesh
+		meshBase: babylon.Mesh
+		ghostMeshBase: babylon.Mesh
 	}
 
 	private reactions: IReactionDisposer[]
 	private meshes: {
-		mesh: InstancedMesh
-		ghostMesh: InstancedMesh
+		mesh: babylon.InstancedMesh
+		ghostMesh: babylon.InstancedMesh
 	}
 
 	async init() {
@@ -70,11 +65,11 @@ export class Cube extends Entity<Context, CubeEntry> {
 		const {meshBase, ghostMeshBase} = Cube.assets
 
 		const mesh = meshBase.createInstance("cube-instance")
-		mesh.scaling = Vector3.FromArray(size)
-		mesh.position = Vector3.FromArray(position)
-		mesh.physicsImpostor = new PhysicsImpostor(
+		mesh.scaling = babylon.Vector3.FromArray(size)
+		mesh.position = babylon.Vector3.FromArray(position)
+		mesh.physicsImpostor = new babylon.PhysicsImpostor(
 			mesh,
-			PhysicsImpostor.BoxImpostor,
+			babylon.PhysicsImpostor.BoxImpostor,
 			{mass, restitution},
 			scene
 		)
@@ -82,8 +77,8 @@ export class Cube extends Entity<Context, CubeEntry> {
 		mesh["entryId"] = id
 
 		const ghostMesh = ghostMeshBase.createInstance("cube-ghost-instance")
-		ghostMesh.scaling = Vector3.FromArray(size)
-		ghostMesh.position = Vector3.FromArray(position)
+		ghostMesh.scaling = babylon.Vector3.FromArray(size)
+		ghostMesh.position = babylon.Vector3.FromArray(position)
 		ghostMesh.isPickable = false
 
 		return {mesh, ghostMesh}
@@ -95,8 +90,8 @@ export class Cube extends Entity<Context, CubeEntry> {
 				if (!this.entry) return
 				const {position, rotation} = this.entry.bearings
 				const {ghostMesh} = this.meshes
-				ghostMesh.position = Vector3.FromArray(position)
-				ghostMesh.rotationQuaternion = bQuaternion.FromArray(rotation)
+				ghostMesh.position = babylon.Vector3.FromArray(position)
+				ghostMesh.rotationQuaternion = babylon.Quaternion.FromArray(rotation)
 			})
 		]
 	}

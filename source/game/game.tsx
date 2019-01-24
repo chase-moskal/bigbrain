@@ -1,7 +1,7 @@
 
 import {h} from "preact"
 import * as preact from "preact"
-import * as babylon from "babylonjs"
+import babylon from "../babylon"
 
 import {GameOptions, GameContext} from "./game-interfaces"
 

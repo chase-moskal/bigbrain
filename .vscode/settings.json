@@ -7,12 +7,16 @@
 	"files.insertFinalNewline": true,
 
 	"files.exclude": {
-		"dist": true,
+		"dist": false,
 		".nyc*": true,
 		"coverage": true,
 		"node_modules": true,
 		"package-lock.json": true,
 		"*.log*": true
+	},
+
+	"search.exclude": {
+		"assets": true
 	},
 
 	"typescript.tsdk": "node_modules/typescript/lib/"

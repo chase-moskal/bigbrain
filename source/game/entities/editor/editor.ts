@@ -1,7 +1,7 @@
 
 import {autorun} from "mobx"
 import * as preact from "preact"
-import * as babylon from "babylonjs"
+import babylon from "../../../babylon"
 
 import {Entity} from "../../../entity"
 import {TickInfo, EntityPlugin} from "../../../interfaces"

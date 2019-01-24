@@ -1,5 +1,5 @@
 
-import * as babylon from "babylonjs"
+import babylon from "../../babylon"
 
 import {Input} from "../../watcher/input"
 import {getVectorMagnitude} from "../../toolbox/get-vector-magnitude"

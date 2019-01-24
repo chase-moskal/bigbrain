@@ -7,9 +7,11 @@ import {
 	GroundEntry,
 	Editor,
 	EditorEntry
-} from ".."
+} from "."
 
-export function initializeSlate() {
+monarchDemo()
+
+export function monarchDemo() {
 	const game = new Game({
 		mode: ModeOfConduct.Alone,
 		canvas: document.querySelector("canvas"),

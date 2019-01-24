@@ -1,23 +1,22 @@
 
-import * as babylon from "babylonjs"
-import {Scene, Vector3, FreeCamera, ArcRotateCamera} from "babylonjs"
+import babylon from "../../babylon"
 
 import {Vector, Bearings} from "../../interfaces"
 
-export const makeCamera = ({scene, bearings, speed}: {scene: Scene; bearings: Bearings; speed: number}) => {
-	const camera = new FreeCamera("Spectator Camera", Vector3.FromArray(bearings.position), scene)
-	camera.position = Vector3.FromArray(bearings.position)
-	camera.setTarget(Vector3.Zero())
+export const makeCamera = ({scene, bearings, speed}: {scene: babylon.Scene; bearings: Bearings; speed: number}) => {
+	const camera = new babylon.FreeCamera("Spectator Camera", babylon.Vector3.FromArray(bearings.position), scene)
+	camera.position = babylon.Vector3.FromArray(bearings.position)
+	camera.setTarget(babylon.Vector3.Zero())
 	camera.speed = speed
 	camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
-	if (!camera._localDirection) camera._localDirection = Vector3.Zero()
-	if (!camera._transformedDirection) camera._transformedDirection = Vector3.Zero()
+	if (!camera._localDirection) camera._localDirection = babylon.Vector3.Zero()
+	if (!camera._transformedDirection) camera._transformedDirection = babylon.Vector3.Zero()
 	scene.activeCamera = camera
 	return camera
 }
 
 export function makeBasicCamera({scene, bearings}: {
-	scene: Scene
+	scene: babylon.Scene
 	bearings: Bearings
 }): babylon.TargetCamera {
 	const camera = new babylon.TargetCamera("basic-camera", babylon.Vector3.FromArray(bearings.position), scene)
@@ -26,17 +25,17 @@ export function makeBasicCamera({scene, bearings}: {
 }
 
 export const makeActiveCamera = ({scene, position, speed}: {
-	scene: Scene
+	scene: babylon.Scene
 	position: Vector
 	speed: number
 }) => {
-	const camera = new FreeCamera("camera", Vector3.FromArray(position), scene)
-	camera.position = Vector3.FromArray(position)
-	camera.setTarget(Vector3.Zero())
+	const camera = new babylon.FreeCamera("camera", babylon.Vector3.FromArray(position), scene)
+	camera.position = babylon.Vector3.FromArray(position)
+	camera.setTarget(babylon.Vector3.Zero())
 	camera.speed = speed
 	camera.inputs.removeByType("FreeCameraKeyboardMoveInput")
-	if (!camera._localDirection) camera._localDirection = Vector3.Zero()
-	if (!camera._transformedDirection) camera._transformedDirection = Vector3.Zero()
+	if (!camera._localDirection) camera._localDirection = babylon.Vector3.Zero()
+	if (!camera._transformedDirection) camera._transformedDirection = babylon.Vector3.Zero()
 	scene.activeCamera = camera
 	return camera
 }

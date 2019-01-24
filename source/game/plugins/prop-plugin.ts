@@ -1,6 +1,6 @@
 
 import * as mobx from "mobx"
-import * as babylon from "babylonjs"
+import babylon from "../../babylon"
 
 import {Manager} from "../../manager"
 import {Input} from "../../watcher/input"
