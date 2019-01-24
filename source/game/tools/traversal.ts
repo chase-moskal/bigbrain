@@ -1,8 +1,8 @@
 
 import babylon from "../../babylon"
 
-import {Input} from "../../watcher/input"
-import {getVectorMagnitude} from "../../toolbox/get-vector-magnitude"
+import {Input} from "../../core/watcher/input"
+import {getVectorMagnitude} from "../../core/toolbox/get-vector-magnitude"
 
 import {
 	ThumbstickInfo,

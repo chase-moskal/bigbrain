@@ -2,9 +2,9 @@
 import * as mobx from "mobx"
 import babylon from "../../babylon"
 
-import {Manager} from "../../manager"
-import {Input} from "../../watcher/input"
-import {Watcher} from "../../watcher/watcher"
+import {Manager} from "../../core/manager"
+import {Input} from "../../core/watcher/input"
+import {Watcher} from "../../core/watcher/watcher"
 import {
 	TickInfo,
 	EntityPlugin,
@@ -12,7 +12,7 @@ import {
 	Bearings,
 	Physique,
 	Quaternion
-} from "../../interfaces"
+} from "../../core/interfaces"
 
 import {CubeEntry} from "../entities/cube/cube-interfaces"
 import {createCubeProposalMesh} from "../entities/cube/create-cube-proposal-mesh"

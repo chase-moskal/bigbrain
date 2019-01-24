@@ -1,8 +1,7 @@
 
 import babylon from "../../babylon"
-
-import {Vector} from "../../interfaces"
-import {Watcher} from "../../watcher/watcher"
+import {Vector} from "../../core/interfaces"
+import {Watcher} from "../../core/watcher/watcher"
 
 import {traversiveBindings} from "./traversal"
 

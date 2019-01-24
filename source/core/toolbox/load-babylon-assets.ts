@@ -1,5 +1,5 @@
 
-import babylon from "../babylon"
+import babylon from "../../babylon"
 
 export async function loadBabylonAssets({
 	path,

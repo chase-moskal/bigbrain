@@ -1,7 +1,6 @@
 
 import babylon from "../../babylon"
-
-import {Vector, Bearings} from "../../interfaces"
+import {Vector, Bearings} from "../../core/interfaces"
 
 export const makeCamera = ({scene, bearings, speed}: {scene: babylon.Scene; bearings: Bearings; speed: number}) => {
 	const camera = new babylon.FreeCamera("Spectator Camera", babylon.Vector3.FromArray(bearings.position), scene)

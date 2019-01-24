@@ -5,14 +5,14 @@ import babylon from "../babylon"
 
 import {GameOptions, GameContext} from "./game-interfaces"
 
-import {Ticker} from "../ticker"
-import {Manager} from "../manager"
-import {Viewport} from "../viewport"
-import {Conductor} from "../conductor"
-import {Overlay} from "../overlay/components/overlay"
-import {Service} from "../toolbox/toolbox-interfaces"
-import {OverlayStore} from "../overlay/stores/overlay-store"
-import {StatisticsStore} from "../overlay/stores/statistics-store"
+import {Ticker} from "../core/ticker"
+import {Manager} from "../core/manager"
+import {Viewport} from "../core/viewport"
+import {Conductor} from "../core/conductor"
+import {Overlay} from "../core/overlay/components/overlay"
+import {Service} from "../core/toolbox/toolbox-interfaces"
+import {OverlayStore} from "../core/overlay/stores/overlay-store"
+import {StatisticsStore} from "../core/overlay/stores/statistics-store"
 
 /**
  * Standard monarch game

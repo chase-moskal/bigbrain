@@ -1,5 +1,5 @@
 
-import {Bearings} from "../../../interfaces"
+import {Bearings} from "../../../core/interfaces"
 import {EditorMenuStore} from "./editor-menu-store"
 
 export interface EditorEntry {

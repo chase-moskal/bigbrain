@@ -1,5 +1,5 @@
 
-import babylon from "./babylon"
+import babylon from "../babylon"
 
 import {Manager} from "./manager"
 import {Network} from "./network/network"

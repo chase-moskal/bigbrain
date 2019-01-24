@@ -1,11 +1,11 @@
 
 import babylon from "../../babylon"
 
-import {cap} from "../../toolbox/cap"
+import {cap} from "../../core/toolbox/cap"
 import {RotatableNode} from "../tools/tools-interfaces"
-import {TickInfo, EntityPlugin} from "../../interfaces"
-import {StickStore} from "../../overlay/stores/stick-store"
-import {MainMenuStore} from "../../overlay/stores/main-menu-store"
+import {TickInfo, EntityPlugin} from "../../core/interfaces"
+import {StickStore} from "../../core/overlay/stores/stick-store"
+import {MainMenuStore} from "../../core/overlay/stores/main-menu-store"
 
 import {LookPluginOptions} from "./plugins-interfaces"
 

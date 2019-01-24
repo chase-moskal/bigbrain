@@ -2,8 +2,8 @@
 import {Context} from "../game-interfaces"
 
 import babylon from "../../babylon"
-import {Entity} from "../../entity"
-import {StateEntry} from "../../interfaces"
+import {Entity} from "../../core/entity"
+import {StateEntry} from "../../core/interfaces"
 
 export interface GroundEntry extends StateEntry {
 	type: "Ground"

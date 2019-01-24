@@ -1,8 +1,9 @@
 
 import babylon from "../../babylon"
-import {Manager} from "../../manager"
-import {StickStore} from "../../overlay/stores/stick-store"
-import {MainMenuStore} from "../../overlay/stores/main-menu-store"
+import {Manager} from "../../core/manager"
+import {StickStore} from "../../core/overlay/stores/stick-store"
+import {MainMenuStore} from "../../core/overlay/stores/main-menu-store"
+
 import {RotatableNode, MovableNode} from "../tools/tools-interfaces"
 
 export interface LookPluginOptions {

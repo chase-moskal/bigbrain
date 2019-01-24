@@ -1,6 +1,6 @@
 
 import {observable, action} from "mobx"
-import {MenuStore} from "../../../overlay/stores/menu-store"
+import {MenuStore} from "../../../core/overlay/stores/menu-store"
 import {EditorTool} from "./editor-interfaces"
 
 export class AdditionTool implements EditorTool {

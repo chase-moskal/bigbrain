@@ -3,10 +3,10 @@ import {autorun, IReactionDisposer} from "mobx"
 
 import babylon from "../../../babylon"
 
-import {Entity} from "../../../entity"
-import {copy} from "../../../toolbox/copy"
+import {Entity} from "../../../core/entity"
 import {Context} from "../../game-interfaces"
-import {Vector, Quaternion, TickInfo} from "../../../interfaces"
+import {copy} from "../../../core/toolbox/copy"
+import {Vector, Quaternion, TickInfo} from "../../../core/interfaces"
 
 import {CubeEntry} from "./cube-interfaces"
 import {createCubeMesh} from "./create-cube-mesh"

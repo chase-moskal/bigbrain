@@ -1,8 +1,8 @@
 
-import {Watcher} from "../../watcher/watcher"
+import {Watcher} from "../../core/watcher/watcher"
 import {MovableNode} from "../tools/tools-interfaces"
-import {TickInfo, EntityPlugin} from "../../interfaces"
-import {StickStore} from "../../overlay/stores/stick-store"
+import {TickInfo, EntityPlugin} from "../../core/interfaces"
+import {StickStore} from "../../core/overlay/stores/stick-store"
 import {
 	enactMovement,
 	ascertainMovement,

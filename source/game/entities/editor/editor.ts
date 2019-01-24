@@ -3,8 +3,8 @@ import {autorun} from "mobx"
 import * as preact from "preact"
 import babylon from "../../../babylon"
 
-import {Entity} from "../../../entity"
-import {TickInfo, EntityPlugin} from "../../../interfaces"
+import {Entity} from "../../../core/entity"
+import {TickInfo, EntityPlugin} from "../../../core/interfaces"
 
 import {Context} from "../../game-interfaces"
 import {LookPlugin} from "../../plugins/look-plugin"

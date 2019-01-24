@@ -1,5 +1,5 @@
 
-import babylon from "../babylon"
+import babylon from "../../babylon"
 import {RoundCameraRigOptions} from "./toolbox-interfaces"
 
 export const createRoundCameraRig = ({

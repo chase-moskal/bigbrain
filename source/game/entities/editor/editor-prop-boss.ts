@@ -1,5 +1,5 @@
 
-import {Entity} from "../../../entity"
+import {Entity} from "../../../core/entity"
 
 interface PropDetails {
 	label: string

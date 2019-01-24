@@ -1,5 +1,5 @@
 
-import babylon from "./babylon"
+import babylon from "../babylon"
 
 import {getTime} from "./toolbox/get-time"
 import {ViewportOptions} from "./interfaces"

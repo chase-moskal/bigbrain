@@ -1,6 +1,6 @@
 
 import {observable, action} from "mobx"
-import {ThumbstickInfo} from "../../game/tools/tools-interfaces"
+import {ThumbstickInfo} from "../../../game/tools/tools-interfaces"
 
 export class StickStore implements ThumbstickInfo {
 	@observable angle: number

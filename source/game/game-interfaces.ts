@@ -2,9 +2,9 @@
 import babylon from "../babylon"
 import * as cannon from "cannon"
 
-import {MainMenuStore} from "../overlay/stores/main-menu-store"
-import {OverlayStore} from "../overlay/stores/overlay-store"
-import {StandardContext, ConductorOptions} from "../interfaces"
+import {MainMenuStore} from "../core/overlay/stores/main-menu-store"
+import {OverlayStore} from "../core/overlay/stores/overlay-store"
+import {StandardContext, ConductorOptions} from "../core/interfaces"
 
 export interface GameContext {
 	window: Window
