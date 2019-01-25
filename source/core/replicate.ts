@@ -15,7 +15,7 @@ export async function replicate({
 			const Entity = getEntityClass(entry.type, entityClasses)
 			const entity = new Entity({id, context, state})
 			entities.set(id, entity)
-			initiates.push(entity.init())
+			initiates.push(entity.initialize())
 		}
 	}
 
@@ -23,7 +23,7 @@ export async function replicate({
 	for (const id of entities.keys()) {
 		if (!state.entries.has(id)) {
 			const entity = entities.get(id)
-			degenerates.push(entity.destructor())
+			degenerates.push(entity.deconstruct())
 			entities.delete(id)
 		}
 	}

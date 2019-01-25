@@ -4,7 +4,7 @@ import * as SimplexNoise from "simplex-noise"
 import babylon from "../../babylon"
 import {Entity} from "../../core/entity"
 import {Context} from "../game-interfaces"
-import {StateEntry} from "../../core/interfaces"
+import {StateEntry, TickInfo} from "../../core/interfaces"
 import {loadBabylonAssets} from "../../core/toolbox/load-babylon-assets"
 
 export interface TerrainEntry extends StateEntry {
@@ -12,11 +12,14 @@ export interface TerrainEntry extends StateEntry {
 }
 
 export class Terrain extends Entity<Context, TerrainEntry> {
-	constructor(o) {
-		super(o)
-		const {scene} = this.context
-		this.load(scene)
+
+	async initialize() {
+		return this.load(this.context.scene)
 	}
+
+	logic(tick: TickInfo) {}
+
+	async deconstruct() {}
 
 	private async load(scene: babylon.Scene) {
 		await this.generateLighting(scene)
@@ -30,6 +33,7 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 		light1.intensity = 0.4
 		light2.intensity = 0.4
 	}
+
 
 	private async generateTerrain(scene: babylon.Scene) {
 		const simplexNoise = new SimplexNoise()
@@ -130,6 +134,4 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 
 		container.addAllToScene()
 	}
-
-	async destructor() {}
 }

@@ -64,7 +64,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 		})
 	]
 
-	async init() {
+	async initialize() {
 		const {overlayStore} = this.context
 		const {menuBar} = overlayStore
 		menuBar.addMenu(this.menu, <typeof preact.Component>EditorMenu)
@@ -93,7 +93,7 @@ export class Editor extends Entity<Context, EditorEntry> {
 		}
 	}
 
-	async destructor() {
+	async deconstruct() {
 		const {overlayStore} = this.context
 		const {menuBar} = overlayStore
 		menuBar.removeMenu(this.menu)

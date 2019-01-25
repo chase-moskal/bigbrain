@@ -24,7 +24,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 		ghostMesh: babylon.InstancedMesh
 	}
 
-	async init() {
+	async initialize() {
 		if (!Cube.assets) Cube.assets = await this.loadAssets()
 		this.meshes = this.instanceAssets()
 		this.establishReactions()
@@ -41,7 +41,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 		this.updateState({position, rotation})
 	}
 
-	async destructor() {
+	async deconstruct() {
 		const {mesh, ghostMesh} = await this.meshes
 		for (const dispose of this.reactions) dispose()
 		mesh.dispose()

@@ -18,8 +18,9 @@ export abstract class Entity<
 > {
 	readonly id: string
 	@observable inbox: Message[] = []
-	private readonly state: State
 	protected readonly context: gContext
+
+	private readonly state: State
 
 	constructor(options: EntityOptions<gContext>) {
 		Object.assign(this, options)
@@ -32,11 +33,13 @@ export abstract class Entity<
 			: raw
 	}
 
-	async init() {}
-	logic(tick: TickInfo) {}
-	abstract async destructor(): Promise<void>
+	abstract async initialize(): Promise<void>
+	abstract logic(tick: TickInfo): void
+	abstract async deconstruct(): Promise<void>
 }
 
 export class GenericEntity extends Entity {
-	async destructor() {}
+	async initialize() {}
+	logic(tick: TickInfo) {}
+	async deconstruct() {}
 }
