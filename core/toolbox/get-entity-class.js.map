@@ -1,0 +1,1 @@
+{"version":3,"file":"get-entity-class.js","sourceRoot":"","sources":["../../../source/core/toolbox/get-entity-class.ts"],"names":[],"mappings":";;;;;;;;;;;IAIa,QAAA,cAAc,GAAG,CAAC,IAAY,EAAE,aAA4B,EACpD,EAAE;QACtB,MAAM,KAAK,GAA8B,aAAa,CAAC,IAAI,CAAC,CAAA;QAC5D,IAAI,CAAC,KAAK;YAAE,MAAM,IAAI,KAAK,CAAC,yBAAyB,IAAI,GAAG,CAAC,CAAA;QAC7D,OAAO,KAAK,CAAA;IACb,CAAC,CAAA"}

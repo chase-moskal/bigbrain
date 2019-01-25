@@ -1,0 +1,79 @@
+{
+  "_args": [
+    [
+      "babylonjs@4.0.0-alpha.22",
+      "/home/brim/Desktop/work/monarch-games/engine"
+    ]
+  ],
+  "_from": "babylonjs@4.0.0-alpha.22",
+  "_id": "babylonjs@4.0.0-alpha.22",
+  "_inBundle": false,
+  "_integrity": "sha512-7ntdVuK6WkPnd91wfjEb9tvsymSXpLpFtnkDl+GD6GRz3K0cHn3X4z3/o+jy4N2iSkvhlNKouvJguBJpM2/xKg==",
+  "_location": "/babylonjs",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "babylonjs@4.0.0-alpha.22",
+    "name": "babylonjs",
+    "escapedName": "babylonjs",
+    "rawSpec": "4.0.0-alpha.22",
+    "saveSpec": null,
+    "fetchSpec": "4.0.0-alpha.22"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/babylonjs/-/babylonjs-4.0.0-alpha.22.tgz",
+  "_spec": "4.0.0-alpha.22",
+  "_where": "/home/brim/Desktop/work/monarch-games/engine",
+  "author": {
+    "name": "David CATUHE"
+  },
+  "bugs": {
+    "url": "https://github.com/BabylonJS/Babylon.js/issues"
+  },
+  "contributors": [
+    {
+      "name": "David ROUSSET"
+    },
+    {
+      "name": "Sebastien VANDENBERGHE"
+    },
+    {
+      "name": "Raanan Weber"
+    }
+  ],
+  "dependencies": {},
+  "description": "Babylon.js is a JavaScript 3D engine based on webgl.",
+  "devDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "esnext": "babylon.js",
+  "files": [
+    "babylon.module.d.ts",
+    "babylon.js",
+    "babylon.max.js",
+    "babylon.max.js.map",
+    "Oimo.js",
+    "readme.md"
+  ],
+  "homepage": "https://github.com/BabylonJS/Babylon.js#readme",
+  "keywords": [
+    "3D",
+    "javascript",
+    "html5",
+    "webgl"
+  ],
+  "license": "Apache-2.0",
+  "main": "babylon.js",
+  "module": "babylon.js",
+  "name": "babylonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BabylonJS/Babylon.js.git"
+  },
+  "typings": "babylon.module.d.ts",
+  "version": "4.0.0-alpha.22"
+}

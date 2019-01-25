@@ -1,0 +1,1 @@
+{"version":3,"file":"cap.js","sourceRoot":"","sources":["../../../source/core/toolbox/cap.ts"],"names":[],"mappings":";;;;;;;;;;;IACA,SAAgB,GAAG,CAAC,KAAa,EAAE,GAAW,EAAE,GAAW;QAC1D,OAAO,KAAK,GAAG,GAAG;YACjB,CAAC,CAAC,GAAG;YACL,CAAC,CAAC,KAAK,GAAG,GAAG;gBACZ,CAAC,CAAC,GAAG;gBACL,CAAC,CAAC,KAAK,CAAA;IACV,CAAC;IAND,kBAMC"}
