@@ -29,7 +29,7 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 		const light1 = new babylon.HemisphericLight("light1", new babylon.Vector3(5, 5, 0), scene)
 		const light2 = new babylon.PointLight("light2", new babylon.Vector3(0, 5, -5), scene)
 		light1.intensity = 0.4
-		light2.intensity = 0.4
+		light2.intensity = 0.7
 	}
 
 
@@ -68,18 +68,34 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 		}) {
 			const terrainMeshPhysical = babylon.Mesh.CreateGround(
 				meshName, size, size, subdivisions, scene, true)
-
 			terrainMeshPhysical.isVisible = false
-			applyNoise({mesh: terrainMeshPhysical, scale: 20, magnitude: 2})
-			applyNoise({mesh: terrainMeshPhysical, scale: 5, magnitude: 0.2})
-			applyNoise({mesh: terrainMeshPhysical, scale: 0.5, magnitude: 0.02})
 
-			const terrainMeshVisual = terrainMeshPhysical.clone()
-			terrainMeshVisual.subdivide(4)
+			const terrainMeshVisual = babylon.Mesh.CreateGround(
+				meshName, size, size, subdivisions * 4, scene, true)
 			terrainMeshVisual.isVisible = true
+			terrainMeshVisual.material = new babylon.StandardMaterial("terrainmaterial", scene)
+			terrainMeshVisual.material.wireframe = true
 
-			applyNoise({mesh: terrainMeshVisual, scale: 10, magnitude: 0.1})
-			applyNoise({mesh: terrainMeshVisual, scale: 0.25, magnitude: 0.02})
+			const broadNoisePasses = [
+				{scale: 20, magnitude: 2},
+				{scale: 5, magnitude: 0.2},
+				{scale: 0.5, magnitude: 0.02}
+			]
+
+			for (const noiseOptions of broadNoisePasses) {
+				applyNoise({mesh: terrainMeshPhysical, ...noiseOptions})
+				applyNoise({mesh: terrainMeshVisual, ...noiseOptions})
+			}
+
+			const subtleNoisePasses = [
+				{scale: 0.3, magnitude: 0.02},
+				{scale: 0.1, magnitude: 0.01}
+			]
+
+			for (const noiseOptions of subtleNoisePasses) {
+				applyNoise({mesh: terrainMeshPhysical, ...noiseOptions})
+				applyNoise({mesh: terrainMeshVisual, ...noiseOptions})
+			}
 
 			terrainMeshVisual.physicsImpostor = new babylon.PhysicsImpostor(
 				terrainMeshPhysical,

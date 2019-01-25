@@ -108,7 +108,7 @@ export class Ticker implements Service {
 	 */
 	private calculateTickRate(timeSinceLastTick: number): number {
 		this.records.unshift(timeSinceLastTick)
-		while (this.records.length > 10) this.records.pop()
+		while (this.records.length > 20) this.records.pop()
 		const sum = this.records.reduce((a, b) => a + b, 0)
 		const averageTimePerTick = sum / this.records.length
 		return 1000 / averageTimePerTick
