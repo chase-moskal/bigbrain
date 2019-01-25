@@ -11,31 +11,40 @@ import {Viewport} from "../core/viewport"
 import {Conductor} from "../core/conductor"
 import {Overlay} from "../core/overlay/components/overlay"
 import {Service} from "../core/toolbox/toolbox-interfaces"
+import {ServiceMaster} from "../core/toolbox/service-master"
 import {OverlayStore} from "../core/overlay/stores/overlay-store"
 import {StatisticsStore} from "../core/overlay/stores/statistics-store"
 
 /**
  * Standard monarch game
  */
-export class Game implements Service {
+export class Game extends ServiceMaster implements Service {
 	readonly manager: Manager
-	private readonly viewport: Viewport
-	private readonly logicTicker: Ticker
 
 	constructor(options: GameOptions) {
-		const {overlayElement, canvas, mode, entityClasses, gravity} = options
+		super()
+		const {
+			mode,
+			canvas,
+			gravity,
+			entityClasses,
+			overlayElement,
+			maxSlowTickRate,
+			maxLogicTickRate,
+			maxHyperTickRate
+		} = options
 
 		// babylon engine as the foundation
 		const engine = new babylon.Engine(canvas, true, undefined, true)
 		const scene = new babylon.Scene(engine)
 
-		const gravityVector = new babylon.Vector3(0, -9.81, 0)
+		const gravityVector = babylon.Vector3.FromArray(gravity)
 		const physicsPlugin = new babylon.AmmoJSPlugin()
 		const physicsWorld = physicsPlugin.world
 		scene.enablePhysics(gravityVector, physicsPlugin)
 
 		// viewport handles render loop and pointer lock
-		const viewport = this.viewport = new Viewport({
+		const viewport = new Viewport({
 			window,
 			canvas,
 			scene,
@@ -67,59 +76,68 @@ export class Game implements Service {
 			}
 		})
 
-		// make the logic ticker
-		this.logicTicker = this.makeLogicTicker({
+		const {logicTicker, hyperTicker, slowTicker} = this.makeTickers({
+			maxLogicTickRate,
+			maxHyperTickRate,
+			maxSlowTickRate,
 			viewport,
 			conductor,
-			statisticsStore,
-			durationBetweenTicks: 0,
-			timeBetweenStatRecordings: 0
+			statisticsStore
 		})
 
-		// expose the state manager
+		this.services = [
+			viewport,
+			logicTicker,
+			hyperTicker,
+			slowTicker
+		]
+
 		this.manager = conductor.manager
 	}
 
-	start() {
-		this.logicTicker.start()
-		this.viewport.start()
-	}
-
-	stop() {
-		this.logicTicker.stop()
-		this.viewport.stop()
-	}
-
-	destructor() {
-		this.logicTicker.destructor()
-		this.viewport.destructor()
-	}
-
-	private makeLogicTicker({
+	private makeTickers({
+		maxLogicTickRate,
+		maxHyperTickRate,
+		maxSlowTickRate,
 		viewport,
 		conductor,
-		statisticsStore,
-		durationBetweenTicks,
-		timeBetweenStatRecordings
+		statisticsStore
 	}: {
+		maxLogicTickRate: number
+		maxHyperTickRate: number
+		maxSlowTickRate: number
 		viewport: Viewport
 		conductor: Conductor
 		statisticsStore: StatisticsStore
-		durationBetweenTicks?: number
-		timeBetweenStatRecordings?: number
+		statPeriod?: number
 	}) {
-		let statmark = 0
-		let ticker
-		return ticker = new Ticker({
-			tickAction: tick => {
-				conductor.logic(tick)
-				if (ticker && tick.timeline - statmark > timeBetweenStatRecordings) {
-					statisticsStore.recordTickerStats(ticker)
-					statisticsStore.recordViewportStats(viewport)
-					statmark = tick.timeline
-				}
-			},
-			durationBetweenTicks
+		const logicTicker = new Ticker({
+			period: 1000 / maxLogicTickRate,
+			tickAction: tickInfo => conductor.logicTick(tickInfo)
 		})
+
+		const hyperTicker = new Ticker({
+			period: 1000 / maxHyperTickRate,
+			tickAction: tickInfo => conductor.hyperTick(tickInfo)
+		})
+
+		const slowTicker = new Ticker({
+			period: 1000 / maxSlowTickRate,
+			tickAction: tickInfo => {
+				conductor.hyperTick(tickInfo)
+
+				// track statistics
+				// TODO split this into its own stats entity, rather than hard-coding it
+				statisticsStore.recordTickerStats({
+					timeline: logicTicker.timeline,
+					slowTickRate: slowTicker.tickRate,
+					logicTickRate: logicTicker.tickRate,
+					hyperTickRate: hyperTicker.tickRate,
+					renderFrameRate: viewport.renderFrameRate
+				})
+			}
+		})
+
+		return {logicTicker, hyperTicker, slowTicker}
 	}
 }

@@ -29,16 +29,19 @@ export class Editor extends Entity<Context, EditorEntry> {
 			node: this.camera,
 			stickStore: this.context.overlayStore.stick1
 		}),
+		new PropPlugin({
+			scene: this.context.scene,
+			canvas: this.context.canvas,
+			manager: this.context.manager
+		})
+	]
+
+	private readonly hyperPlugins: EntityPlugin[] = [
 		new LookPlugin({
 			node: this.camera,
 			engine: this.context.engine,
 			mainMenuStore: this.context.mainMenuStore,
 			stickStore: this.context.overlayStore.stick2
-		}),
-		new PropPlugin({
-			scene: this.context.scene,
-			canvas: this.context.canvas,
-			manager: this.context.manager
 		})
 	]
 
@@ -71,13 +74,11 @@ export class Editor extends Entity<Context, EditorEntry> {
 		overlayStore.addStickSubscriber()
 	}
 
-	logic(tick: TickInfo) {
+	logicTick(tickInfo: TickInfo) {
 		const {laserDot} = this
 
-		// run plugins
-		for (const plugin of this.plugins) {
-			plugin.logic(tick)
-		}
+		for (const plugin of this.plugins)
+			plugin.logic(tickInfo)
 
 		// position the laser dot
 		if (laserDot) {
@@ -91,6 +92,11 @@ export class Editor extends Entity<Context, EditorEntry> {
 				laserDot.setEnabled(false)
 			}
 		}
+	}
+
+	hyperTick(tickInfo: TickInfo) {
+		for (const plugin of this.hyperPlugins)
+			plugin.logic(tickInfo)
 	}
 
 	async deconstruct() {

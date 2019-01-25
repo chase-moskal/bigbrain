@@ -63,14 +63,25 @@ class Statistics extends Component<{statisticsStore: StatisticsStore}> {
 		const {statisticsStore} = this.props
 		return (
 			<div className="stats">
+				<div data-stat="hyper">
+					<label>Hyper</label>
+					<output>{statisticsStore.hyperTickRate.toFixed(0)}</output>
+				</div>
 				<div data-stat="logic">
-					<label>Logic</label> <output>{statisticsStore.tickRate.toFixed(0)}</output>
+					<label>Logic</label>
+					<output>{statisticsStore.logicTickRate.toFixed(0)}</output>
+				</div>
+				<div data-stat="slow">
+					<label>Slow</label>
+					<output>{statisticsStore.slowTickRate.toFixed(0)}</output>
 				</div>
 				<div data-stat="render">
-					<label>Render</label> <output>{statisticsStore.renderRate.toFixed(0)}</output>
+					<label>Render</label>
+					<output>{statisticsStore.renderFrameRate.toFixed(0)}</output>
 				</div>
 				<div data-stat="timeline">
-					<label>Time</label> <output>{(statisticsStore.timeline / 1000).toFixed(2)}</output>
+					<label>Time</label>
+					<output>{(statisticsStore.timeline / 1000).toFixed(1)}</output>
 				</div>
 			</div>
 		)

@@ -3,7 +3,7 @@ import babylon from "../../babylon"
 import {Vector} from "../interfaces"
 
 export interface Service {
-	destructor(): void
+	deconstruct(): void
 	start(): void
 	stop(): void
 }

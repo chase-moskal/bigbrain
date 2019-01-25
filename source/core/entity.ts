@@ -34,12 +34,13 @@ export abstract class Entity<
 	}
 
 	abstract async initialize(): Promise<void>
-	abstract logic(tick: TickInfo): void
 	abstract async deconstruct(): Promise<void>
+	logicTick(tick: TickInfo): void {}
+	hyperTick(tick: TickInfo): void {}
+	slowTick(tick: TickInfo): void {}
 }
 
 export class GenericEntity extends Entity {
 	async initialize() {}
-	logic(tick: TickInfo) {}
 	async deconstruct() {}
 }

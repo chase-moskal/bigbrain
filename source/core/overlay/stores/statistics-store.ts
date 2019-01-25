@@ -1,20 +1,28 @@
 
 import {observable, action} from "mobx"
 
-import {Ticker} from "../../ticker"
-import {Viewport} from "../../viewport"
-
 export class StatisticsStore {
-	@observable tickRate: number = 0
 	@observable timeline: number = 0
-	@observable renderRate: number = 0
+	@observable slowTickRate: number = 0
+	@observable logicTickRate: number = 0
+	@observable hyperTickRate: number = 0
+	@observable renderFrameRate: number = 0
 
-	@action recordTickerStats(ticker: Ticker) {
-		this.tickRate = ticker.tickRate
-		this.timeline = ticker.timeline
+	@action recordTickerStats({timeline, slowTickRate, logicTickRate, hyperTickRate, renderFrameRate}: {
+		timeline: number
+		slowTickRate: number
+		logicTickRate: number
+		hyperTickRate: number
+		renderFrameRate: number
+	}) {
+		this.timeline = timeline
+		this.slowTickRate = slowTickRate
+		this.logicTickRate = logicTickRate
+		this.hyperTickRate = hyperTickRate
+		this.renderFrameRate = renderFrameRate
 	}
 
-	@action recordViewportStats(viewport: Viewport) {
-		this.renderRate = viewport.renderRate
+	@action recordViewportStats({renderFrameRate}: {renderFrameRate: number}) {
+		this.renderFrameRate = renderFrameRate
 	}
 }

@@ -8,7 +8,7 @@ import {TickerOptions, TickAction} from "./interfaces"
  */
 const defaultTickerOptions: Partial<TickerOptions> = {
 	start: true,
-	durationBetweenTicks: 10
+	period: 10
 }
 
 /**
@@ -22,8 +22,8 @@ export class Ticker implements Service {
 	tickRate: number = 0
 	timeline: number = 0
 
+	private period: number
 	private tickAction: TickAction
-	private durationBetweenTicks: number
 
 	private active = false
 	private interval: number
@@ -33,14 +33,14 @@ export class Ticker implements Service {
 	constructor(opts: TickerOptions) {
 		const options = {...defaultTickerOptions, ...opts}
 		this.tickAction = options.tickAction
-		this.durationBetweenTicks = options.durationBetweenTicks
+		this.period = options.period
 		if (options.start) this.start()
 	}
 
 	/**
 	 * Destruct this ticker
 	 */
-	destructor() {
+	deconstruct() {
 		this.tickAction = null
 		this.records = []
 		this.stop()
@@ -54,9 +54,10 @@ export class Ticker implements Service {
 		else {
 			this.active = true
 			this.lastTime = getTime()
+			console.log(this.period)
 			this.interval = setInterval(
 				() => this.loop(),
-				this.durationBetweenTicks
+				this.period
 			)
 		}
 	}

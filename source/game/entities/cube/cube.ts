@@ -30,8 +30,8 @@ export class Cube extends Entity<Context, CubeEntry> {
 		this.establishReactions()
 	}
 
-	logic(tick: TickInfo) {
-		if (this.isTooSoon(tick.timeline, 200)) return
+	logicTick(tickInfo: TickInfo) {
+		if (this.isTooSoon(tickInfo.timeline, 200)) return
 		const {
 			position: babylonPosition,
 			rotationQuaternion: babylonRotation
@@ -60,7 +60,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 	private instanceAssets() {
 		const {entry, context, id} = this
 		const {scene} = context
-		const {size, mass, restitution} = entry.physique
+		const {size, mass, restitution, friction} = entry.physique
 		const {position} = entry.bearings
 		const {meshBase, ghostMeshBase} = Cube.assets
 
@@ -70,7 +70,7 @@ export class Cube extends Entity<Context, CubeEntry> {
 		mesh.physicsImpostor = new babylon.PhysicsImpostor(
 			mesh,
 			babylon.PhysicsImpostor.BoxImpostor,
-			{mass, restitution},
+			{mass, restitution, friction},
 			scene
 		)
 		mesh.physicsImpostor.physicsBody.allowSleep = true

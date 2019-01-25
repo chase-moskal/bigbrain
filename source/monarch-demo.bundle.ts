@@ -15,6 +15,9 @@ monarchDemo()
 
 export function monarchDemo() {
 	const game = new Game({
+		maxSlowTickRate: 10,
+		maxLogicTickRate: 60,
+		maxHyperTickRate: 1000,
 		mode: ModeOfConduct.Alone,
 		canvas: document.querySelector("canvas"),
 		overlayElement: document.querySelector(".overlay"),

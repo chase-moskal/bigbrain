@@ -17,8 +17,6 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 		return this.load(this.context.scene)
 	}
 
-	logic(tick: TickInfo) {}
-
 	async deconstruct() {}
 
 	private async load(scene: babylon.Scene) {
@@ -89,7 +87,7 @@ export class Terrain extends Entity<Context, TerrainEntry> {
 				{
 					mass: 0,
 					restitution: 0.1,
-					friction: 0.5
+					friction: 1
 				}
 			)
 

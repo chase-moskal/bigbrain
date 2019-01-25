@@ -123,5 +123,5 @@ export interface TickerOptions {
 	start?: boolean
 
 	/** Duration in milliseconds between each tick */
-	durationBetweenTicks?: number
+	period?: number
 }

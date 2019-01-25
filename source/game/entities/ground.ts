@@ -18,8 +18,6 @@ export class Ground extends Entity<Context, GroundEntry> {
 
 	async initialize() {}
 
-	logic(tick: TickInfo) {}
-
 	private async loadGround(scene: babylon.Scene) {
 		const light1 = new babylon.HemisphericLight("light1", new babylon.Vector3(5, 5, 0), scene)
 		const light2 = new babylon.PointLight("light2", new babylon.Vector3(0, 5, -5), scene)

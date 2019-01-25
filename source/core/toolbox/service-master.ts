@@ -2,14 +2,10 @@
 import {Service} from "./toolbox-interfaces"
 
 export class ServiceMaster implements Service {
-	private services: Service[]
+	protected services: Service[]
 
-	constructor(services: Service[]) {
-		this.services = services
-	}
-
-	destructor() {
-		for (const service of this.services) service.destructor()
+	deconstruct() {
+		for (const service of this.services) service.deconstruct()
 	}
 
 	start() {

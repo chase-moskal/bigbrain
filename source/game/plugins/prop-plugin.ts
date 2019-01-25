@@ -109,7 +109,7 @@ export class PropPlugin implements EntityPlugin {
 					physique: {
 						mass: s,
 						size: [s, s, s],
-						friction: 0.5
+						friction: 1
 					},
 					bearings: {
 						position: <Vector>proposalMesh.position.asArray(),

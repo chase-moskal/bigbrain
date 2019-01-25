@@ -22,7 +22,7 @@ export class Viewport implements Service {
 	private lastFrameTime = getTime()
 	private locked: boolean = false
 
-	renderRate: number = 0
+	renderFrameRate: number = 0
 
 	private readonly listeners: { [eventName: string]: () => void } = {
 		resize: () => {
@@ -65,14 +65,14 @@ export class Viewport implements Service {
 			const since = getTime() - this.lastFrameTime
 			scene.render()
 			this.lastFrameTime = getTime()
-			this.renderRate = engine.getFps()
+			this.renderFrameRate = engine.getFps()
 		})
 	}
 
 	stop() {
 		const {window, listeners, engine} = this
 		this.active = false
-		this.renderRate = 0
+		this.renderFrameRate = 0
 
 		window.removeEventListener("resize", listeners.resize)
 		window.removeEventListener("mousemove", listeners.mousemove)
@@ -81,5 +81,5 @@ export class Viewport implements Service {
 		engine.stopRenderLoop()
 	}
 
-	destructor() {}
+	deconstruct() {}
 }

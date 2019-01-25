@@ -49,9 +49,18 @@ export class Conductor<AdditionalContext extends Object = Object> {
 		this.manager = manager
 	}
 
-	logic(tick: TickInfo) {
-		for (const [id, entity] of this.entities) {
-			entity.logic(tick)
-		}
+	logicTick(tickInfo: TickInfo) {
+		for (const [id, entity] of this.entities)
+			entity.logicTick(tickInfo)
+	}
+
+	hyperTick(tickInfo: TickInfo) {
+		for (const [id, entity] of this.entities)
+			entity.hyperTick(tickInfo)
+	}
+
+	slowTick(tickInfo: TickInfo) {
+		for (const [id, entity] of this.entities)
+			entity.slowTick(tickInfo)
 	}
 }

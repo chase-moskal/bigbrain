@@ -19,6 +19,9 @@ export interface GameContext {
 export type Context = StandardContext & GameContext
 
 export interface GameOptions extends ConductorOptions {
+	maxSlowTickRate: number
+	maxLogicTickRate: number
+	maxHyperTickRate: number
 	canvas: HTMLCanvasElement
 	overlayElement: HTMLDivElement
 	gravity: [number, number, number]
