@@ -54,7 +54,6 @@ export class Ticker implements Service {
 		else {
 			this.active = true
 			this.lastTime = getTime()
-			console.log(this.period)
 			this.interval = setInterval(
 				() => this.loop(),
 				this.period
