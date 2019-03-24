@@ -1,6 +1,6 @@
 
-import babylon from "../../babylon"
-import {Vector} from "../interfaces"
+import * as babylon from "@babylonjs/core"
+import {Vector} from "../interfaces.js"
 
 export interface Service {
 	deconstruct(): void

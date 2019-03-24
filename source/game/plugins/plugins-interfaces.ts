@@ -1,10 +1,10 @@
 
-import babylon from "../../babylon"
-import {Manager} from "../../core/manager"
-import {StickStore} from "../../core/overlay/stores/stick-store"
-import {MainMenuStore} from "../../core/overlay/stores/main-menu-store"
+import * as babylon from "@babylonjs/core"
+import {Manager} from "../../core/manager.js"
+import {StickStore} from "../../core/overlay/stores/stick-store.js"
+import {MainMenuStore} from "../../core/overlay/stores/main-menu-store.js"
 
-import {RotatableNode, MovableNode} from "../tools/tools-interfaces"
+import {RotatableNode, MovableNode} from "../tools/tools-interfaces.js"
 
 export interface LookPluginOptions {
 	node: RotatableNode

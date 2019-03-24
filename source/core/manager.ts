@@ -1,8 +1,8 @@
 
 import * as uuid from "uuid/v4"
 
-import {Entity} from "./entity"
-import {State, StateEntry} from "./interfaces"
+import {Entity} from "./entity.js"
+import {State, StateEntry} from "./interfaces.js"
 
 /**
  * State manager

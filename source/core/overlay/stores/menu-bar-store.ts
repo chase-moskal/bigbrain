@@ -2,8 +2,8 @@
 import * as preact from "preact"
 import {observable, action} from "mobx"
 
-import {MenuStore} from "./menu-store"
-import {MenuBarItem} from "./stores-interfaces"
+import {MenuStore} from "./menu-store.js"
+import {MenuBarItem} from "./stores-interfaces.js"
 
 export class MenuBarStore {
 	@observable menus: MenuBarItem[] = []

@@ -1,7 +1,7 @@
 
 import {observable, action} from "mobx"
-import {MenuStore} from "../../../core/overlay/stores/menu-store"
-import {EditorTool} from "./editor-interfaces"
+import {MenuStore} from "../../../core/overlay/stores/menu-store.js"
+import {EditorTool} from "./editor-interfaces.js"
 
 export class AdditionTool implements EditorTool {
 	label = "Add"

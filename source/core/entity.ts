@@ -1,8 +1,10 @@
 
 import {observable} from "mobx"
-import * as deepFreeze from "deep-freeze"
 
-import {copy} from "./toolbox/copy"
+const deepFreeze = (o: any) => o
+// import * as deepFreeze from "deep-freeze"
+
+import {copy} from "./toolbox/copy.js"
 import {
 	State,
 	Message,
@@ -10,7 +12,7 @@ import {
 	StateEntry,
 	EntityOptions,
 	StandardContext
-} from "./interfaces"
+} from "./interfaces.js"
 
 export abstract class Entity<
 	gContext extends StandardContext = StandardContext,

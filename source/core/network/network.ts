@@ -1,8 +1,8 @@
 
 import {action} from "mobx"
-import {copy} from "../toolbox/copy"
-import {assignPropsOntoMap} from "../toolbox/assign-props-onto-map"
-import {State, Message, Update, ModeOfConduct} from "../interfaces"
+import {copy} from "../toolbox/copy.js"
+import {assignPropsOntoMap} from "../toolbox/assign-props-onto-map.js"
+import {State, Message, Update, ModeOfConduct} from "../interfaces.js"
 
 export abstract class Network {
 	protected readonly mode: ModeOfConduct

@@ -1,6 +1,6 @@
 
-import {Input} from "./input"
-import {InputKeycodeRelation} from "./watcher-interfaces"
+import {Input} from "./input.js"
+import {InputKeycodeRelation} from "./watcher-interfaces.js"
 
 export const inputKeycodeRelations: InputKeycodeRelation[] = [
 	{input: Input.W, code: 87},

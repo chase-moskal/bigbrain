@@ -2,8 +2,8 @@
 import {h, Component} from "preact"
 import {observer} from "mobx-preact"
 
-import {MainMenuProps} from "./components-interfaces"
-import {StatisticsStore} from "../stores/statistics-store"
+import {MainMenuProps} from "./components-interfaces.js"
+import {StatisticsStore} from "../stores/statistics-store.js"
 
 @observer
 export class MainMenu extends Component<MainMenuProps> {

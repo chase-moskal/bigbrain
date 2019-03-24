@@ -1,17 +1,17 @@
 
 import {observable, autorun} from "mobx"
 
-import {Entity} from "./entity"
-import {Manager} from "./manager"
-import {replicate} from "./replicate"
-import {LoopbackNetwork} from "./network/loopback-network"
+import {Entity} from "./entity.js"
+import {Manager} from "./manager.js"
+import {replicate} from "./replicate.js"
+import {LoopbackNetwork} from "./network/loopback-network.js"
 import {
 	State,
 	TickInfo,
 	ModeOfConduct,
 	StandardContext,
 	ConductorOptions
-} from "./interfaces"
+} from "./interfaces.js"
 
 export class Conductor<AdditionalContext extends Object = Object> {
 	readonly manager: Manager

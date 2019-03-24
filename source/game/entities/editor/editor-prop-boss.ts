@@ -1,5 +1,5 @@
 
-import {Entity} from "../../../core/entity"
+import {Entity} from "../../../core/entity.js"
 
 interface PropDetails {
 	label: string

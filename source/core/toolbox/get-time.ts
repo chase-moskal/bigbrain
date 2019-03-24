@@ -1,5 +1,5 @@
 
-import {environment} from "./environment"
+import {environment} from "./environment.js"
 
 declare const process: any
 

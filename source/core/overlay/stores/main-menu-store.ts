@@ -1,8 +1,8 @@
 
 import {observable, action} from "mobx"
 
-import {MenuStore} from "./menu-store"
-import {StatisticsStore} from "./statistics-store"
+import {MenuStore} from "./menu-store.js"
+import {StatisticsStore} from "./statistics-store.js"
 
 const storageKeyLookSensitivity = "monarch-look-sensitivity"
 

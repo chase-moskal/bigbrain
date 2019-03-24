@@ -1,6 +1,6 @@
 
-import {ReplicateParams} from "./interfaces"
-import {getEntityClass} from "./toolbox/get-entity-class"
+import {ReplicateParams} from "./interfaces.js"
+import {getEntityClass} from "./toolbox/get-entity-class.js"
 
 export async function replicate({
 	context, state, entities, entityClasses

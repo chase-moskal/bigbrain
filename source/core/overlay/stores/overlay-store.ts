@@ -2,12 +2,12 @@
 import * as preact from "preact"
 import {observable, action, computed} from "mobx"
 
-import {MainMenu} from "../components/main-menu"
+import {MainMenu} from "../components/main-menu.js"
 
-import {StickStore} from "./stick-store"
-import {MenuBarStore} from "./menu-bar-store"
-import {MainMenuStore} from "./main-menu-store"
-import {StatisticsStore} from "./statistics-store"
+import {StickStore} from "./stick-store.js"
+import {MenuBarStore} from "./menu-bar-store.js"
+import {MainMenuStore} from "./main-menu-store.js"
+import {StatisticsStore} from "./statistics-store.js"
 
 export class OverlayStore {
 	readonly menuBar: MenuBarStore

@@ -1,9 +1,9 @@
 
-import babylon from "../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {getTime} from "./toolbox/get-time"
-import {ViewportOptions} from "./interfaces"
-import {Service} from "./toolbox/toolbox-interfaces"
+import {getTime} from "./toolbox/get-time.js"
+import {ViewportOptions} from "./interfaces.js"
+import {Service} from "./toolbox/toolbox-interfaces.js"
 
 /**
  * Scene rendering and input manager
@@ -35,7 +35,7 @@ export class Viewport implements Service {
 
 		pointerlockchange: () => {
 			if (this.scene.activeCamera) {
-				const locked = (this.window.document.pointerLockElement === this.canvas)
+				const locked = ((<any>this.window.document).pointerLockElement === this.canvas)
 				this.locked = locked
 			}
 		}

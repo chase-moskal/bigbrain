@@ -1,5 +1,5 @@
 
-import {Service} from "./toolbox-interfaces"
+import {Service} from "./toolbox-interfaces.js"
 
 export class ServiceMaster implements Service {
 	protected services: Service[]

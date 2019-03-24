@@ -1,9 +1,9 @@
 
-import babylon from "../../babylon"
-import {Vector} from "../../core/interfaces"
-import {Watcher} from "../../core/watcher/watcher"
+import * as babylon from "@babylonjs/core"
+import {Vector} from "../../core/interfaces.js"
+import {Watcher} from "../../core/watcher/watcher.js"
 
-import {traversiveBindings} from "./traversal"
+import {traversiveBindings} from "./traversal.js"
 
 export interface NippleData {
 	angle: {

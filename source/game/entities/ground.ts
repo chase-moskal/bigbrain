@@ -1,9 +1,9 @@
 
-import {Context} from "../game-interfaces"
+import {Context} from "../game-interfaces.js"
 
-import babylon from "../../babylon"
-import {Entity} from "../../core/entity"
-import {StateEntry, TickInfo} from "../../core/interfaces"
+import * as babylon from "@babylonjs/core"
+import {Entity} from "../../core/entity.js"
+import {StateEntry, TickInfo} from "../../core/interfaces.js"
 
 export interface GroundEntry extends StateEntry {
 	type: "Ground"

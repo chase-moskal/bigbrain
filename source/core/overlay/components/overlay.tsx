@@ -2,9 +2,9 @@
 import {h, Component} from "preact"
 import {observer} from "mobx-preact"
 
-import {Stick} from "./stick"
-import {MenuBar} from "./menu-bar"
-import {OverlayProps} from "./components-interfaces"
+import {Stick} from "./stick.js"
+import {MenuBar} from "./menu-bar.js"
+import {OverlayProps} from "./components-interfaces.js"
 
 @observer
 export class Overlay extends Component<OverlayProps> {

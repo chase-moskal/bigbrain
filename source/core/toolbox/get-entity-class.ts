@@ -1,6 +1,6 @@
 
-import {GenericEntity} from "../entity"
-import {EntityClasses} from "../interfaces"
+import {GenericEntity} from "../entity.js"
+import {EntityClasses} from "../interfaces.js"
 
 export const getEntityClass = (type: string, entityClasses: EntityClasses):
 typeof GenericEntity => {

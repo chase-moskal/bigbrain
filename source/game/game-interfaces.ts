@@ -1,10 +1,10 @@
 
-import babylon from "../babylon"
+import * as babylon from "@babylonjs/core"
 import * as cannon from "cannon"
 
-import {MainMenuStore} from "../core/overlay/stores/main-menu-store"
-import {OverlayStore} from "../core/overlay/stores/overlay-store"
-import {StandardContext, ConductorOptions} from "../core/interfaces"
+import {MainMenuStore} from "../core/overlay/stores/main-menu-store.js"
+import {OverlayStore} from "../core/overlay/stores/overlay-store.js"
+import {StandardContext, ConductorOptions} from "../core/interfaces.js"
 
 export interface GameContext {
 	window: Window

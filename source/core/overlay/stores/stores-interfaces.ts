@@ -1,6 +1,6 @@
 
 import * as preact from "preact"
-import {MenuStore} from "./menu-store"
+import {MenuStore} from "./menu-store.js"
 
 export interface MenuBarItem {
 	store: MenuStore

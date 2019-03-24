@@ -1,7 +1,7 @@
 
 import {h, Component} from "preact"
 import {observer} from "mobx-preact"
-import {EditorMenuProps} from "./editor-interfaces"
+import {EditorMenuProps} from "./editor-interfaces.js"
 
 @observer
 export class EditorMenu extends Component<EditorMenuProps> {

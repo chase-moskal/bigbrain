@@ -1,16 +1,16 @@
 
 import {autorun, IReactionDisposer} from "mobx"
 
-import babylon from "../../../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {Entity} from "../../../core/entity"
-import {Context} from "../../game-interfaces"
-import {copy} from "../../../core/toolbox/copy"
-import {Vector, Quaternion, TickInfo} from "../../../core/interfaces"
+import {Entity} from "../../../core/entity.js"
+import {Context} from "../../game-interfaces.js"
+import {copy} from "../../../core/toolbox/copy.js"
+import {Vector, Quaternion, TickInfo} from "../../../core/interfaces.js"
 
-import {CubeEntry} from "./cube-interfaces"
-import {createCubeMesh} from "./create-cube-mesh"
-import {createCubeGhostMesh} from "./create-cube-ghost-mesh"
+import {CubeEntry} from "./cube-interfaces.js"
+import {createCubeMesh} from "./create-cube-mesh.js"
+import {createCubeGhostMesh} from "./create-cube-ghost-mesh.js"
 
 export class Cube extends Entity<Context, CubeEntry> {
 	private static assets: {

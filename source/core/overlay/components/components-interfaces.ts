@@ -1,8 +1,8 @@
 
-import {StickStore} from "../stores/stick-store"
-import {OverlayStore} from "../stores/overlay-store"
-import {MenuBarStore} from "../stores/menu-bar-store"
-import {MainMenuStore} from "../stores/main-menu-store"
+import {StickStore} from "../stores/stick-store.js"
+import {OverlayStore} from "../stores/overlay-store.js"
+import {MenuBarStore} from "../stores/menu-bar-store.js"
+import {MainMenuStore} from "../stores/main-menu-store.js"
 
 export interface OverlayProps {
 	overlayStore: OverlayStore

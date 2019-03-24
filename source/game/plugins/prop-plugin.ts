@@ -1,10 +1,10 @@
 
 import * as mobx from "mobx"
-import babylon from "../../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {Manager} from "../../core/manager"
-import {Input} from "../../core/watcher/input"
-import {Watcher} from "../../core/watcher/watcher"
+import {Manager} from "../../core/manager.js"
+import {Input} from "../../core/watcher/input.js"
+import {Watcher} from "../../core/watcher/watcher.js"
 import {
 	TickInfo,
 	EntityPlugin,
@@ -12,12 +12,12 @@ import {
 	Bearings,
 	Physique,
 	Quaternion
-} from "../../core/interfaces"
+} from "../../core/interfaces.js"
 
-import {CubeEntry} from "../entities/cube/cube-interfaces"
-import {createCubeProposalMesh} from "../entities/cube/create-cube-proposal-mesh"
+import {CubeEntry} from "../entities/cube/cube-interfaces.js"
+import {createCubeProposalMesh} from "../entities/cube/create-cube-proposal-mesh.js"
 
-import {PropPluginOptions} from "./plugins-interfaces"
+import {PropPluginOptions} from "./plugins-interfaces.js"
 
 export const bindings = {
 	propose: [Input.E],

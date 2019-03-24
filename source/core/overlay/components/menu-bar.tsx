@@ -2,7 +2,7 @@
 import {h, Component} from "preact"
 import {observer} from "mobx-preact"
 
-import {MenuBarProps} from "./components-interfaces"
+import {MenuBarProps} from "./components-interfaces.js"
 
 @observer
 export class MenuBar extends Component<MenuBarProps> {

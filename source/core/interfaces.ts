@@ -1,10 +1,10 @@
 
-import babylon from "../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {Manager} from "./manager"
-import {Network} from "./network/network"
-import {Entity, GenericEntity} from "./entity"
-import {StatisticsStore} from "./overlay/stores/statistics-store"
+import {Manager} from "./manager.js"
+import {Network} from "./network/network.js"
+import {Entity, GenericEntity} from "./entity.js"
+import {StatisticsStore} from "./overlay/stores/statistics-store.js"
 
 export enum ModeOfConduct {
 	Alone,

@@ -1,6 +1,6 @@
 
-import babylon from "../../babylon"
-import {RoundCameraRigOptions} from "./toolbox-interfaces"
+import * as babylon from "@babylonjs/core"
+import {RoundCameraRigOptions} from "./toolbox-interfaces.js"
 
 export const createRoundCameraRig = ({
 	scene,

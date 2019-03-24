@@ -1,15 +1,15 @@
 
-import {Watcher} from "../../core/watcher/watcher"
-import {MovableNode} from "../tools/tools-interfaces"
-import {TickInfo, EntityPlugin} from "../../core/interfaces"
-import {StickStore} from "../../core/overlay/stores/stick-store"
+import {Watcher} from "../../core/watcher/watcher.js"
+import {MovableNode} from "../tools/tools-interfaces.js"
+import {TickInfo, EntityPlugin} from "../../core/interfaces.js"
+import {StickStore} from "../../core/overlay/stores/stick-store.js"
 import {
 	enactMovement,
 	ascertainMovement,
 	traversiveBindings
-} from "../tools/traversal"
+} from "../tools/traversal.js"
 
-import {MovePluginOptions} from "./plugins-interfaces"
+import {MovePluginOptions} from "./plugins-interfaces.js"
 
 export class MovePlugin implements EntityPlugin {
 	private readonly node: MovableNode

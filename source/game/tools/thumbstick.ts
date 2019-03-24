@@ -5,7 +5,7 @@ import {
 	NippleData,
 	ThumbstickInfo,
 	ThumbstickOptions
-} from "./tools-interfaces"
+} from "./tools-interfaces.js"
 
 const defaultThumbstickInfo: ThumbstickInfo = {angle: 0, force: 0}
 
@@ -27,7 +27,8 @@ export class Thumbstick {
 			position: {bottom: "50%", left: "50%"}
 		})
 
-		manager.on("start end", (event, instance) => move(defaultThumbstickInfo))
+		// TODO "start end"?
+		manager.on("start", (event, instance) => move(defaultThumbstickInfo))
 
 		manager.on("move", (event, data: NippleData) => move({
 			angle: data.angle.radian,

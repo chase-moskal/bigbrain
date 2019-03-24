@@ -1,11 +1,11 @@
 
 import * as SimplexNoise from "simplex-noise"
 
-import babylon from "../../babylon"
-import {Entity} from "../../core/entity"
-import {Context} from "../game-interfaces"
-import {StateEntry, TickInfo} from "../../core/interfaces"
-import {loadBabylonAssets} from "../../core/toolbox/load-babylon-assets"
+import * as babylon from "@babylonjs/core"
+import {Entity} from "../../core/entity.js"
+import {Context} from "../game-interfaces.js"
+import {StateEntry, TickInfo} from "../../core/interfaces.js"
+import {loadBabylonAssets} from "../../core/toolbox/load-babylon-assets.js"
 
 export interface TerrainEntry extends StateEntry {
 	type: "Terrain"

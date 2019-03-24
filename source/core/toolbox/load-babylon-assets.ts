@@ -1,5 +1,5 @@
 
-import babylon from "../../babylon"
+import * as babylon from "@babylonjs/core"
 
 export async function loadBabylonAssets({
 	path,

@@ -1,7 +1,7 @@
 
-import {getTime} from "./toolbox/get-time"
-import {Service} from "./toolbox/toolbox-interfaces"
-import {TickerOptions, TickAction} from "./interfaces"
+import {getTime} from "./toolbox/get-time.js"
+import {Service} from "./toolbox/toolbox-interfaces.js"
+import {TickerOptions, TickAction} from "./interfaces.js"
 
 /**
  * Default ticker option values
@@ -26,7 +26,7 @@ export class Ticker implements Service {
 	private tickAction: TickAction
 
 	private active = false
-	private interval: number
+	private interval: NodeJS.Timer
 	private lastTime = getTime()
 	private records: number[] = []
 

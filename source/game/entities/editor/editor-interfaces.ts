@@ -1,6 +1,6 @@
 
-import {Bearings} from "../../../core/interfaces"
-import {EditorMenuStore} from "./editor-menu-store"
+import {Bearings} from "../../../core/interfaces.js"
+import {EditorMenuStore} from "./editor-menu-store.js"
 
 export interface EditorEntry {
 	type: "Editor"

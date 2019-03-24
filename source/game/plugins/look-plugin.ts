@@ -1,13 +1,13 @@
 
-import babylon from "../../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {cap} from "../../core/toolbox/cap"
-import {RotatableNode} from "../tools/tools-interfaces"
-import {TickInfo, EntityPlugin} from "../../core/interfaces"
-import {StickStore} from "../../core/overlay/stores/stick-store"
-import {MainMenuStore} from "../../core/overlay/stores/main-menu-store"
+import {cap} from "../../core/toolbox/cap.js"
+import {RotatableNode} from "../tools/tools-interfaces.js"
+import {TickInfo, EntityPlugin} from "../../core/interfaces.js"
+import {StickStore} from "../../core/overlay/stores/stick-store.js"
+import {MainMenuStore} from "../../core/overlay/stores/main-menu-store.js"
 
-import {LookPluginOptions} from "./plugins-interfaces"
+import {LookPluginOptions} from "./plugins-interfaces.js"
 
 class Freelook {
 	horizontal: number = 0

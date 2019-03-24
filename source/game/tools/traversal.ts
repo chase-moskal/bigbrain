@@ -1,14 +1,14 @@
 
-import babylon from "../../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {Input} from "../../core/watcher/input"
-import {getVectorMagnitude} from "../../core/toolbox/get-vector-magnitude"
+import {Input} from "../../core/watcher/input.js"
+import {getVectorMagnitude} from "../../core/toolbox/get-vector-magnitude.js"
 
 import {
 	ThumbstickInfo,
 	MovementInputs,
 	MovableNode
-} from "./tools-interfaces"
+} from "./tools-interfaces.js"
 
 export const traversiveBindings = {
 	forward: [Input.W, Input.ArrowUp],

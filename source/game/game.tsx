@@ -1,19 +1,19 @@
 
 import {h} from "preact"
 import * as preact from "preact"
-import babylon from "../babylon"
+import * as babylon from "@babylonjs/core"
 
-import {GameOptions, GameContext} from "./game-interfaces"
+import {GameOptions, GameContext} from "./game-interfaces.js"
 
-import {Ticker} from "../core/ticker"
-import {Manager} from "../core/manager"
-import {Viewport} from "../core/viewport"
-import {Conductor} from "../core/conductor"
-import {Overlay} from "../core/overlay/components/overlay"
-import {Service} from "../core/toolbox/toolbox-interfaces"
-import {ServiceMaster} from "../core/toolbox/service-master"
-import {OverlayStore} from "../core/overlay/stores/overlay-store"
-import {StatisticsStore} from "../core/overlay/stores/statistics-store"
+import {Ticker} from "../core/ticker.js"
+import {Manager} from "../core/manager.js"
+import {Viewport} from "../core/viewport.js"
+import {Conductor} from "../core/conductor.js"
+import {Overlay} from "../core/overlay/components/overlay.js"
+import {Service} from "../core/toolbox/toolbox-interfaces.js"
+import {ServiceMaster} from "../core/toolbox/service-master.js"
+import {OverlayStore} from "../core/overlay/stores/overlay-store.js"
+import {StatisticsStore} from "../core/overlay/stores/statistics-store.js"
 
 /**
  * Standard monarch game

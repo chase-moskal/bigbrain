@@ -1,10 +1,10 @@
 
 import {observable} from "mobx"
 
-import {Input} from "./input"
-import {inputKeycodeRelations} from "./input-keycode-relations"
-import {otherwiseSupportedInputs} from "./otherwise-supported-inputs"
-import {Bindings, WatcherOptions, Status} from "./watcher-interfaces"
+import {Input} from "./input.js"
+import {inputKeycodeRelations} from "./input-keycode-relations.js"
+import {otherwiseSupportedInputs} from "./otherwise-supported-inputs.js"
+import {Bindings, WatcherOptions, Status} from "./watcher-interfaces.js"
 
 export class Watcher<gBindings extends Bindings = Bindings> {
 	private readonly eventTarget: EventTarget
