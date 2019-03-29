@@ -1,7 +1,7 @@
 
-import * as SimplexNoise from "simplex-noise"
-
+import {SimplexNoise} from "simplex-noise-esm"
 import * as babylon from "@babylonjs/core"
+
 import {Entity} from "../../core/entity.js"
 import {Context} from "../game-interfaces.js"
 import {StateEntry, TickInfo} from "../../core/interfaces.js"

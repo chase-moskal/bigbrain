@@ -1,4 +1,4 @@
 
-import * as shortid from "shortid"
+import nanoid from "nanoid-esm"
 
-export const generateId = () => shortid.generate()
+export const generateId = () => nanoid()

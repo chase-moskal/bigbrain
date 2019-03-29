@@ -6,7 +6,7 @@
 	"types": "dist/index.d.ts",
 	"scripts": {
 		"prepare": "run-p build",
-		"start": "http-server dist",
+		"start": "http-server",
 		"build": "run-p build-clean && run-p build-importmap build-copy build-index && run-p build-scripts build-styles build-pages && echo ✔ done production build",
 		"build:debug": "run-p build-clean && run-p build-importmap build-copy build-index && run-p build-scripts:debug build-styles build-pages:debug && echo ✔ done debug build",
 		"build-clean": "rimraf dist && mkdirp dist",
@@ -63,6 +63,7 @@
 		"browserify": "16.2.3",
 		"create-index": "2.4.0",
 		"envify": "4.1.0",
+		"jest": "24.5.0",
 		"http-server": "0.11.1",
 		"importly": "0.0.0-dev.1",
 		"mkdirp": "0.5.1",
@@ -84,15 +85,13 @@
 		"cannon": "0.6.2",
 		"deep-freeze": "0.0.1",
 		"earcut": "2.1.5",
-		"jest": "24.5.0",
 		"jsondiffpatch": "0.3.11",
 		"mobx": "5.9.0",
 		"mobx-preact": "3.0.0",
+		"nanoid-esm": "2.1.0-esm.4",
 		"nipplejs": "0.8.1",
 		"oimo": "1.0.9",
 		"preact": "8.4.2",
-		"shortid": "2.2.14",
-		"simplex-noise": "2.4.0",
-		"uuid": "3.3.2"
+		"simplex-noise-esm": "2.5.0-esm.0"
 	}
 }

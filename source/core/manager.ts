@@ -1,8 +1,7 @@
 
-import * as uuid from "uuid/v4"
-
 import {Entity} from "./entity.js"
 import {State, StateEntry} from "./interfaces.js"
+import {generateId} from "./toolbox/generate-id.js"
 
 /**
  * State manager
@@ -22,7 +21,7 @@ export class Manager {
 	}
 
 	addEntry<T extends StateEntry = StateEntry>(entry: T): string {
-		const id: string = uuid()
+		const id: string = generateId()
 		this.state.entries.set(id, entry)
 		return id
 	}
