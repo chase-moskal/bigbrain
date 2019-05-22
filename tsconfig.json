@@ -9,13 +9,14 @@
 		"moduleResolution": "node",
 		"experimentalDecorators": true,
 		"sourceMap": true,
-		"declaration": true,
-		"jsx": "react",
-		"jsxFactory": "h"
+		"declaration": true
 	},
+	"include": [
+		"source/**/*"
+	],
 	"exclude": [
 		"dist",
 		"node_modules",
-		"source/monarch-global.bundle.ts"
+		"source-archive"
 	]
 }
