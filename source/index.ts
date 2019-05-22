@@ -3,3 +3,7 @@
  */
 
 export * from "./module.js"
+export * from "./state/interfaces.js"
+export * from "./state/state.js"
+export * from "./toolbox/copy-deep.js"
+export * from "./toolbox/freezie.js"
