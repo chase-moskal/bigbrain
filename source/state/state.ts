@@ -3,13 +3,11 @@ import {freezie} from "../toolbox/freezie.js"
 import {copyDeep} from "../toolbox/copy-deep.js"
 
 import {Entry, Id} from "./interfaces.js"
-import { exportAllDeclaration } from "@babel/types";
 
 const _write = Symbol("_write")
 const _entries = Symbol("_entries")
 const _replicator = Symbol("_replicator")
 const _frozenEntries = Symbol("_frozenEntries")
-const _previousEntries = Symbol("_previousEntries")
 
 export interface StateOptions {
 	hostState?: State
