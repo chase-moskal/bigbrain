@@ -16,8 +16,7 @@
 		"test": "exit 0"
 	},
 	"files": [
-		"dist",
-		"types"
+		"dist"
 	],
 	"devDependencies": {
 		"barrelsby": "^2.1.1",
