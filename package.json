@@ -12,6 +12,7 @@
 		"clean": "rimraf dist && mkdirp dist",
 		"importmap": "importly < package.json > dist/importmap.json",
 		"build": "tsc",
+		"start": "serve",
 		"test": "exit 0"
 	},
 	"files": [
