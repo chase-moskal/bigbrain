@@ -1,28 +1,44 @@
 {
 	"name": "monarch-engine",
 	"version": "0.4.0-echo.0",
-	"author": "Chase Moskal <chasemoskal@gmail.com>",
 	"description": "concept game engine",
 	"license": "ISC",
-	"main": "dist-cjs/index.js",
-	"module": "dist/index.js",
-	"types": "dist/index.d.ts",
+	"author": "Chase Moskal <chasemoskal@gmail.com>",
+	"main": "dist/register-all.js",
+	"module": "dist/register-all.js",
+	"types": "dist/register-all.d.ts",
 	"scripts": {
-		"prepare": "run-s clean barrel && run-p compile-esm compile-cjs && run-p importmap test",
-		"clean": "rimraf dist dist-cjs && mkdirp dist && mkdirp dist-cjs && mkdirp dist",
-		"importmap": "importly < importly.config > dist/importmap.json",
-		"copy": "cpy '**/*.css' '../dist/' --cwd=source --parents",
-		"barrel": "barrelsby --delete --directory source && replace '\";$' '.js\"' source/index.ts --silent",
-		"compile-esm": "tsc",
-		"compile-cjs": "tsc --module commonjs --outDir dist-cjs",
-		"watch": "npm run -s compile-esm -- --watch",
-		"start": "serve -n",
+		"prepare": "run-s clean && run-p importmap build",
+		"clean": "rimraf dist && mkdirp dist",
+		"importmap": "importly < package.json > dist/importmap.json",
+		"build": "tsc",
 		"test": "exit 0"
 	},
 	"files": [
 		"dist",
 		"types"
 	],
+	"devDependencies": {
+		"barrelsby": "^2.1.1",
+		"cpy-cli": "^2.0.0",
+		"importly": "0.1.0-dev.0",
+		"mkdirp": "^0.5.1",
+		"npm-run-all": "^4.1.5",
+		"replace": "^1.1.0",
+		"rimraf": "^2.6.3",
+		"serve": "^11.1.0",
+		"typescript": "^3.5.3"
+	},
+	"dependencies": {
+		"@babylonjs/core": "^4.0.3",
+		"cannon": "^0.6.2",
+		"lit-element": "^2.2.1",
+		"lit-html": "^1.1.1",
+		"nanoid-esm": "^2.1.0-esm.4",
+		"nipplejs": "^0.8.2",
+		"oimo": "^1.0.9",
+		"simplex-noise-esm": "^2.5.0-esm.0"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/monarch-games/engine.git"
@@ -30,28 +46,5 @@
 	"bugs": {
 		"url": "https://github.com/monarch-games/engine/issues"
 	},
-	"homepage": "https://github.com/monarch-games/engine#readme",
-	"devDependencies": {
-		"@types/jest": "^24.0.13",
-		"barrelsby": "^2.1.1",
-		"cpy-cli": "^2.0.0",
-		"importly": "^0.0.0-dev.4",
-		"jest": "^24.8.0",
-		"mkdirp": "^0.5.1",
-		"npm-run-all": "^4.1.5",
-		"replace": "^1.1.0",
-		"rimraf": "^2.6.3",
-		"serve": "^11.0.0",
-		"typescript": "^3.4.5"
-	},
-	"dependencies": {
-		"@babylonjs/core": "^4.0.3",
-		"cannon": "^0.6.2",
-		"lit-element": "^2.1.0",
-		"lit-html": "^1.1.0",
-		"nanoid-esm": "^2.1.0-esm.4",
-		"nipplejs": "^0.8.2",
-		"oimo": "^1.0.9",
-		"simplex-noise-esm": "^2.5.0-esm.0"
-	}
+	"homepage": "https://github.com/monarch-games/engine#readme"
 }
