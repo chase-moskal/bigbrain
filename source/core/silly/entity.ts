@@ -3,11 +3,11 @@ import {
 	Entry,
 	Action,
 	LogicInput,
+	MimicInput,
+	MimicOutput,
 	LogicOutput,
 	ActionInput,
 	ActionOutput,
-	MimicInput,
-	MimicOutput,
 	EntityOptions,
 	SendActionInput,
 } from "./interfaces"

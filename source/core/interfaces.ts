@@ -1,81 +1,47 @@
 
-import {State} from "./state.js"
-import {EntityHost, EntityClient} from "./entity.js"
-
 //
-// state
+// isomorphic
 //
 
-export interface Entry {
-	id: string
-	type: string
-}
+export interface Whole {}
+export interface Delta {}
+export interface Message {}
 
-export interface Entries {
-	[id: string]: Entry
-}
-
-export interface Replicator {
-	insertion(id: string, entry: Entry): void
-	extraction(id: string): void
+export interface StateIdea {
+	extract(i: {id: string}): void
+	insert(i: {id: string}): {id: string}
+	apply(i: {whole?: Whole; delta: Delta}): void
 }
 
 //
-// entities
+// host
 //
 
-export interface Entity {
-	host: typeof EntityHost
-	client: typeof EntityClient
+export interface SimulatorIdea {
+	queue(i: {messages: Message}): void
+	tick(): {
+		priorities: PriorityIdea[]
+	}
 }
 
-export interface Entities {
-	[type: string]: Entity
+export interface NetworkHostIdea {
+	queue(i: {priority: PriorityIdea}): void
+	tick()
 }
 
-export interface EntityOptions {
-	id: string
+export interface PriorityIdea {
+	delta: Delta
+	importance: number
 }
-
-export interface Delta<E extends Entry> {
-	entry: E
-	networkPriority: number
-}
-
-export interface LogicInput<E extends Entry> {
-	entry: E
-}
-
-export interface LogicOutput<E extends Entry> extends Delta<E> {}
-
-export interface Action {
-	type: string
-}
-
-export interface ActionInput<E extends Entry, A extends Action = Action> {
-	action: A
-	entry: E
-}
-
-export interface ActionOutput<E extends Entry> extends Delta<E> {}
-
-export interface SendActionInput<A extends Action = Action> {
-	action: A
-	networkPriority: number
-}
-
-export interface SendActionOutput<> {}
-
-export interface MimicInput<E extends Entry> {
-	entry: E
-}
-
-export interface MimicOutput {}
 
 //
-// Network
+// client
 //
 
-export interface NetworkOptions {
-	state: State
+export interface NetworkClientIdea {
+	tick(): {whole?: Whole; delta: Delta}
+}
+
+export interface ReplicatorIdea {
+	tick(i: {state: StateIdea}): void
 }

@@ -1,5 +1,5 @@
 
-import {generateId} from "../toolbox/generate-id.js"
+import {generateId} from "../../toolbox/generate-id.js"
 
 import {
 	Entry,
