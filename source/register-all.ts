@@ -1,7 +1,7 @@
 
-import {MonarchGame} from "./components/monarch-game.js"
+import {BigBrain} from "./components/big-brain.js"
 import {registerComponents} from "./toolbox/register-components.js"
 
-registerComponents({MonarchGame})
+registerComponents({BigBrain})
 
 console.log("🤖")

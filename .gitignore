@@ -4,6 +4,5 @@
 /node_modules
 /*.tgz
 
-.nyc*
-*.blend1
 *.log
+*.blend1
